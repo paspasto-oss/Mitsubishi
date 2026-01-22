@@ -1,238 +1,429 @@
 <!DOCTYPE html>
 <html lang="sk">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cenová ponuka - Mitsubishi Electric</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        @media print {
-            body { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
-            .no-print { display: none; }
-            .page-break { page-break-inside: avoid; }
-        }
-        body { font-family: 'Inter', sans-serif; }
-    </style>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cenová ponuka – Tepelné čerpadlo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    @media print {
+      body { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+      .no-print { display: none; }
+      .page-break { page-break-inside: avoid; }
+      .print\:shadow-none { box-shadow: none !important; }
+      .print\:max-w-full { max-width: 100% !important; }
+    }
+    body { font-family: 'Inter', sans-serif; }
+  </style>
 </head>
+
 <body class="bg-gray-100 p-4 md:p-8 text-slate-800">
 
-    <div class="max-w-4xl mx-auto bg-white shadow-xl rounded-lg overflow-hidden print:shadow-none print:max-w-full">
-        
-        <!-- Header / Hlavička -->
-        <div class="bg-slate-800 text-white p-8 flex justify-between items-start">
-            <div>
-                <h1 class="text-3xl font-bold tracking-wide uppercase">Cenová ponuka</h1>
-                <p class="mt-2 text-slate-300">Tepelné čerpadlo Mitsubishi Electric</p>
-                <div class="mt-4 text-sm text-slate-400">
-                    <p>Dátum vystavenia: <span id="date"></span></p>
-                    <p>Platnosť ponuky: 30 dní</p>
-                </div>
-            </div>
-            <div class="text-right">
-                <div class="text-2xl font-bold mb-2">Spektra install s.r.o.</div>
-                <p class="text-sm text-slate-300">Váš dodávateľ technológií</p>
-                <p class="text-sm text-slate-300">spektrainstall@gmail.com | 0917 572 221</p>
-            </div>
+  <div class="max-w-4xl mx-auto bg-white shadow-xl rounded-lg overflow-hidden print:shadow-none print:max-w-full">
+
+    <!-- Header -->
+    <div class="bg-slate-800 text-white p-8 flex flex-col md:flex-row justify-between items-start gap-6">
+      <div>
+        <h1 class="text-3xl font-bold tracking-wide uppercase">Cenová ponuka</h1>
+        <p class="mt-2 text-slate-300" id="headerSubtitle">Tepelné čerpadlo</p>
+        <div class="mt-4 text-sm text-slate-400">
+          <p>Dátum vystavenia: <span id="date"></span></p>
+          <p>Platnosť ponuky: 30 dní</p>
         </div>
 
-        <!-- Project Info / Informácie o projekte -->
-        <div class="p-8 border-b border-gray-200">
-            <h2 class="text-lg font-semibold text-slate-700 mb-4 border-l-4 border-red-600 pl-3">Informácie o projekte</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                <div>
-                    <p><span class="font-semibold">Objekt:</span> Rodinný dom</p>
-                    <p><span class="font-semibold">Systém:</span> Vzduch / Voda – Split</p>
-                </div>
-                <div>
-                    <p><span class="font-semibold">Výrobca:</span> Mitsubishi Electric</p>
-                    <p><span class="font-semibold">Výkon:</span> 10 – 12 kW (ZUBADAN)</p>
-                </div>
-            </div>
+        <!-- Variant selector -->
+        <div class="no-print mt-5">
+          <label class="block text-xs uppercase tracking-wide text-slate-300 mb-2">Vyber variant ponuky</label>
+          <select id="offerSelect" class="w-full md:w-[420px] rounded-md bg-white text-slate-800 px-3 py-2 text-sm">
+            <option value="mitsubishi">Mitsubishi Zubadan 12 kW + 200 l TÚV (akcia)</option>
+
+            <!-- NOVÉ alternatívy -->
+            <option value="midea_arctic_10">Midea Arctic R290 Monoblok 10 kW + Dražice 200 l (alternatíva)</option>
+            <option value="midea_arctic_12">Midea Arctic R290 Monoblok 12 kW + Dražice 200 l (alternatíva)</option>
+          </select>
+          <p class="text-xs text-slate-300 mt-2">
+            Tip: ceny alternatív upravíš v kóde v objekte <span class="font-semibold">OFFERS</span>.
+          </p>
         </div>
+      </div>
 
-        <!-- Section 1: Technology -->
-        <div class="p-8 page-break">
-            <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center">
-                <span class="bg-slate-100 text-slate-600 rounded-full h-8 w-8 flex items-center justify-center mr-2 text-sm">1</span>
-                Technológia – Akciová ponuka
-            </h3>
-            <div class="overflow-x-auto">
-                <table class="w-full text-sm text-left text-gray-600">
-                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 border-b border-gray-200">
-                        <tr>
-                            <th class="py-3 px-4 w-5/12">Položka</th>
-                            <th class="py-3 px-4 w-3/12">Typ / Model</th>
-                            <th class="py-3 px-4 text-right text-gray-400 font-normal">Cenníková cena</th>
-                            <th class="py-3 px-4 text-right font-bold text-slate-800">Vaša cena</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr class="border-b hover:bg-gray-50">
-                            <td class="py-3 px-4 font-medium text-gray-900">
-                                Vonkajšia jednotka ZUBADAN 12 kW
-                                <div class="text-xs text-gray-500 font-normal">400 V, garantovaný výkon do -15°C</div>
-                            </td>
-                            <td class="py-3 px-4">PUD-SHWM120YAA</td>
-                            <td class="py-3 px-4 text-right text-gray-400 line-through decoration-red-400">6 535,00 €</td>
-                            <td class="py-3 px-4 text-right font-bold text-green-700">4 990,00 €</td>
-                        </tr>
-                        <tr class="border-b hover:bg-gray-50">
-                            <td class="py-3 px-4 font-medium text-gray-900">
-                                Hydrobox (vnútorná jednotka)
-                                <div class="text-xs text-gray-500 font-normal">Vstavaný nerezový zásobník TÚV 200 l</div>
-                            </td>
-                            <td class="py-3 px-4">ERST20D-YM9D</td>
-                            <td class="py-3 px-4 text-right text-gray-400 line-through decoration-red-400">6 841,00 €</td>
-                            <td class="py-3 px-4 text-right font-bold text-green-700">5 290,00 €</td>
-                        </tr>
-                        <tr class="border-b hover:bg-gray-50">
-                            <td class="py-3 px-4 font-medium text-gray-900">Regulácia Mitsubishi (FTC)</td>
-                            <td class="py-3 px-4">Súčasť setu</td>
-                            <td class="py-3 px-4 text-right text-gray-400">-</td>
-                            <td class="py-3 px-4 text-right">0,00 €</td>
-                        </tr>
-                    </tbody>
-                    <tfoot>
-                        <tr class="font-semibold text-gray-900 bg-slate-50">
-                            <td colspan="3" class="py-3 px-4 text-right text-slate-600">Spolu za technológiu:</td>
-                            <td class="py-3 px-4 text-right text-lg">10 280,00 €</td>
-                        </tr>
-                    </tfoot>
-                </table>
-            </div>
-            <!-- Zľava info -->
-            <div class="mt-2 text-right text-xs text-red-600 font-semibold italic">
-                * Uplatnená mimoriadna zľava na technológiu
-            </div>
-        </div>
-
-        <!-- Section 2: Installation -->
-        <div class="px-8 pb-8 page-break">
-            <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center">
-                <span class="bg-slate-100 text-slate-600 rounded-full h-8 w-8 flex items-center justify-center mr-2 text-sm">2</span>
-                Montáž a inštalácia
-            </h3>
-            <table class="w-full text-sm text-left text-gray-600">
-                <tbody class="divide-y divide-gray-100">
-                    <tr class="hover:bg-gray-50">
-                        <td class="py-2 px-4 w-3/4">Montáž tepelného čerpadla (vnútorná + vonkajšia jednotka)</td>
-                        <td class="py-2 px-4 text-right">950,00 €</td>
-                    </tr>
-                    <tr class="hover:bg-gray-50">
-                        <td class="py-2 px-4">Chladiarenské prepojenie (Cu potrubie, izolácia, vákuovanie)</td>
-                        <td class="py-2 px-4 text-right">380,00 €</td>
-                    </tr>
-                    <tr class="hover:bg-gray-50">
-                        <td class="py-2 px-4">Napojenie na vykurovací systém</td>
-                        <td class="py-2 px-4 text-right">320,00 €</td>
-                    </tr>
-                    <tr class="hover:bg-gray-50">
-                        <td class="py-2 px-4">Elektroinštalácia + istenie</td>
-                        <td class="py-2 px-4 text-right">250,00 €</td>
-                    </tr>
-                    <tr class="hover:bg-gray-50">
-                        <td class="py-2 px-4">Uvedenie do prevádzky, nastavenie, zaškolenie</td>
-                        <td class="py-2 px-4 text-right">180,00 €</td>
-                    </tr>
-                </tbody>
-                <tfoot>
-                    <tr class="font-semibold text-gray-900 bg-slate-50">
-                        <td class="py-2 px-4 text-right">Spolu za montáž:</td>
-                        <td class="py-2 px-4 text-right">2 080,00 €</td>
-                    </tr>
-                </tfoot>
-            </table>
-        </div>
-
-        <!-- Section 3: Other Services -->
-        <div class="px-8 pb-8 page-break">
-            <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center">
-                <span class="bg-slate-100 text-slate-600 rounded-full h-8 w-8 flex items-center justify-center mr-2 text-sm">3</span>
-                Ostatné služby
-            </h3>
-            <table class="w-full text-sm text-left text-gray-600">
-                <tbody class="divide-y divide-gray-100">
-                    <tr class="hover:bg-gray-50">
-                        <td class="py-2 px-4 w-3/4">Elektrická revízia</td>
-                        <td class="py-2 px-4 text-right">120,00 €</td>
-                    </tr>
-                    <tr class="hover:bg-gray-50">
-                        <td class="py-2 px-4">Odvoz obalov, ekologická likvidácia</td>
-                        <td class="py-2 px-4 text-right">60,00 €</td>
-                    </tr>
-                </tbody>
-                <tfoot>
-                    <tr class="font-semibold text-gray-900 bg-slate-50">
-                        <td class="py-2 px-4 text-right">Spolu za služby:</td>
-                        <td class="py-2 px-4 text-right">180,00 €</td>
-                    </tr>
-                </tfoot>
-            </table>
-        </div>
-
-        <!-- Final Summary / Rekapitulácia -->
-        <div class="bg-slate-50 p-8 border-t border-gray-200 page-break">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-end">
-                
-                <!-- Notes / Poznámky -->
-                <div class="w-full md:w-1/2 mb-6 md:mb-0 pr-4">
-                    <h4 class="font-bold text-slate-700 mb-2">Poznámky k systému Zubadan:</h4>
-                    <ul class="text-sm text-slate-600 list-disc list-inside space-y-1">
-                        <li>Technológia Flash Injection – udržiava plný vykurovací výkon až do -15 °C.</li>
-                        <li>Garantovaná prevádzka do -28 °C.</li>
-                        <li>Systém je vhodný pre kombináciu radiátorov aj podlahového vykurovania.</li>
-                        <li>Kompaktná vnútorná jednotka s nerezovým 200 l zásobníkom (úspora miesta).</li>
-                    </ul>
-                </div>
-
-                <!-- Price Calculation / Cena -->
-                <div class="w-full md:w-1/2 bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-                    <div class="flex justify-between py-2 text-slate-600">
-                        <span>Cena bez DPH:</span>
-                        <span class="font-medium">12 540,00 €</span>
-                    </div>
-                    <div class="flex justify-between py-2 text-slate-600 border-b border-gray-200 mb-2">
-                        <span>DPH (20%):</span>
-                        <span class="font-medium">2 508,00 €</span>
-                    </div>
-                    <div class="flex justify-between py-2 text-xl font-bold text-slate-900">
-                        <span>SPOLU s DPH:</span>
-                        <span>15 048,00 €</span>
-                    </div>
-
-                    <!-- Subsidy Highlight -->
-                    <div class="mt-4 bg-green-50 p-3 rounded border border-green-200">
-                        <div class="flex justify-between text-green-700 text-sm mb-1">
-                            <span>Predpokladaná dotácia:</span>
-                            <span class="font-bold">- 3 400,00 €</span>
-                        </div>
-                        <div class="flex justify-between text-green-800 font-bold border-t border-green-200 pt-2 mt-1">
-                            <span>Cena po odrátaní dotácie:</span>
-                            <span>~ 11 648,00 €</span>
-                        </div>
-                        <p class="text-[10px] text-green-600 mt-1 italic">* Dotácia "Zelená domácnostiam" podlieha schváleniu SIEA.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Footer / Päta -->
-        <div class="bg-slate-800 text-slate-400 p-4 text-center text-xs">
-            <p>Táto cenová ponuka je nezáväzná. Pre záväznú objednávku nás prosím kontaktujte.</p>
-        </div>
-
+      <div class="text-right">
+        <div class="text-2xl font-bold mb-2">Spektra install s.r.o.</div>
+        <p class="text-sm text-slate-300">Váš dodávateľ technológií</p>
+        <p class="text-sm text-slate-300">spektrainstall@gmail.com | 0917 572 221</p>
+      </div>
     </div>
 
-    <script>
-        // Set current date
-        const dateElement = document.getElementById('date');
-        const today = new Date();
-        dateElement.textContent = today.toLocaleDateString('sk-SK', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-        });
-    </script>
+    <!-- Project Info -->
+    <div class="p-8 border-b border-gray-200">
+      <h2 class="text-lg font-semibold text-slate-700 mb-4 border-l-4 border-red-600 pl-3">Informácie o projekte</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+        <div>
+          <p><span class="font-semibold">Objekt:</span> Rodinný dom</p>
+          <p><span class="font-semibold">Systém:</span> Vzduch / Voda</p>
+        </div>
+        <div>
+          <p><span class="font-semibold">Výrobca / séria:</span> <span id="brandText">—</span></p>
+          <p><span class="font-semibold">Výkon:</span> <span id="powerText">—</span></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 1 -->
+    <div class="p-8 page-break">
+      <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center">
+        <span class="bg-slate-100 text-slate-600 rounded-full h-8 w-8 flex items-center justify-center mr-2 text-sm">1</span>
+        Technológia
+      </h3>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm text-left text-gray-600">
+          <thead class="text-xs text-gray-700 uppercase bg-gray-50 border-b border-gray-200">
+            <tr>
+              <th class="py-3 px-4 w-5/12">Položka</th>
+              <th class="py-3 px-4 w-3/12">Typ / Model</th>
+              <th class="py-3 px-4 text-right text-gray-400 font-normal" id="listPriceHeader">Cenníková cena</th>
+              <th class="py-3 px-4 text-right font-bold text-slate-800">Vaša cena</th>
+            </tr>
+          </thead>
+          <tbody id="techBody"></tbody>
+          <tfoot>
+            <tr class="font-semibold text-gray-900 bg-slate-50">
+              <td colspan="3" class="py-3 px-4 text-right text-slate-600">Spolu za technológiu:</td>
+              <td class="py-3 px-4 text-right text-lg" id="techTotal">0,00 €</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+
+      <div class="mt-2 text-right text-xs text-red-600 font-semibold italic" id="discountNote"></div>
+    </div>
+
+    <!-- Section 2 -->
+    <div class="px-8 pb-8 page-break">
+      <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center">
+        <span class="bg-slate-100 text-slate-600 rounded-full h-8 w-8 flex items-center justify-center mr-2 text-sm">2</span>
+        Montáž a inštalácia
+      </h3>
+
+      <table class="w-full text-sm text-left text-gray-600">
+        <tbody class="divide-y divide-gray-100" id="installBody"></tbody>
+        <tfoot>
+          <tr class="font-semibold text-gray-900 bg-slate-50">
+            <td class="py-2 px-4 text-right">Spolu za montáž:</td>
+            <td class="py-2 px-4 text-right" id="installTotal">0,00 €</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+
+    <!-- Section 3 -->
+    <div class="px-8 pb-8 page-break">
+      <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center">
+        <span class="bg-slate-100 text-slate-600 rounded-full h-8 w-8 flex items-center justify-center mr-2 text-sm">3</span>
+        Ostatné služby
+      </h3>
+
+      <table class="w-full text-sm text-left text-gray-600">
+        <tbody class="divide-y divide-gray-100" id="servicesBody"></tbody>
+        <tfoot>
+          <tr class="font-semibold text-gray-900 bg-slate-50">
+            <td class="py-2 px-4 text-right">Spolu za služby:</td>
+            <td class="py-2 px-4 text-right" id="servicesTotal">0,00 €</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+
+    <!-- Summary -->
+    <div class="bg-slate-50 p-8 border-t border-gray-200 page-break">
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
+
+        <div class="w-full md:w-1/2 pr-4">
+          <h4 class="font-bold text-slate-700 mb-2">Poznámky</h4>
+          <ul class="text-sm text-slate-600 list-disc list-inside space-y-1" id="notesList"></ul>
+        </div>
+
+        <div class="w-full md:w-1/2 bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+          <div class="flex justify-between py-2 text-slate-600">
+            <span>Cena bez DPH:</span>
+            <span class="font-medium" id="sumNoVat">0,00 €</span>
+          </div>
+          <div class="flex justify-between py-2 text-slate-600 border-b border-gray-200 mb-2">
+            <span>DPH (20%):</span>
+            <span class="font-medium" id="sumVat">0,00 €</span>
+          </div>
+          <div class="flex justify-between py-2 text-xl font-bold text-slate-900">
+            <span>SPOLU s DPH:</span>
+            <span id="sumWithVat">0,00 €</span>
+          </div>
+
+          <div class="mt-4 bg-green-50 p-3 rounded border border-green-200">
+            <div class="flex justify-between text-green-700 text-sm mb-1">
+              <span>Predpokladaná dotácia:</span>
+              <span class="font-bold" id="subsidyText">- 3 400,00 €</span>
+            </div>
+            <div class="flex justify-between text-green-800 font-bold border-t border-green-200 pt-2 mt-1">
+              <span>Cena po odrátaní dotácie:</span>
+              <span id="afterSubsidy">~ 0,00 €</span>
+            </div>
+            <p class="text-[10px] text-green-600 mt-1 italic">* Dotácia "Zelená domácnostiam" podlieha schváleniu SIEA.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="bg-slate-800 text-slate-400 p-4 text-center text-xs">
+      <p>Táto cenová ponuka je nezáväzná. Pre záväznú objednávku nás prosím kontaktujte.</p>
+    </div>
+
+  </div>
+
+<script>
+  // ---------- CONFIG ----------
+  const VAT_RATE = 0.20;
+  const DEFAULT_SUBSIDY_EUR = 3400;
+
+  // Tvoje doplnky (ostávajú rovnaké pre všetky varianty)
+  const COMMON_INSTALL_EXTRAS = [
+    { label: "Vŕtanie jadrovou vŕtačkou (prestup stena Ø 65–80 mm)", price: 120 },
+    { label: "Izolácie – kaučuk (vykurovanie/chladenie, hr. 19 mm)", price: 140 },
+    { label: "Materiál voda / kúrenie do 3 m (potrubie + fitingy)", price: 180 },
+    { label: "Medené potrubie DS28 do 3 m (vrátane izolácie)", price: 210 },
+  ];
+
+  // ---------- OFFERS ----------
+  const OFFERS = {
+    // Tvoja Mitsubishi akcia (ponechané ako doteraz)
+    mitsubishi: {
+      headerSubtitle: "Tepelné čerpadlo Mitsubishi Electric – Zubadan (akcia)",
+      brand: "Mitsubishi Electric – Zubadan",
+      power: "10 – 12 kW (ZUBADAN)",
+      discountNote: "* Uplatnená mimoriadna zľava na technológiu (akciová ponuka).",
+      subsidy: 3400,
+      notes: [
+        "Technológia Flash Injection – udržiava plný vykurovací výkon až do -15 °C.",
+        "Garantovaná prevádzka do -28 °C.",
+        "Vhodné pre kombináciu radiátorov aj podlahového vykurovania.",
+        "Kompaktná vnútorná jednotka s nerezovým 200 l zásobníkom TÚV."
+      ],
+      tech: [
+        { name: "Vonkajšia jednotka ZUBADAN 12 kW", desc: "400 V, garantovaný výkon do -15°C", model: "PUD-SHWM120YAA", listPrice: 6535, yourPrice: 4990 },
+        { name: "Hydrobox (vnútorná jednotka)", desc: "Vstavaný nerezový zásobník TÚV 200 l", model: "ERST20D-YM9D", listPrice: 6841, yourPrice: 5290 },
+        { name: "Regulácia Mitsubishi (FTC)", desc: "", model: "Súčasť setu", listPrice: null, yourPrice: 0 }
+      ],
+      installBase: [
+        { label: "Montáž tepelného čerpadla (vnútorná + vonkajšia jednotka)", price: 950 },
+        { label: "Chladiarenské prepojenie (Cu potrubie, izolácia, vákuovanie)", price: 380 },
+        { label: "Napojenie na vykurovací systém", price: 320 },
+        { label: "Elektroinštalácia + istenie", price: 250 },
+        { label: "Uvedenie do prevádzky, nastavenie, zaškolenie", price: 180 },
+        ...COMMON_INSTALL_EXTRAS
+      ],
+      services: [
+        { label: "Elektrická revízia", price: 120 },
+        { label: "Odvoz obalov, ekologická likvidácia", price: 60 }
+      ]
+    },
+
+    // NOVÉ alternatívy: Midea Arctic R290 + Dražice 200 l
+    midea_arctic_10: {
+      headerSubtitle: "Tepelné čerpadlo Midea Arctic R290 – monoblok + Dražice 200 l",
+      brand: "Midea – Arctic R290 (monoblok)",
+      power: "cca 10 kW",
+      discountNote: "",
+      subsidy: 3400,
+      notes: [
+        "Monoblok R290 – ekologické chladivo (podľa konfigurácie) a jednoduchšie riešenie bez split chladiva v interiéri.",
+        "Zásobník TÚV Dražice 200 l určený pre tepelné čerpadlá (väčšia výmenná plocha).",
+        "Vhodné pre radiátory aj podlahové kúrenie podľa návrhu a teplôt systému."
+      ],
+      tech: [
+        {
+          name: "Tepelné čerpadlo Midea Arctic R290 – monoblok ~10 kW",
+          desc: "invertor, R290, vzduch/voda",
+          model: "Arctic R290 10 kW",
+          listPrice: null,
+          yourPrice: 4200   // <-- UPRAV TU cenu zariadenia (bez DPH)
+        },
+        {
+          name: "Zásobník TÚV 200 l Dražice pre tepelné čerpadlo",
+          desc: "TÚV bojler s výmenníkom pre TČ",
+          model: "Dražice 200 l (TČ)",
+          listPrice: null,
+          yourPrice: 690    // <-- UPRAV TU cenu bojlera (bez DPH)
+        }
+      ],
+      installBase: [
+        { label: "Montáž tepelného čerpadla", price: 950 },
+        { label: "Napojenie na vykurovací systém", price: 320 },
+        { label: "Elektroinštalácia + istenie", price: 250 },
+        { label: "Uvedenie do prevádzky, nastavenie, zaškolenie", price: 180 },
+        ...COMMON_INSTALL_EXTRAS
+      ],
+      services: [
+        { label: "Elektrická revízia", price: 120 },
+        { label: "Odvoz obalov, ekologická likvidácia", price: 60 }
+      ]
+    },
+
+    midea_arctic_12: {
+      headerSubtitle: "Tepelné čerpadlo Midea Arctic R290 – monoblok + Dražice 200 l",
+      brand: "Midea – Arctic R290 (monoblok)",
+      power: "cca 12 kW",
+      discountNote: "",
+      subsidy: 3400,
+      notes: [
+        "Výkonnejšia alternatíva pre domy s vyššou stratou alebo radiátormi s vyššími teplotami.",
+        "Zásobník TÚV Dražice 200 l určený pre tepelné čerpadlá (väčšia výmenná plocha)."
+      ],
+      tech: [
+        {
+          name: "Tepelné čerpadlo Midea Arctic R290 – monoblok ~12 kW",
+          desc: "invertor, R290, vzduch/voda",
+          model: "Arctic R290 12 kW",
+          listPrice: null,
+          yourPrice: 4700   // <-- UPRAV TU cenu zariadenia (bez DPH)
+        },
+        {
+          name: "Zásobník TÚV 200 l Dražice pre tepelné čerpadlo",
+          desc: "TÚV bojler s výmenníkom pre TČ",
+          model: "Dražice 200 l (TČ)",
+          listPrice: null,
+          yourPrice: 690    // <-- UPRAV TU cenu bojlera (bez DPH)
+        }
+      ],
+      installBase: [
+        { label: "Montáž tepelného čerpadla", price: 950 },
+        { label: "Napojenie na vykurovací systém", price: 320 },
+        { label: "Elektroinštalácia + istenie", price: 250 },
+        { label: "Uvedenie do prevádzky, nastavenie, zaškolenie", price: 180 },
+        ...COMMON_INSTALL_EXTRAS
+      ],
+      services: [
+        { label: "Elektrická revízia", price: 120 },
+        { label: "Odvoz obalov, ekologická likvidácia", price: 60 }
+      ]
+    }
+  };
+
+  // ---------- Helpers ----------
+  const fmt = (n) => {
+    const num = Number(n || 0);
+    return num.toLocaleString("sk-SK", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " €";
+  };
+  const sum = (arr) => arr.reduce((acc, x) => acc + (Number(x.price) || 0), 0);
+  const techSum = (techRows) => techRows.reduce((acc, r) => acc + (Number(r.yourPrice) || 0), 0);
+
+  // ---------- Render ----------
+  function renderOffer(key) {
+    const offer = OFFERS[key];
+
+    // Header / info
+    document.getElementById("headerSubtitle").textContent = offer.headerSubtitle;
+    document.getElementById("brandText").textContent = offer.brand;
+    document.getElementById("powerText").textContent = offer.power;
+    document.getElementById("discountNote").textContent = offer.discountNote || "";
+
+    // Tech table
+    const techBody = document.getElementById("techBody");
+    techBody.innerHTML = "";
+
+    const showListPrice = offer.tech.some(r => typeof r.listPrice === "number");
+    document.getElementById("listPriceHeader").textContent = showListPrice ? "Cenníková cena" : "Poznámka";
+
+    offer.tech.forEach(r => {
+      const tr = document.createElement("tr");
+      tr.className = "border-b hover:bg-gray-50";
+
+      const listCell = showListPrice
+        ? (typeof r.listPrice === "number"
+            ? `<td class="py-3 px-4 text-right text-gray-400 line-through decoration-red-400">${fmt(r.listPrice)}</td>`
+            : `<td class="py-3 px-4 text-right text-gray-400">-</td>`
+          )
+        : `<td class="py-3 px-4 text-right text-gray-400">${r.desc ? " " : "-"}</td>`;
+
+      tr.innerHTML = `
+        <td class="py-3 px-4 font-medium text-gray-900">
+          ${r.name}
+          ${r.desc ? `<div class="text-xs text-gray-500 font-normal">${r.desc}</div>` : ``}
+        </td>
+        <td class="py-3 px-4">${r.model || "-"}</td>
+        ${listCell}
+        <td class="py-3 px-4 text-right font-bold ${key==="mitsubishi" ? "text-green-700" : "text-slate-800"}">${fmt(r.yourPrice)}</td>
+      `;
+      techBody.appendChild(tr);
+    });
+
+    const techTotal = techSum(offer.tech);
+    document.getElementById("techTotal").textContent = fmt(techTotal);
+
+    // Install
+    const installBody = document.getElementById("installBody");
+    installBody.innerHTML = "";
+    offer.installBase.forEach(r => {
+      const tr = document.createElement("tr");
+      tr.className = "hover:bg-gray-50";
+      tr.innerHTML = `
+        <td class="py-2 px-4 w-3/4">${r.label}</td>
+        <td class="py-2 px-4 text-right">${fmt(r.price)}</td>
+      `;
+      installBody.appendChild(tr);
+    });
+    const installTotal = sum(offer.installBase);
+    document.getElementById("installTotal").textContent = fmt(installTotal);
+
+    // Services
+    const servicesBody = document.getElementById("servicesBody");
+    servicesBody.innerHTML = "";
+    offer.services.forEach(r => {
+      const tr = document.createElement("tr");
+      tr.className = "hover:bg-gray-50";
+      tr.innerHTML = `
+        <td class="py-2 px-4 w-3/4">${r.label}</td>
+        <td class="py-2 px-4 text-right">${fmt(r.price)}</td>
+      `;
+      servicesBody.appendChild(tr);
+    });
+    const servicesTotal = sum(offer.services);
+    document.getElementById("servicesTotal").textContent = fmt(servicesTotal);
+
+    // Notes
+    const notesList = document.getElementById("notesList");
+    notesList.innerHTML = "";
+    offer.notes.forEach(n => {
+      const li = document.createElement("li");
+      li.textContent = n;
+      notesList.appendChild(li);
+    });
+
+    // Summary
+    const totalNoVat = techTotal + installTotal + servicesTotal;
+    const vat = totalNoVat * VAT_RATE;
+    const totalWithVat = totalNoVat + vat;
+
+    document.getElementById("sumNoVat").textContent = fmt(totalNoVat);
+    document.getElementById("sumVat").textContent = fmt(vat);
+    document.getElementById("sumWithVat").textContent = fmt(totalWithVat);
+
+    const subsidy = Number(offer.subsidy ?? DEFAULT_SUBSIDY_EUR);
+    document.getElementById("subsidyText").textContent = "- " + fmt(subsidy);
+    const after = Math.max(0, totalWithVat - subsidy);
+    document.getElementById("afterSubsidy").textContent = "~ " + fmt(after);
+  }
+
+  // Date
+  const dateElement = document.getElementById('date');
+  const today = new Date();
+  dateElement.textContent = today.toLocaleDateString('sk-SK', { year:'numeric', month:'long', day:'numeric' });
+
+  // Init
+  const sel = document.getElementById("offerSelect");
+  sel.addEventListener("change", () => renderOffer(sel.value));
+  renderOffer(sel.value);
+</script>
+
 </body>
 </html>
