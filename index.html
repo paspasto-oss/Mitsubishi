@@ -57,6 +57,7 @@
             <label class="block text-xs uppercase tracking-wide text-slate-300 mb-2">Vyber variant ponuky</label>
             <select id="offerSelect" class="w-full md:w-[420px] rounded-md bg-white text-slate-800 px-3 py-2 text-sm">
               <option value="mitsubishi">Mitsubishi Zubadan 12 kW + 200 l TÚV (akcia)</option>
+              <option value="panasonic_split">Panasonic Aquarea K Series 9 kW + 185 l TÚV</option>
               <option value="midea_arctic_10">Midea Arctic R290 Monoblok 10 kW + Dražice 200 l</option>
               <option value="midea_arctic_12">Midea Arctic R290 Monoblok 12 kW + Dražice 200 l</option>
             </select>
@@ -253,6 +254,36 @@
         { name: "Vonkajšia jednotka ZUBADAN 12 kW", desc: "400 V, garantovaný výkon do -15°C", model: "PUD-SHWM120YAA", listPrice: 6535, yourPrice: 4990 },
         { name: "Hydrobox (vnútorná jednotka)", desc: "Vstavaný nerezový zásobník TÚV 200 l", model: "ERST20D-YM9D", listPrice: 6841, yourPrice: 5290 },
         { name: "Regulácia Mitsubishi (FTC)", desc: "", model: "Súčasť setu", listPrice: null, yourPrice: 0 }
+      ],
+      installBase: [
+        { label: "Montáž tepelného čerpadla (vnútorná + vonkajšia jednotka)", price: 950 },
+        { label: "Chladiarenské prepojenie (Cu potrubie, izolácia, vákuovanie)", price: 380 },
+        { label: "Napojenie na vykurovací systém", price: 320 },
+        { label: "Elektroinštalácia + istenie", price: 250 },
+        { label: "Uvedenie do prevádzky, nastavenie, zaškolenie", price: 180 },
+        ...COMMON_INSTALL_EXTRAS
+      ],
+      services: [
+        { label: "Elektrická revízia", price: 120 },
+        { label: "Odvoz obalov, ekologická likvidácia", price: 60 }
+      ]
+    },
+
+    panasonic_split: {
+      headerSubtitle: "Tepelné čerpadlo Panasonic Aquarea High Performance (K Series)",
+      brand: "Panasonic – Aquarea K Series (Split)",
+      power: "9 kW",
+      discountNote: "",
+      subsidy: 3400,
+      notes: [
+        "Nová generácia K Series – moderný dizajn a veľmi tichá prevádzka.",
+        "Integrovaný nerezový zásobník TÚV 185 l (All-in-One).",
+        "Zabudovaný magnetický filter a WiFi ovládanie (voliteľné/Smart Cloud).",
+        "Zachováva vysoký výkon aj pri nízkych teplotách, chladivo R32."
+      ],
+      tech: [
+        { name: "Vonkajšia jednotka Panasonic Aquarea High P.", desc: "9 kW, 1-fáza, R32", model: "WH-UDZ09KE5", listPrice: 3100, yourPrice: 2350 },
+        { name: "Vnútorná jednotka All-in-One (s TÚV)", desc: "Zásobník 185 l, záložný ohrev 3kW", model: "WH-ADC0309K3E5", listPrice: 5100, yourPrice: 3850 }
       ],
       installBase: [
         { label: "Montáž tepelného čerpadla (vnútorná + vonkajšia jednotka)", price: 950 },
