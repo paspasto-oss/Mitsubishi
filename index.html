@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cenová ponuka - Mitsubishi Electric</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @media print {
+            body { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+            .no-print { display: none; }
+            .page-break { page-break-inside: avoid; }
+        }
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gray-100 p-4 md:p-8 text-slate-800">
+
+    <div class="max-w-4xl mx-auto bg-white shadow-xl rounded-lg overflow-hidden print:shadow-none print:max-w-full">
+        
+        <!-- Header / Hlavička -->
+        <div class="bg-slate-800 text-white p-8 flex justify-between items-start">
+            <div>
+                <h1 class="text-3xl font-bold tracking-wide uppercase">Cenová ponuka</h1>
+                <p class="mt-2 text-slate-300">Tepelné čerpadlo Mitsubishi Electric</p>
+                <div class="mt-4 text-sm text-slate-400">
+                    <p>Dátum vystavenia: <span id="date"></span></p>
+                    <p>Platnosť ponuky: 30 dní</p>
+                </div>
+            </div>
+            <div class="text-right">
+                <div class="text-2xl font-bold mb-2">Spektra install s.r.o.</div>
+                <p class="text-sm text-slate-300">Váš dodávateľ technológií</p>
+                <p class="text-sm text-slate-300">spektrainstall@gmail.com | 0917 572 221</p>
+            </div>
+        </div>
+
+        <!-- Project Info / Informácie o projekte -->
+        <div class="p-8 border-b border-gray-200">
+            <h2 class="text-lg font-semibold text-slate-700 mb-4 border-l-4 border-red-600 pl-3">Informácie o projekte</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                <div>
+                    <p><span class="font-semibold">Objekt:</span> Rodinný dom</p>
+                    <p><span class="font-semibold">Systém:</span> Vzduch / Voda – Split</p>
+                </div>
+                <div>
+                    <p><span class="font-semibold">Výrobca:</span> Mitsubishi Electric</p>
+                    <p><span class="font-semibold">Výkon:</span> 10 – 12 kW (ZUBADAN)</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 1: Technology -->
+        <div class="p-8 page-break">
+            <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center">
+                <span class="bg-slate-100 text-slate-600 rounded-full h-8 w-8 flex items-center justify-center mr-2 text-sm">1</span>
+                Technológia – Akciová ponuka
+            </h3>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm text-left text-gray-600">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 border-b border-gray-200">
+                        <tr>
+                            <th class="py-3 px-4 w-5/12">Položka</th>
+                            <th class="py-3 px-4 w-3/12">Typ / Model</th>
+                            <th class="py-3 px-4 text-right text-gray-400 font-normal">Cenníková cena</th>
+                            <th class="py-3 px-4 text-right font-bold text-slate-800">Vaša cena</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="border-b hover:bg-gray-50">
+                            <td class="py-3 px-4 font-medium text-gray-900">
+                                Vonkajšia jednotka ZUBADAN 12 kW
+                                <div class="text-xs text-gray-500 font-normal">400 V, garantovaný výkon do -15°C</div>
+                            </td>
+                            <td class="py-3 px-4">PUD-SHWM120YAA</td>
+                            <td class="py-3 px-4 text-right text-gray-400 line-through decoration-red-400">6 535,00 €</td>
+                            <td class="py-3 px-4 text-right font-bold text-green-700">4 990,00 €</td>
+                        </tr>
+                        <tr class="border-b hover:bg-gray-50">
+                            <td class="py-3 px-4 font-medium text-gray-900">
+                                Hydrobox (vnútorná jednotka)
+                                <div class="text-xs text-gray-500 font-normal">Vstavaný nerezový zásobník TÚV 200 l</div>
+                            </td>
+                            <td class="py-3 px-4">ERST20D-YM9D</td>
+                            <td class="py-3 px-4 text-right text-gray-400 line-through decoration-red-400">6 841,00 €</td>
+                            <td class="py-3 px-4 text-right font-bold text-green-700">5 290,00 €</td>
+                        </tr>
+                        <tr class="border-b hover:bg-gray-50">
+                            <td class="py-3 px-4 font-medium text-gray-900">Regulácia Mitsubishi (FTC)</td>
+                            <td class="py-3 px-4">Súčasť setu</td>
+                            <td class="py-3 px-4 text-right text-gray-400">-</td>
+                            <td class="py-3 px-4 text-right">0,00 €</td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr class="font-semibold text-gray-900 bg-slate-50">
+                            <td colspan="3" class="py-3 px-4 text-right text-slate-600">Spolu za technológiu:</td>
+                            <td class="py-3 px-4 text-right text-lg">10 280,00 €</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <!-- Zľava info -->
+            <div class="mt-2 text-right text-xs text-red-600 font-semibold italic">
+                * Uplatnená mimoriadna zľava na technológiu
+            </div>
+        </div>
+
+        <!-- Section 2: Installation -->
+        <div class="px-8 pb-8 page-break">
+            <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center">
+                <span class="bg-slate-100 text-slate-600 rounded-full h-8 w-8 flex items-center justify-center mr-2 text-sm">2</span>
+                Montáž a inštalácia
+            </h3>
+            <table class="w-full text-sm text-left text-gray-600">
+                <tbody class="divide-y divide-gray-100">
+                    <tr class="hover:bg-gray-50">
+                        <td class="py-2 px-4 w-3/4">Montáž tepelného čerpadla (vnútorná + vonkajšia jednotka)</td>
+                        <td class="py-2 px-4 text-right">950,00 €</td>
+                    </tr>
+                    <tr class="hover:bg-gray-50">
+                        <td class="py-2 px-4">Chladiarenské prepojenie (Cu potrubie, izolácia, vákuovanie)</td>
+                        <td class="py-2 px-4 text-right">380,00 €</td>
+                    </tr>
+                    <tr class="hover:bg-gray-50">
+                        <td class="py-2 px-4">Napojenie na vykurovací systém</td>
+                        <td class="py-2 px-4 text-right">320,00 €</td>
+                    </tr>
+                    <tr class="hover:bg-gray-50">
+                        <td class="py-2 px-4">Elektroinštalácia + istenie</td>
+                        <td class="py-2 px-4 text-right">250,00 €</td>
+                    </tr>
+                    <tr class="hover:bg-gray-50">
+                        <td class="py-2 px-4">Uvedenie do prevádzky, nastavenie, zaškolenie</td>
+                        <td class="py-2 px-4 text-right">180,00 €</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr class="font-semibold text-gray-900 bg-slate-50">
+                        <td class="py-2 px-4 text-right">Spolu za montáž:</td>
+                        <td class="py-2 px-4 text-right">2 080,00 €</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+        <!-- Section 3: Other Services -->
+        <div class="px-8 pb-8 page-break">
+            <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center">
+                <span class="bg-slate-100 text-slate-600 rounded-full h-8 w-8 flex items-center justify-center mr-2 text-sm">3</span>
+                Ostatné služby
+            </h3>
+            <table class="w-full text-sm text-left text-gray-600">
+                <tbody class="divide-y divide-gray-100">
+                    <tr class="hover:bg-gray-50">
+                        <td class="py-2 px-4 w-3/4">Elektrická revízia</td>
+                        <td class="py-2 px-4 text-right">120,00 €</td>
+                    </tr>
+                    <tr class="hover:bg-gray-50">
+                        <td class="py-2 px-4">Odvoz obalov, ekologická likvidácia</td>
+                        <td class="py-2 px-4 text-right">60,00 €</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr class="font-semibold text-gray-900 bg-slate-50">
+                        <td class="py-2 px-4 text-right">Spolu za služby:</td>
+                        <td class="py-2 px-4 text-right">180,00 €</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+        <!-- Final Summary / Rekapitulácia -->
+        <div class="bg-slate-50 p-8 border-t border-gray-200 page-break">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-end">
+                
+                <!-- Notes / Poznámky -->
+                <div class="w-full md:w-1/2 mb-6 md:mb-0 pr-4">
+                    <h4 class="font-bold text-slate-700 mb-2">Poznámky k systému Zubadan:</h4>
+                    <ul class="text-sm text-slate-600 list-disc list-inside space-y-1">
+                        <li>Technológia Flash Injection – udržiava plný vykurovací výkon až do -15 °C.</li>
+                        <li>Garantovaná prevádzka do -28 °C.</li>
+                        <li>Systém je vhodný pre kombináciu radiátorov aj podlahového vykurovania.</li>
+                        <li>Kompaktná vnútorná jednotka s nerezovým 200 l zásobníkom (úspora miesta).</li>
+                    </ul>
+                </div>
+
+                <!-- Price Calculation / Cena -->
+                <div class="w-full md:w-1/2 bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                    <div class="flex justify-between py-2 text-slate-600">
+                        <span>Cena bez DPH:</span>
+                        <span class="font-medium">12 540,00 €</span>
+                    </div>
+                    <div class="flex justify-between py-2 text-slate-600 border-b border-gray-200 mb-2">
+                        <span>DPH (20%):</span>
+                        <span class="font-medium">2 508,00 €</span>
+                    </div>
+                    <div class="flex justify-between py-2 text-xl font-bold text-slate-900">
+                        <span>SPOLU s DPH:</span>
+                        <span>15 048,00 €</span>
+                    </div>
+
+                    <!-- Subsidy Highlight -->
+                    <div class="mt-4 bg-green-50 p-3 rounded border border-green-200">
+                        <div class="flex justify-between text-green-700 text-sm mb-1">
+                            <span>Predpokladaná dotácia:</span>
+                            <span class="font-bold">- 3 400,00 €</span>
+                        </div>
+                        <div class="flex justify-between text-green-800 font-bold border-t border-green-200 pt-2 mt-1">
+                            <span>Cena po odrátaní dotácie:</span>
+                            <span>~ 11 648,00 €</span>
+                        </div>
+                        <p class="text-[10px] text-green-600 mt-1 italic">* Dotácia "Zelená domácnostiam" podlieha schváleniu SIEA.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer / Päta -->
+        <div class="bg-slate-800 text-slate-400 p-4 text-center text-xs">
+            <p>Táto cenová ponuka je nezáväzná. Pre záväznú objednávku nás prosím kontaktujte.</p>
+        </div>
+
+    </div>
+
+    <script>
+        // Set current date
+        const dateElement = document.getElementById('date');
+        const today = new Date();
+        dateElement.textContent = today.toLocaleDateString('sk-SK', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+    </script>
+</body>
+</html>
