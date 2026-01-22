@@ -1,1 +1,253 @@
+/* ZÁKLADNÉ NASTAVENIA A PREMENNÉ */
+:root {
+    --primary-red: #EE2A24;   /* Červená z loga Spektra */
+    --text-dark: #333333;     /* Tmavá pre text */
+    --text-light: #666666;    /* Sivá pre popisy */
+    --bg-grey: #f9f9f9;       /* Pozadie pre striedanie riadkov */
+    --border-color: #dddddd;
+}
 
+body {
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background-color: #555; /* Tmavé pozadie prehliadača */
+    margin: 0;
+    padding: 20px;
+    color: var(--text-dark);
+}
+
+/* A4 PAPIER */
+.a4-wrapper {
+    background: white;
+    width: 210mm;
+    min-height: 297mm;
+    margin: 0 auto;
+    padding: 15mm 20mm;
+    box-sizing: border-box;
+    box-shadow: 0 0 15px rgba(0,0,0,0.3);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+/* HLAVIČKA */
+.header-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 15px;
+}
+
+.logo-img {
+    max-width: 240px; /* Prispôsob podľa potreby */
+    height: auto;
+}
+
+.company-details {
+    text-align: right;
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+.company-details h3 {
+    margin: 0 0 5px 0;
+    font-size: 16px;
+    text-transform: uppercase;
+    color: var(--text-dark);
+}
+
+.contact-info {
+    margin-top: 5px;
+    font-weight: bold;
+    color: var(--primary-red);
+}
+
+.contact-info span {
+    margin-left: 10px;
+}
+
+/* DESIGN PRVOK */
+.brand-line {
+    width: 100%;
+    height: 3px;
+    background-color: var(--primary-red);
+    margin-bottom: 30px;
+}
+
+/* INFORMÁCIE O ZÁKAZNÍKOVI A PONUKE */
+.info-section {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 40px;
+}
+
+.client-box {
+    width: 50%;
+}
+
+.label {
+    font-size: 10px;
+    color: var(--text-light);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.client-box h4 {
+    margin: 0 0 5px 0;
+    font-size: 16px;
+}
+
+.offer-meta {
+    width: 40%;
+    text-align: right;
+}
+
+.offer-meta h1 {
+    margin: 0 0 10px 0;
+    font-size: 24px;
+    color: var(--text-dark);
+    letter-spacing: 2px;
+}
+
+.offer-meta table {
+    width: 100%;
+    font-size: 13px;
+}
+
+.meta-label {
+    text-align: left;
+    color: var(--text-light);
+    padding: 2px 0;
+}
+
+.meta-value {
+    text-align: right;
+    padding: 2px 0;
+}
+
+/* TABUĽKA POLOŽIEK */
+.intro-text {
+    margin-bottom: 20px;
+    font-size: 14px;
+    font-style: italic;
+}
+
+.items-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin-bottom: 40px;
+}
+
+.items-table th {
+    background-color: var(--text-dark);
+    color: white;
+    padding: 10px;
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 1px;
+}
+
+.items-table td {
+    padding: 12px 10px;
+    border-bottom: 1px solid var(--border-color);
+    vertical-align: top;
+}
+
+.item-sub {
+    display: block;
+    font-size: 11px;
+    color: var(--text-light);
+    margin-top: 3px;
+}
+
+/* Stĺpce */
+.col-desc { text-align: left; width: 50%; }
+.col-center { text-align: center; width: 10%; }
+.col-right { text-align: right; width: 15%; }
+
+/* SÚČTY A TOTAL */
+.summary-label {
+    text-align: right;
+    padding-right: 15px;
+    font-weight: bold;
+    color: var(--text-light);
+}
+
+.summary-value {
+    text-align: right;
+    font-weight: bold;
+}
+
+.grand-total-row td {
+    border-top: 2px solid var(--primary-red);
+    border-bottom: none;
+    padding-top: 15px;
+}
+
+.total-label {
+    text-align: right;
+    padding-right: 15px;
+    font-size: 14px;
+    font-weight: bold;
+    color: var(--primary-red);
+}
+
+.total-value {
+    text-align: right;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    background: var(--primary-red);
+    padding: 5px 10px;
+}
+
+.notes-cell {
+    font-size: 11px;
+    color: var(--text-light);
+    vertical-align: middle !important;
+}
+
+/* PÄTIČKA */
+.footer-section {
+    margin-top: auto; /* Tlačí pätu naspodok */
+    border-top: 1px solid var(--border-color);
+    padding-top: 15px;
+    font-size: 10px;
+    color: var(--text-light);
+}
+
+.footer-cols {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.website {
+    text-align: center;
+    font-weight: bold;
+    color: var(--primary-red);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+/* NASTAVENIE PRE TLAČ */
+@media print {
+    body {
+        background: none;
+        margin: 0;
+        padding: 0;
+    }
+    .a4-wrapper {
+        box-shadow: none;
+        margin: 0;
+        width: 100%;
+        height: auto;
+        padding: 10mm; /* Menšie okraje pri tlači */
+    }
+    .grand-total-row .total-value {
+        -webkit-print-color-adjust: exact; /* Vynúti tlač pozadia */
+        print-color-adjust: exact;
+    }
+}
