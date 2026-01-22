@@ -73,13 +73,19 @@
           <p class="text-sm text-slate-300">spektrainstall@gmail.com | 0917 572 221</p>
 
           <!-- LOGO pod firemné iniciály/názov -->
-          <div class="mt-4 flex justify-end">
-            <img
-              src="ONE1.webp"
-              alt="Spektra Install logo"
-              class="h-20 w-auto rounded bg-white/5 p-2"
-              onerror="this.style.display='none'"
-            />
+          <div class="mt-6 flex justify-end">
+            <!-- Tu je vygenerované SVG logo. Ak máte vlastný obrázok, zmažte <svg>...</svg> a vložte <img src="logo.png" class="h-20 w-auto"> -->
+            <svg width="200" height="60" viewBox="0 0 200 60" fill="none" xmlns="http://www.w3.org/2000/svg" class="opacity-90">
+                <!-- Ikonka domu/energie -->
+                <circle cx="30" cy="30" r="28" fill="white" fill-opacity="0.1"/>
+                <path d="M30 10L12 24H48L30 10Z" fill="#ef4444"/> <!-- Červená strecha -->
+                <rect x="16" y="24" width="28" height="22" fill="white"/> <!-- Telo domu -->
+                <path d="M22 36H38" stroke="#3b82f6" stroke-width="2.5" stroke-linecap="round"/> <!-- Modrá linka -->
+                
+                <!-- Text Loga -->
+                <text x="68" y="32" fill="white" font-family="sans-serif" font-weight="800" font-size="22" letter-spacing="0.5">SPEKTRA</text>
+                <text x="68" y="52" fill="#9ca3af" font-family="sans-serif" font-weight="500" font-size="14" letter-spacing="3">INSTALL</text>
+            </svg>
           </div>
         </div>
       </div>
@@ -104,7 +110,7 @@
     <div class="p-8 page-break">
       <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center">
         <span class="bg-slate-100 text-slate-600 rounded-full h-8 w-8 flex items-center justify-center mr-2 text-sm">1</span>
-        Technológia
+        Technológia – Prémiové riešenie
       </h3>
 
       <div class="overflow-x-auto">
@@ -134,7 +140,7 @@
     <div class="px-8 pb-8 page-break">
       <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center">
         <span class="bg-slate-100 text-slate-600 rounded-full h-8 w-8 flex items-center justify-center mr-2 text-sm">2</span>
-        Montáž a inštalácia
+        Profesionálna montáž a inštalácia
       </h3>
 
       <table class="w-full text-sm text-left text-gray-600">
@@ -152,7 +158,7 @@
     <div class="px-8 pb-8 page-break">
       <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center">
         <span class="bg-slate-100 text-slate-600 rounded-full h-8 w-8 flex items-center justify-center mr-2 text-sm">3</span>
-        Ostatné služby
+        Ostatné služby a servis
       </h3>
 
       <table class="w-full text-sm text-left text-gray-600">
@@ -171,7 +177,7 @@
       <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
 
         <div class="w-full md:w-1/2 pr-4">
-          <h4 class="font-bold text-slate-700 mb-2">Poznámky</h4>
+          <h4 class="font-bold text-slate-700 mb-2">Kľúčové výhody pre vás</h4>
           <ul class="text-sm text-slate-600 list-disc list-inside space-y-1" id="notesList"></ul>
 
           <!-- POZNÁMKA O CHLADIVÁCH (na konci dokumentu) -->
@@ -230,10 +236,19 @@
   const VAT_RATE = 0.20;
   const DEFAULT_SUBSIDY_EUR = 3400;
 
+  // VYLEPŠENÉ TEXTY PRE MONTÁŽ - SPOLOČNÉ PRE VŠETKY PONUKY
+  const COMMON_INSTALL_BASE = [
+    { label: "Odborná montáž certifikovaným technikom (záruka kvality)", price: 950 },
+    { label: "Chladiarenské prepojenie (kvalitné Cu potrubie + izolácia, vákuovanie)", price: 380 },
+    { label: "Profesionálne napojenie na vykurovací systém domu", price: 320 },
+    { label: "Elektroinštalácia, istenie a komunikačné prepojenie", price: 250 },
+    { label: "Spustenie, hydraulické vyváženie a zaškolenie obsluhy", price: 180 }
+  ];
+
   const COMMON_INSTALL_EXTRAS = [
-    { label: "Vŕtanie jadrovou vŕtačkou (prestup stena Ø 65–80 mm)", price: 120 },
-    { label: "Izolácie – kaučuk (vykurovanie/chladenie, hr. 19 mm)", price: 140 },
-    { label: "Materiál voda / kúrenie do 3 m (potrubie + fitingy)", price: 180 },
+    { label: "Vŕtanie jadrovou vŕtačkou (presný prestup bez poškodenia steny)", price: 120 },
+    { label: "Prémiová kaučuková izolácia (účinná ochrana potrubí hr. 19mm)", price: 140 },
+    { label: "Inštalačný materiál (ventily, fitingy, kotvenie) do 3 m", price: 180 },
     { label: "Medené potrubie DS28 do 3 m (vrátane izolácie)", price: 210 },
   ];
 
@@ -245,27 +260,21 @@
       discountNote: "* Uplatnená mimoriadna zľava na technológiu (akciová ponuka).",
       subsidy: 3400,
       notes: [
-        "Technológia Flash Injection – udržiava plný vykurovací výkon až do -15 °C.",
-        "Garantovaná prevádzka do -28 °C.",
-        "Vhodné pre kombináciu radiátorov aj podlahového vykurovania.",
-        "Kompaktná vnútorná jednotka s nerezovým 200 l zásobníkom TÚV."
+        "Technológia Flash Injection – plný vykurovací výkon aj pri extrémnych mrazoch (-15 °C).",
+        "Japonská spoľahlivosť s garanciou prevádzky až do -28 °C.",
+        "Univerzálne riešenie: ideálne pre radiátory aj podlahové vykurovanie.",
+        "Kompaktná vnútorná jednotka s nerezovým 200 l zásobníkom (úspora miesta v technickej miestnosti)."
       ],
       tech: [
-        { name: "Vonkajšia jednotka ZUBADAN 12 kW", desc: "400 V, garantovaný výkon do -15°C", model: "PUD-SHWM120YAA", listPrice: 6535, yourPrice: 4990 },
-        { name: "Hydrobox (vnútorná jednotka)", desc: "Vstavaný nerezový zásobník TÚV 200 l", model: "ERST20D-YM9D", listPrice: 6841, yourPrice: 5290 },
-        { name: "Regulácia Mitsubishi (FTC)", desc: "", model: "Súčasť setu", listPrice: null, yourPrice: 0 }
+        { name: "Vonkajšia jednotka ZUBADAN 12 kW (Vlajková loď)", desc: "400 V, patentovaná technológia vstrekovania chladiva", model: "PUD-SHWM120YAA", listPrice: 6535, yourPrice: 4990 },
+        { name: "Hydrobox - Vnútorná jednotka All-in-One", desc: "Vstavaný nerezový zásobník TÚV 200 l + záložný ohrev", model: "ERST20D-YM9D", listPrice: 6841, yourPrice: 5290 },
+        { name: "Akumulačná nádoba 100 l (Buffer)", desc: "Pre hydraulickú stabilitu a zväčšenie objemu systému", model: "V 100 l", listPrice: 350, yourPrice: 290 },
+        { name: "Inteligentná regulácia Mitsubishi (FTC)", desc: "Intuitívne ovládanie celého systému", model: "GRÁTIS v cene", listPrice: null, yourPrice: 0 }
       ],
-      installBase: [
-        { label: "Montáž tepelného čerpadla (vnútorná + vonkajšia jednotka)", price: 950 },
-        { label: "Chladiarenské prepojenie (Cu potrubie, izolácia, vákuovanie)", price: 380 },
-        { label: "Napojenie na vykurovací systém", price: 320 },
-        { label: "Elektroinštalácia + istenie", price: 250 },
-        { label: "Uvedenie do prevádzky, nastavenie, zaškolenie", price: 180 },
-        ...COMMON_INSTALL_EXTRAS
-      ],
+      installBase: COMMON_INSTALL_BASE.concat(COMMON_INSTALL_EXTRAS),
       services: [
-        { label: "Elektrická revízia", price: 120 },
-        { label: "Odvoz obalov, ekologická likvidácia", price: 60 }
+        { label: "Elektrická revízia (vrátane revíznej správy)", price: 120 },
+        { label: "Upratanie miesta realizácie a ekologická likvidácia odpadu", price: 60 }
       ]
     },
 
@@ -276,26 +285,20 @@
       discountNote: "",
       subsidy: 3400,
       notes: [
-        "Nová generácia K Series – moderný dizajn a veľmi tichá prevádzka.",
-        "Integrovaný nerezový zásobník TÚV 185 l (All-in-One).",
-        "Zabudovaný magnetický filter a WiFi ovládanie (voliteľné/Smart Cloud).",
-        "Zachováva vysoký výkon aj pri nízkych teplotách, chladivo R32."
+        "Najnovšia generácia K Series – moderný dizajn ocenený za estetiku.",
+        "Veľmi tichá prevádzka – vhodné aj do hustej zástavby.",
+        "All-in-One riešenie: všetko v jednej skrini (TÚV, filter, elektronika).",
+        "Smart Cloud: Možnosť ovládania cez mobilnú aplikáciu."
       ],
       tech: [
-        { name: "Vonkajšia jednotka Panasonic Aquarea High P.", desc: "9 kW, 1-fáza, R32", model: "WH-UDZ09KE5", listPrice: 3100, yourPrice: 2350 },
-        { name: "Vnútorná jednotka All-in-One (s TÚV)", desc: "Zásobník 185 l, záložný ohrev 3kW", model: "WH-ADC0309K3E5", listPrice: 5100, yourPrice: 3850 }
+        { name: "Vonkajšia jednotka Panasonic Aquarea High P.", desc: "9 kW, 1-fáza, tichý režim, chladivo R32", model: "WH-UDZ09KE5", listPrice: 3100, yourPrice: 2350 },
+        { name: "Vnútorná jednotka All-in-One (s TÚV)", desc: "Zásobník 185 l, zabudovaný magnetický filter, Smart Cloud", model: "WH-ADC0309K3E5", listPrice: 5100, yourPrice: 3850 },
+        { name: "Akumulačná nádoba 100 l (Buffer)", desc: "Pre hydraulickú stabilitu a zväčšenie objemu systému", model: "V 100 l", listPrice: 350, yourPrice: 290 }
       ],
-      installBase: [
-        { label: "Montáž tepelného čerpadla (vnútorná + vonkajšia jednotka)", price: 950 },
-        { label: "Chladiarenské prepojenie (Cu potrubie, izolácia, vákuovanie)", price: 380 },
-        { label: "Napojenie na vykurovací systém", price: 320 },
-        { label: "Elektroinštalácia + istenie", price: 250 },
-        { label: "Uvedenie do prevádzky, nastavenie, zaškolenie", price: 180 },
-        ...COMMON_INSTALL_EXTRAS
-      ],
+      installBase: COMMON_INSTALL_BASE.concat(COMMON_INSTALL_EXTRAS),
       services: [
-        { label: "Elektrická revízia", price: 120 },
-        { label: "Odvoz obalov, ekologická likvidácia", price: 60 }
+        { label: "Elektrická revízia (vrátane revíznej správy)", price: 120 },
+        { label: "Upratanie miesta realizácie a ekologická likvidácia odpadu", price: 60 }
       ]
     },
 
@@ -306,23 +309,27 @@
       discountNote: "",
       subsidy: 3400,
       notes: [
-        "Monoblok R290 – ekologické chladivo, bez split chladiva v interiéri.",
-        "Zásobník TÚV Dražice OKC 200 NTR/HP – určený pre tepelné čerpadlá (väčšia výmenná plocha)."
+        "Ekologické chladivo R290 (Propán) – budúcnosť bez legislatívnych obmedzení.",
+        "Monoblok systém – žiadne chladivo v interiéri, vyššia bezpečnosť.",
+        "Vysoká teplota výstupnej vody – vhodné aj pre rekonštrukcie.",
+        "Osvedčený zásobník Dražice s predĺženou životnosťou."
       ],
       tech: [
-        { name: "Tepelné čerpadlo Midea Arctic R290 – monoblok ~10 kW", desc: "invertor, R290, vzduch/voda", model: "Arctic R290 10 kW", listPrice: null, yourPrice: 4200 },
-        { name: "Dražice OKC 200 NTR/HP – zásobník na TÚV 200 l", desc: "zásobník určený pre tepelné čerpadlo", model: "OKC 200 NTR/HP", listPrice: null, yourPrice: 938.21 }
+        { name: "Tepelné čerpadlo Midea Arctic R290 ~10 kW", desc: "Invertorová technológia, vysoká účinnosť, WiFi modul v cene", model: "Arctic R290 10 kW", listPrice: null, yourPrice: 4200 },
+        { name: "Zásobník TÚV Dražice OKC 200 NTR/HP", desc: "Špeciál pre TČ, zväčšená výhrevná plocha hada", model: "OKC 200 NTR/HP", listPrice: null, yourPrice: 938.21 },
+        { name: "Akumulačná nádoba 100 l (Buffer)", desc: "Pre hydraulickú stabilitu a zväčšenie objemu systému", model: "V 100 l", listPrice: 350, yourPrice: 290 }
       ],
       installBase: [
-        { label: "Montáž tepelného čerpadla", price: 950 },
-        { label: "Napojenie na vykurovací systém", price: 320 },
-        { label: "Elektroinštalácia + istenie", price: 250 },
-        { label: "Uvedenie do prevádzky, nastavenie, zaškolenie", price: 180 },
+         // Midea má jednoduchšiu montáž (monoblok), ale popisy ponecháme atraktívne
+        { label: "Odborná montáž monobloku certifikovaným technikom", price: 950 },
+        { label: "Profesionálne napojenie na vykurovací systém domu", price: 320 },
+        { label: "Elektroinštalácia, istenie a sprevádzkovanie", price: 250 },
+        { label: "Zaškolenie obsluhy a nastavenie ekvitermiky", price: 180 },
         ...COMMON_INSTALL_EXTRAS
       ],
       services: [
-        { label: "Elektrická revízia", price: 120 },
-        { label: "Odvoz obalov, ekologická likvidácia", price: 60 }
+        { label: "Elektrická revízia (vrátane revíznej správy)", price: 120 },
+        { label: "Upratanie miesta realizácie a ekologická likvidácia odpadu", price: 60 }
       ]
     },
 
@@ -333,23 +340,26 @@
       discountNote: "",
       subsidy: 3400,
       notes: [
-        "Výkonnejšia alternatíva pre domy s vyššou stratou alebo radiátormi.",
-        "Zásobník TÚV Dražice OKC 200 NTR/HP – určený pre tepelné čerpadlá (väčšia výmenná plocha)."
+        "Zvýšený výkon 12 kW – rezerva pre chladnejšie dni.",
+        "Ekologické a bezpečné chladivo R290.",
+        "Tichá prevádzka vonkajšej jednotky.",
+        "Kompletné riešenie ohrevu vody so zásobníkom Dražice."
       ],
       tech: [
-        { name: "Tepelné čerpadlo Midea Arctic R290 – monoblok ~12 kW", desc: "invertor, R290, vzduch/voda", model: "Arctic R290 12 kW", listPrice: null, yourPrice: 4700 },
-        { name: "Dražice OKC 200 NTR/HP – zásobník na TÚV 200 l", desc: "zásobník určený pre tepelné čerpadlo", model: "OKC 200 NTR/HP", listPrice: null, yourPrice: 938.21 }
+        { name: "Tepelné čerpadlo Midea Arctic R290 ~12 kW", desc: "Vysoký výkon, WiFi ovládanie, dotykový ovládač", model: "Arctic R290 12 kW", listPrice: null, yourPrice: 4700 },
+        { name: "Zásobník TÚV Dražice OKC 200 NTR/HP", desc: "Kvalitný smalt, zväčšený výmenník tepla", model: "OKC 200 NTR/HP", listPrice: null, yourPrice: 938.21 },
+        { name: "Akumulačná nádoba 100 l (Buffer)", desc: "Pre hydraulickú stabilitu a zväčšenie objemu systému", model: "V 100 l", listPrice: 350, yourPrice: 290 }
       ],
       installBase: [
-        { label: "Montáž tepelného čerpadla", price: 950 },
-        { label: "Napojenie na vykurovací systém", price: 320 },
-        { label: "Elektroinštalácia + istenie", price: 250 },
-        { label: "Uvedenie do prevádzky, nastavenie, zaškolenie", price: 180 },
+        { label: "Odborná montáž monobloku certifikovaným technikom", price: 950 },
+        { label: "Profesionálne napojenie na vykurovací systém domu", price: 320 },
+        { label: "Elektroinštalácia, istenie a sprevádzkovanie", price: 250 },
+        { label: "Zaškolenie obsluhy a nastavenie ekvitermiky", price: 180 },
         ...COMMON_INSTALL_EXTRAS
       ],
       services: [
-        { label: "Elektrická revízia", price: 120 },
-        { label: "Odvoz obalov, ekologická likvidácia", price: 60 }
+        { label: "Elektrická revízia (vrátane revíznej správy)", price: 120 },
+        { label: "Upratanie miesta realizácie a ekologická likvidácia odpadu", price: 60 }
       ]
     }
   };
