@@ -10,7 +10,7 @@
   <style>
     body { font-family: 'Inter', sans-serif; }
     
-    /* Vylepšené štýly pre tlač */
+    /* Vylepšené štýly pre tlač (podľa PDF predlohy) */
     @media print {
       @page {
         margin: 0cm;
@@ -21,15 +21,17 @@
         print-color-adjust: exact !important; 
         -webkit-print-color-adjust: exact !important; 
         background-color: white !important;
-        margin: 1.25cm; /* Štandardný okraj pre A4 */
-        color: #1f2937; /* Tmavosivá pre ostrý text */
+        margin: 1.5cm; /* Okraje presne ako v PDF */
+        color: #1f2937;
+        font-size: 12px; /* Mierne zmenšenie písma pre compact look */
       }
 
       .no-print { display: none !important; }
       .print-reset-shadow { box-shadow: none !important; }
       .print-full-width { max-width: 100% !important; margin: 0 !important; }
+      .print-border-none { border: none !important; }
       
-      /* FIX pre Hlavičku: Pevné rozloženie */
+      /* Hlavička */
       .header-row {
         display: flex !important;
         flex-direction: row !important;
@@ -39,39 +41,69 @@
         margin-bottom: 2rem !important;
       }
       
-      .header-left { width: 55% !important; }
-      .header-right { width: 45% !important; text-align: right !important; }
+      .header-left { width: 50% !important; }
+      .header-right { width: 50% !important; text-align: right !important; }
+
+      /* Sekcie */
+      h1 { font-size: 24px !important; margin-bottom: 5px !important; color: #111827 !important; }
+      h2 { font-size: 14px !important; border: none !important; padding: 0 !important; margin-bottom: 15px !important; text-transform: uppercase; color: #374151 !important; font-weight: 800 !important; }
+      h3 { font-size: 14px !important; margin-bottom: 10px !important; color: #111827 !important; }
+
+      /* Tabuľky */
+      th { background-color: white !important; color: #374151 !important; font-weight: 800 !important; border-bottom: 2px solid #e5e7eb !important; padding-top: 5px !important; padding-bottom: 5px !important; }
+      td { padding-top: 6px !important; padding-bottom: 6px !important; border-bottom: 1px solid #f3f4f6 !important; }
+      tfoot td { border-top: 2px solid #e5e7eb !important; border-bottom: none !important; padding-top: 10px !important; font-size: 14px !important; }
 
       /* Inteligentné lámanie strán */
       tr { page-break-inside: avoid; } 
-      h3 { page-break-after: avoid; page-break-inside: avoid; }
-      .avoid-break-inside { page-break-inside: avoid; }
+      .section-block { page-break-inside: avoid; margin-bottom: 20px; }
       
-      /* Farby pre tlač (vysoký kontrast) */
-      .text-slate-300 { color: #9ca3af !important; } 
-      .text-slate-400 { color: #6b7280 !important; }
+      /* Farby */
+      .text-slate-300 { color: #6b7280 !important; } 
+      .text-slate-400 { color: #4b5563 !important; }
       .text-red-400 { color: #ef4444 !important; }
+      .bg-slate-800 { background-color: transparent !important; color: #111827 !important; }
+      .text-white { color: #111827 !important; }
       
-      /* Obrázok na konci - vyplnenie miesta */
-      .summary-section {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        height: auto;
+      /* Skrytie pozadí sekcií v tlači pre čistý vzhľad */
+      .bg-gray-100 { background-color: white !important; padding: 0 !important; }
+      .bg-white { background-color: white !important; box-shadow: none !important; }
+      .p-8 { padding: 0 !important; }
+      
+      /* Projekt Info Grid */
+      .project-info-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+        margin-bottom: 2rem;
       }
-      .final-image-container {
-        margin-top: auto !important; /* Tlačí obrázok dolu */
-        page-break-inside: avoid;
+      
+      /* Zhrnutie na konci */
+      .summary-container {
+         display: flex;
+         justify-content: space-between;
+         margin-top: 2rem;
+         page-break-inside: avoid;
+      }
+      .summary-left { width: 55%; }
+      .summary-right { width: 40%; }
+
+      /* Obrázok */
+      .image-container {
+        margin-top: 2rem;
+        width: 100%;
+        height: 300px;
+        overflow: hidden;
+      }
+      .image-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
       }
     }
 
-    /* Základný layout pre obrazovku */
-    .header-row { 
-      display: flex; 
-      justify-content: space-between; 
-      align-items: flex-start; 
-      gap: 24px; 
-    }
+    /* Web štýly */
+    .header-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 24px; }
   </style>
 </head>
 
@@ -80,30 +112,22 @@
   <div class="max-w-4xl mx-auto bg-white shadow-xl rounded-lg overflow-hidden print-reset-shadow print-full-width">
 
     <!-- Header -->
-    <div class="bg-slate-800 text-white p-8 print:p-0 print:bg-white print:text-slate-800">
+    <div class="bg-slate-800 text-white p-8 print:p-0 print:bg-white print:text-slate-900">
       <div class="header-row">
-        <!-- Ľavá strana: Nadpis a Zákazník -->
+        <!-- Ľavá strana -->
         <div class="header-left">
           <h1 class="text-3xl font-extrabold tracking-wide uppercase leading-none text-white print:text-slate-900">Cenová ponuka</h1>
-          <div class="flex items-center gap-2 mt-2">
-             <span class="text-red-400 font-bold text-lg" id="offerNumberDisplay">2026/001</span>
+          <div class="flex items-center gap-2 mt-2 mb-4">
+             <span class="text-slate-200 font-semibold text-lg print:text-slate-700" id="offerNumberDisplay">2026/001</span>
              <span class="text-slate-400 text-sm font-medium print:text-slate-500">| Tepelné čerpadlo</span>
           </div>
           
-          <div class="mt-4 text-xs text-slate-400 print:text-slate-600">
-            <p>Dátum vystavenia: <span id="date" class="text-slate-300 font-medium print:text-slate-800"></span></p>
+          <div class="text-xs text-slate-400 print:text-slate-600 space-y-1">
+            <p>Dátum vystavenia: <span id="date" class="text-slate-300 font-medium print:text-slate-900"></span></p>
             <p>Platnosť ponuky: 30 dní</p>
           </div>
 
-          <!-- Zobrazenie zákazníka -->
-          <div class="mt-8 p-0 bg-transparent">
-            <p class="text-[11px] uppercase text-slate-400 font-bold mb-2 tracking-widest print:text-slate-500 border-b border-slate-600 print:border-slate-200 inline-block pb-1">Zákazník / Odberateľ</p>
-            <div id="customerDisplay" class="text-sm font-semibold whitespace-pre-line text-white print:text-slate-900 leading-relaxed mt-1">Vážený zákazník
-Ulica 123
-000 00 Mesto</div>
-          </div>
-
-          <!-- Ovládací panel (iba pre vás) -->
+          <!-- Ovládací panel (iba pre vás - web) -->
           <div class="no-print mt-8 p-4 bg-slate-700 rounded-lg border border-slate-600 shadow-inner">
             <div class="flex items-center gap-2 mb-3 border-b border-slate-600 pb-2">
                 <span class="text-lg">🛠</span>
@@ -149,96 +173,88 @@ Ulica 123
 
         <!-- Pravá strana: Firma -->
         <div class="header-right text-right">
-          <div class="text-2xl font-bold mb-1 tracking-tight text-white print:text-slate-900">Spektra install s.r.o.</div>
-          <div class="text-sm text-slate-300 space-y-0.5 print:text-slate-600">
+          <div class="text-xl font-bold mb-1 tracking-tight text-white print:text-slate-900 uppercase">Spektra install s.r.o.</div>
+          <div class="text-sm text-slate-300 space-y-1 print:text-slate-600 print:text-xs">
             <p>prevádzka Hollého 210</p>
             <p>015 01 Rajec</p>
-            <p class="mt-2 text-white font-medium print:text-slate-900">spektrainstall@gmail.com</p>
+            <p class="mt-2 text-white font-medium print:text-slate-900 print:mt-1">spektrainstall@gmail.com</p>
             <p class="font-medium text-white print:text-slate-900">0917 572 221</p>
           </div>
 
-          <!-- LOGO -->
-          <div class="mt-8 flex justify-end opacity-90 print:opacity-100">
-            <!-- Vylepšené SVG Logo (Tmavé pre tlač, svetlé pre web) -->
-            <svg width="180" height="50" viewBox="0 0 200 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="30" cy="30" r="28" fill="currentColor" class="text-white print:text-slate-200" fill-opacity="0.1"/>
-                <path d="M30 10L12 24H48L30 10Z" fill="#ef4444"/>
-                <rect x="16" y="24" width="28" height="22" fill="currentColor" class="text-white print:text-slate-800"/>
-                <path d="M22 36H38" stroke="#3b82f6" stroke-width="2.5" stroke-linecap="round"/>
-                <text x="68" y="32" fill="currentColor" class="text-white print:text-slate-900" font-family="sans-serif" font-weight="800" font-size="22" letter-spacing="0.5">SPEKTRA</text>
-                <text x="68" y="52" fill="currentColor" class="text-slate-400 print:text-slate-500" font-family="sans-serif" font-weight="500" font-size="14" letter-spacing="3">INSTALL</text>
-            </svg>
+          <!-- ZÁKAZNÍK (vpravo pod firmou v tlači, vľavo na webe je v editore) -->
+          <div class="mt-8 text-left print:mt-12">
+            <p class="text-[11px] uppercase text-slate-400 font-bold mb-1 tracking-widest print:text-slate-500 border-b border-slate-600 print:border-slate-300 inline-block pb-1">ZÁKAZNÍK / ODBERATEĽ</p>
+            <div id="customerDisplay" class="text-sm font-semibold whitespace-pre-line text-white print:text-slate-900 leading-relaxed mt-1">Vážený zákazník
+Ulica 123
+000 00 Mesto</div>
           </div>
         </div>
       </div>
     </div>
 
     <!-- Project Info -->
-    <div class="p-8 border-b border-gray-200 print:p-0 print:mb-8 print:border-b-2 print:pb-4 avoid-break-inside">
-      <h2 class="text-lg font-semibold text-slate-700 mb-4 border-l-4 border-red-600 pl-3 print:text-slate-900 print:mb-2">Informácie o projekte</h2>
-      <div class="grid grid-cols-2 gap-8 text-sm">
+    <div class="p-8 border-b border-gray-200 print:p-0 print:border-none print:mt-8 section-block">
+      <h2 class="text-lg font-bold text-slate-700 mb-4 pl-0 print:text-slate-800 print:text-sm print:uppercase print:tracking-wide">Informácie o projekte</h2>
+      <div class="project-info-grid text-sm">
         <div>
-          <p class="text-slate-500 text-[10px] uppercase font-bold tracking-wider mb-1">Objekt</p>
-          <p class="font-semibold text-slate-800 text-base">Rodinný dom</p>
-          <div class="mt-3">
-             <p class="text-slate-500 text-[10px] uppercase font-bold tracking-wider mb-1">Systém</p>
-             <p class="font-semibold text-slate-800 text-base">Vzduch / Voda</p>
-          </div>
+          <p class="text-slate-500 text-[10px] uppercase font-bold tracking-wider mb-1">OBJEKT</p>
+          <p class="font-bold text-slate-800 text-base mb-4">Rodinný dom</p>
+          
+          <p class="text-slate-500 text-[10px] uppercase font-bold tracking-wider mb-1">SYSTÉM</p>
+          <p class="font-bold text-slate-800 text-base">Vzduch / Voda</p>
         </div>
         <div>
-          <p class="text-slate-500 text-[10px] uppercase font-bold tracking-wider mb-1">Zvolená technológia</p>
-          <p class="font-semibold text-slate-800 text-base"><span id="brandText">—</span></p>
-          <div class="mt-3">
-             <p class="text-slate-500 text-[10px] uppercase font-bold tracking-wider mb-1">Výkon</p>
-             <p class="font-semibold text-slate-800 text-base"><span id="powerText">—</span></p>
-          </div>
+          <p class="text-slate-500 text-[10px] uppercase font-bold tracking-wider mb-1">ZVOLENÁ TECHNOLÓGIA</p>
+          <p class="font-bold text-slate-800 text-base mb-4"><span id="brandText">—</span></p>
+          
+          <p class="text-slate-500 text-[10px] uppercase font-bold tracking-wider mb-1">VÝKON</p>
+          <p class="font-bold text-slate-800 text-base"><span id="powerText">—</span></p>
         </div>
       </div>
     </div>
 
     <!-- Section 1: Tech -->
-    <div class="p-8 print:p-0 print:mb-6">
-      <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center print:mb-2 print:text-slate-900">
-        <span class="bg-slate-100 text-slate-600 rounded-full h-8 w-8 flex items-center justify-center mr-2 text-sm font-bold border border-slate-200 print:bg-slate-200 print:text-slate-800">1</span>
+    <div class="p-8 print:p-0 print:mt-4 section-block">
+      <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center print:text-sm print:uppercase print:tracking-wide">
+        <span class="bg-slate-100 text-slate-600 rounded-full h-6 w-6 flex items-center justify-center mr-2 text-xs font-bold border border-slate-200 print:bg-slate-200 print:text-slate-800">1</span>
         Technológia – Prémiové riešenie
       </h3>
 
-      <div class="overflow-hidden rounded-lg border border-gray-200 print:border-slate-300">
+      <div class="print:border-t-2 print:border-slate-800">
         <table class="w-full text-sm text-left text-gray-600">
-          <thead class="text-xs text-gray-700 uppercase bg-gray-50 border-b border-gray-200 print:bg-slate-100 print:text-slate-800">
+          <thead class="text-xs text-gray-700 uppercase print:text-slate-800">
             <tr>
-              <th class="py-3 px-4 w-5/12">Položka</th>
-              <th class="py-3 px-4 w-3/12">Typ / Model</th>
-              <th class="py-3 px-4 text-right text-gray-400 font-normal print:text-slate-500" id="listPriceHeader">Cenníková cena</th>
-              <th class="py-3 px-4 text-right font-bold text-slate-800 print:text-slate-900">Vaša cena</th>
+              <th class="py-2 px-2 w-5/12">POLOŽKA</th>
+              <th class="py-2 px-2 w-3/12">TYP / MODEL</th>
+              <th class="py-2 px-2 text-right font-bold w-2/12" id="listPriceHeader">CENNÍKOVÁ CENA</th>
+              <th class="py-2 px-2 text-right font-bold w-2/12">VAŠA CENA</th>
             </tr>
           </thead>
           <tbody id="techBody" class="divide-y divide-gray-100 print:divide-slate-200"></tbody>
-          <tfoot class="bg-slate-50 border-t border-gray-200 print:bg-slate-50 print:border-slate-300">
+          <tfoot class="print:border-t-2 print:border-slate-300">
             <tr>
-              <td colspan="3" class="py-3 px-4 text-right text-slate-600 font-medium">Spolu za technológiu:</td>
-              <td class="py-3 px-4 text-right text-lg font-bold text-slate-900" id="techTotal">0,00 €</td>
+              <td colspan="3" class="py-3 px-2 text-right text-slate-600 font-bold text-xs uppercase tracking-wide">Spolu za technológiu:</td>
+              <td class="py-3 px-2 text-right text-base font-bold text-slate-900" id="techTotal">0,00 €</td>
             </tr>
           </tfoot>
         </table>
       </div>
-      <div class="mt-2 text-right text-xs text-red-600 font-semibold italic" id="discountNote"></div>
     </div>
 
     <!-- Section 2: Install -->
-    <div class="px-8 pb-4 print:p-0 print:mb-6">
-      <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center print:mb-2 print:text-slate-900">
-        <span class="bg-slate-100 text-slate-600 rounded-full h-8 w-8 flex items-center justify-center mr-2 text-sm font-bold border border-slate-200 print:bg-slate-200 print:text-slate-800">2</span>
+    <div class="px-8 pb-4 print:p-0 print:mt-4 section-block">
+      <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center print:text-sm print:uppercase print:tracking-wide">
+        <span class="bg-slate-100 text-slate-600 rounded-full h-6 w-6 flex items-center justify-center mr-2 text-xs font-bold border border-slate-200 print:bg-slate-200 print:text-slate-800">2</span>
         Profesionálna montáž a inštalácia
       </h3>
 
-      <div class="overflow-hidden rounded-lg border border-gray-200 print:border-slate-300">
+      <div class="print:border-t-2 print:border-slate-800">
         <table class="w-full text-sm text-left text-gray-600">
           <tbody class="divide-y divide-gray-100 print:divide-slate-200" id="installBody"></tbody>
-          <tfoot class="bg-slate-50 border-t border-gray-200 print:bg-slate-50 print:border-slate-300">
+          <tfoot class="print:border-t-2 print:border-slate-300">
             <tr>
-              <td class="py-2 px-4 text-right font-medium">Spolu za montáž:</td>
-              <td class="py-2 px-4 text-right font-bold text-slate-900" id="installTotal">0,00 €</td>
+              <td class="py-2 px-2 text-right font-bold text-xs uppercase tracking-wide">Spolu za montáž:</td>
+              <td class="py-2 px-2 text-right font-bold text-slate-900 w-2/12" id="installTotal">0,00 €</td>
             </tr>
           </tfoot>
         </table>
@@ -246,97 +262,91 @@ Ulica 123
     </div>
 
     <!-- Section 3: Services -->
-    <div class="px-8 pb-8 print:p-0 print:mb-8">
-      <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center print:mb-2 print:text-slate-900">
-        <span class="bg-slate-100 text-slate-600 rounded-full h-8 w-8 flex items-center justify-center mr-2 text-sm font-bold border border-slate-200 print:bg-slate-200 print:text-slate-800">3</span>
+    <div class="px-8 pb-8 print:p-0 print:mt-4 section-block">
+      <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center print:text-sm print:uppercase print:tracking-wide">
+        <span class="bg-slate-100 text-slate-600 rounded-full h-6 w-6 flex items-center justify-center mr-2 text-xs font-bold border border-slate-200 print:bg-slate-200 print:text-slate-800">3</span>
         Ostatné služby a servis
       </h3>
 
-      <div class="overflow-hidden rounded-lg border border-gray-200 print:border-slate-300 avoid-break-inside">
+      <div class="print:border-t-2 print:border-slate-800">
         <table class="w-full text-sm text-left text-gray-600">
           <tbody class="divide-y divide-gray-100 print:divide-slate-200" id="servicesBody"></tbody>
-          <tfoot class="bg-slate-50 border-t border-gray-200 print:bg-slate-50 print:border-slate-300">
+          <tfoot class="print:border-t-2 print:border-slate-300">
             <tr>
-              <td class="py-2 px-4 text-right font-medium">Spolu za služby:</td>
-              <td class="py-2 px-4 text-right font-bold text-slate-900" id="servicesTotal">0,00 €</td>
+              <td class="py-2 px-2 text-right font-bold text-xs uppercase tracking-wide">Spolu za služby:</td>
+              <td class="py-2 px-2 text-right font-bold text-slate-900 w-2/12" id="servicesTotal">0,00 €</td>
             </tr>
           </tfoot>
         </table>
       </div>
     </div>
 
-    <!-- Summary & Image (Vynútený prechod na novú stranu v tlači ak treba) -->
-    <div class="bg-slate-50 p-8 border-t border-gray-200 print:p-0 print:bg-white print:border-none summary-section">
+    <!-- Summary & Image -->
+    <div class="bg-slate-50 p-8 border-t border-gray-200 print:p-0 print:bg-white print:border-none print:mt-8 section-block">
       
-      <div class="flex flex-col md:flex-row justify-between items-start gap-8 avoid-break-inside">
+      <div class="summary-container">
         <!-- Notes -->
-        <div class="w-full md:w-1/2">
-          <h4 class="font-bold text-slate-800 mb-3 text-sm uppercase tracking-wide print:text-slate-900">Kľúčové výhody pre vás</h4>
-          <ul class="text-sm text-slate-600 list-disc list-inside space-y-2 marker:text-red-400 print:text-slate-700" id="notesList"></ul>
+        <div class="summary-left">
+          <h4 class="font-bold text-slate-800 mb-3 text-xs uppercase tracking-wide print:text-slate-900">Kľúčové výhody pre vás</h4>
+          <ul class="text-sm text-slate-600 list-disc list-inside space-y-1 marker:text-red-400 print:text-slate-700" id="notesList"></ul>
+          
+          <div class="mt-2 text-xs text-red-600 font-bold italic" id="discountNote"></div>
 
-          <div class="mt-6 p-3 bg-blue-50/50 rounded border border-blue-100 text-xs text-slate-600 leading-relaxed print:bg-white print:border-slate-300 print:text-slate-600">
-            <p class="font-bold text-blue-800 mb-1 print:text-slate-900">Legislatíva EÚ (F-plyny):</p>
+          <div class="mt-6 text-xs text-slate-600 leading-relaxed print:text-slate-600">
+            <p class="font-bold text-slate-900 mb-1 uppercase">Legislatíva EÚ (F-plyny):</p>
             <p>
               Prebieha postupné obmedzovanie chladiva <b>R32</b>. Trend smeruje k ekologickým chladivám 
-              <b>R290 (propán)</b>. Odporúčame zvážiť tento faktor pri výbere zariadenia pre dlhodobú udržateľnosť.
+              <b>R290 (propán)</b>. Odporúčame zvážiť tento faktor pri výbere zariadenia.
             </p>
           </div>
         </div>
 
         <!-- Total Price -->
-        <div class="w-full md:w-1/2">
-          <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200 print:border-slate-300 print:bg-white">
-            <div class="flex justify-between py-1 text-slate-600 text-sm">
-              <span>Cena bez DPH:</span>
+        <div class="summary-right">
+          <div class="bg-white p-4 rounded border border-gray-200 print:border-none print:p-0">
+            <div class="flex justify-between py-1 text-slate-600 text-sm print:text-slate-800">
+              <span class="font-semibold">Cena bez DPH:</span>
               <span class="font-medium" id="sumNoVat">0,00 €</span>
             </div>
-            <div class="flex justify-between py-1 text-slate-600 text-sm border-b border-gray-100 mb-2 pb-2">
-              <span>DPH (20%):</span>
+            <div class="flex justify-between py-1 text-slate-600 text-sm border-b border-gray-200 mb-2 pb-2 print:text-slate-800">
+              <span class="font-semibold">DPH (20%):</span>
               <span class="font-medium" id="sumVat">0,00 €</span>
             </div>
-            <div class="flex justify-between items-end py-2">
-              <span class="text-slate-800 font-bold text-lg">SPOLU s DPH:</span>
-              <span class="text-2xl font-black text-slate-900 tracking-tight" id="sumWithVat">0,00 €</span>
+            <div class="flex justify-between items-end py-2 bg-slate-50 print:bg-white print:py-0">
+              <span class="text-slate-900 font-extrabold uppercase">SPOLU s DPH:</span>
+              <span class="text-xl font-black text-slate-900 tracking-tight" id="sumWithVat">0,00 €</span>
             </div>
 
-            <div class="mt-4 bg-green-50 p-3 rounded border border-green-200 print:bg-white print:border-green-400 print:border-dashed">
-              <div class="flex justify-between text-green-700 text-sm mb-1 print:text-green-800">
+            <div class="mt-4 pt-4 border-t border-slate-200">
+              <div class="flex justify-between text-green-700 text-sm mb-1 print:text-slate-800">
                 <span>Možná dotácia:</span>
                 <span class="font-bold" id="subsidyText">- 3 400,00 €</span>
               </div>
-              <div class="flex justify-between text-green-800 font-bold border-t border-green-200 pt-2 mt-1 print:border-green-300 print:text-black">
+              <div class="flex justify-between text-green-800 font-bold pt-1 print:text-slate-900">
                 <span>Po odrátaní dotácie:</span>
                 <span id="afterSubsidy">~ 0,00 €</span>
               </div>
-              <p class="text-[10px] text-green-600 mt-1 italic">* Dotácia "Zelená domácnostiam" podlieha schváleniu SIEA.</p>
+              <p class="text-[10px] text-slate-500 mt-2 italic">* Dotácia "Zelená domácnostiam" podlieha schváleniu SIEA.</p>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- OBRÁZOK (Pohľad z okna) - Auto-fill -->
-      <div class="mt-8 w-full final-image-container">
-         <div class="relative w-full h-64 md:h-[400px] bg-gray-100 rounded-lg overflow-hidden border border-slate-200 print:border-0 print:h-auto">
-             <!-- Placeholder text ak sa obrázok nenačíta -->
-             <div class="absolute inset-0 flex items-center justify-center text-slate-400 text-xs print:hidden">
-                 (Miesto pre vizualizáciu: pohlad.jpg)
-             </div>
-             
-             <img 
-               src="pohlad.jpg" 
-               alt="Vizualizácia" 
-               class="relative z-10 w-full h-full object-cover print:object-contain print:max-h-[40cm]"
-               onerror="this.src='pohlad.png'; this.onerror=null;" 
-             />
-         </div>
+      <!-- OBRÁZOK (Pohľad z okna) - Vypĺňa spodok strany -->
+      <div class="image-container print:block hidden md:block">
+         <img 
+           src="pohlad.jpg" 
+           alt="Vizualizácia" 
+           onerror="this.style.display='none'" 
+         />
       </div>
 
     </div>
 
     <!-- Footer -->
-    <div class="bg-slate-800 text-slate-400 p-4 text-center text-xs print:bg-white print:text-slate-400 print:border-t print:border-slate-100 print:mt-4">
+    <div class="bg-slate-800 text-slate-400 p-4 text-center text-xs print:bg-white print:text-slate-500 print:border-t print:border-slate-200 print:mt-4 print:pt-2">
       <p>Táto cenová ponuka je nezáväzná. Ceny sú uvedené vrátane recyklačných poplatkov.</p>
-      <p class="print:mt-1">© 2026 Spektra install s.r.o.</p>
+      <p class="print:mt-0 font-bold">© 2026 Spektra install s.r.o.</p>
     </div>
 
   </div>
@@ -346,16 +356,14 @@ Ulica 123
     window.print();
   }
 
-  // --- LOGIKA PRE ZÁKAZNÍKA A ČÍSLO PONUKY ---
+  // --- LOGIKA ---
   const offerNumberInput = document.getElementById("offerNumberInput");
   const offerNumberDisplay = document.getElementById("offerNumberDisplay");
   const customerInput = document.getElementById("customerInput");
   const customerDisplay = document.getElementById("customerDisplay");
   const dateElement = document.getElementById('date');
 
-  // Nastavenie dátumu podľa PDF
   const today = new Date();
-  // Formát: 23. januára 2026
   const options = { year: 'numeric', month: 'long', day: 'numeric' };
   dateElement.textContent = today.toLocaleDateString('sk-SK', options);
 
@@ -366,7 +374,6 @@ Ulica 123
   customerInput.addEventListener("input", () => {
     customerDisplay.textContent = customerInput.value;
   });
-  // ------------------------------------------
 
   const VAT_RATE = 0.20;
   const DEFAULT_SUBSIDY_EUR = 3400;
@@ -395,7 +402,7 @@ Ulica 123
       ],
       tech: [
         { name: "Vonkajšia jednotka ZUBADAN 12 kW (Vlajková loď)", desc: "400 V, patentovaná technológia vstrekovania", model: "PUD-SHWM120YAA", listPrice: 6535, yourPrice: 5100 },
-        { name: "Hydrobox - Vnútorná jednotka All-in-One", desc: "Zásobník TÚV 200 l + záložný ohrev", model: "ERST20D-YM9D", listPrice: 6841, yourPrice: 5400 },
+        { name: "Hydrobox - Vnútorná jednotka All-in-One", desc: "Zásobník TÚV 200 l + záložný ohrev", model: "ERST20D-YM9D", listPrice: 6641, yourPrice: 5400 },
         { name: "Akumulačná nádoba 100 l (Buffer)", desc: "Hydraulická stabilita systému", model: "V 100 l", listPrice: 550, yourPrice: 420 },
         { name: "Inteligentná regulácia Mitsubishi (FTC)", desc: "Intuitívne ovládanie", model: "GRÁTIS", listPrice: null, yourPrice: 0 }
       ],
@@ -524,7 +531,7 @@ Ulica 123
 
   const fmt = (n) => {
     const num = Number(n || 0);
-    return num.toLocaleString("sk-SK", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " €";
+    return num.toLocaleString("sk-SK", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).replace(/\s/g, ' ') + " €";
   };
   const sum = (arr) => arr.reduce((acc, x) => acc + (Number(x.price) || 0), 0);
   const techSum = (techRows) => techRows.reduce((acc, r) => acc + (Number(r.yourPrice) || 0), 0);
@@ -540,27 +547,27 @@ Ulica 123
     techBody.innerHTML = "";
 
     const showListPrice = offer.tech.some(r => typeof r.listPrice === "number");
-    document.getElementById("listPriceHeader").textContent = showListPrice ? "Cenníková cena" : "Poznámka";
+    document.getElementById("listPriceHeader").textContent = showListPrice ? "CENNÍKOVÁ CENA" : "POZNÁMKA";
 
     offer.tech.forEach(r => {
       const tr = document.createElement("tr");
-      tr.className = "hover:bg-gray-50 transition-colors print:hover:bg-transparent";
-
+      // Pre tlač odstránime hover efekty
+      
       const listCell = showListPrice
         ? (typeof r.listPrice === "number"
-            ? `<td class="py-3 px-4 text-right text-slate-400 line-through decoration-red-300 text-xs">${fmt(r.listPrice)}</td>`
-            : `<td class="py-3 px-4 text-right text-slate-400 text-xs">-</td>`
+            ? `<td class="py-2 px-2 text-right text-slate-400 line-through decoration-red-300 text-xs w-2/12">${fmt(r.listPrice)}</td>`
+            : `<td class="py-2 px-2 text-right text-slate-400 text-xs w-2/12">-</td>`
           )
-        : `<td class="py-3 px-4 text-right text-slate-400 text-xs">${r.desc ? " " : "-"}</td>`;
+        : `<td class="py-2 px-2 text-right text-slate-400 text-xs w-2/12">${r.desc ? " " : "-"}</td>`;
 
       tr.innerHTML = `
-        <td class="py-3 px-4 font-medium text-slate-900">
+        <td class="py-2 px-2 font-medium text-slate-900 w-5/12">
           ${r.name}
           ${r.desc ? `<div class="text-xs text-slate-500 font-normal mt-0.5 print:text-slate-600">${r.desc}</div>` : ``}
         </td>
-        <td class="py-3 px-4 text-slate-600 print:text-slate-800">${r.model || "-"}</td>
+        <td class="py-2 px-2 text-slate-600 print:text-slate-800 w-3/12">${r.model || "-"}</td>
         ${listCell}
-        <td class="py-3 px-4 text-right font-bold text-slate-900">${fmt(r.yourPrice)}</td>
+        <td class="py-2 px-2 text-right font-bold text-slate-900 w-2/12">${fmt(r.yourPrice)}</td>
       `;
       techBody.appendChild(tr);
     });
@@ -572,10 +579,9 @@ Ulica 123
     installBody.innerHTML = "";
     offer.installBase.forEach(r => {
       const tr = document.createElement("tr");
-      tr.className = "hover:bg-gray-50 transition-colors print:hover:bg-transparent";
       tr.innerHTML = `
-        <td class="py-2 px-4 w-3/4 text-slate-700 print:text-slate-900">${r.label}</td>
-        <td class="py-2 px-4 text-right text-slate-900 font-medium">${fmt(r.price)}</td>
+        <td class="py-2 px-2 w-3/4 text-slate-700 print:text-slate-900">${r.label}</td>
+        <td class="py-2 px-2 text-right text-slate-900 font-medium w-2/12">${fmt(r.price)}</td>
       `;
       installBody.appendChild(tr);
     });
@@ -586,10 +592,9 @@ Ulica 123
     servicesBody.innerHTML = "";
     offer.services.forEach(r => {
       const tr = document.createElement("tr");
-      tr.className = "hover:bg-gray-50 transition-colors print:hover:bg-transparent";
       tr.innerHTML = `
-        <td class="py-2 px-4 w-3/4 text-slate-700 print:text-slate-900">${r.label}</td>
-        <td class="py-2 px-4 text-right text-slate-900 font-medium">${fmt(r.price)}</td>
+        <td class="py-2 px-2 w-3/4 text-slate-700 print:text-slate-900">${r.label}</td>
+        <td class="py-2 px-2 text-right text-slate-900 font-medium w-2/12">${fmt(r.price)}</td>
       `;
       servicesBody.appendChild(tr);
     });
