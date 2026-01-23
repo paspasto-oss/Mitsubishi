@@ -420,4 +420,61 @@
     const installBody = document.getElementById("installBody");
     installBody.innerHTML = "";
     offer.installBase.forEach(r => {
-      const tr = document.creat
+      const tr = document.createElement("tr");
+      tr.className = "hover:bg-gray-50";
+      tr.innerHTML = `
+        <td class="py-2 px-4 w-3/4">${r.label}</td>
+        <td class="py-2 px-4 text-right">${fmt(r.price)}</td>
+      `;
+      installBody.appendChild(tr);
+    });
+    const installTotal = sum(offer.installBase);
+    document.getElementById("installTotal").textContent = fmt(installTotal);
+
+    const servicesBody = document.getElementById("servicesBody");
+    servicesBody.innerHTML = "";
+    offer.services.forEach(r => {
+      const tr = document.createElement("tr");
+      tr.className = "hover:bg-gray-50";
+      tr.innerHTML = `
+        <td class="py-2 px-4 w-3/4">${r.label}</td>
+        <td class="py-2 px-4 text-right">${fmt(r.price)}</td>
+      `;
+      servicesBody.appendChild(tr);
+    });
+    const servicesTotal = sum(offer.services);
+    document.getElementById("servicesTotal").textContent = fmt(servicesTotal);
+
+    const notesList = document.getElementById("notesList");
+    notesList.innerHTML = "";
+    offer.notes.forEach(n => {
+      const li = document.createElement("li");
+      li.textContent = n;
+      notesList.appendChild(li);
+    });
+
+    const totalNoVat = techTotal + installTotal + servicesTotal;
+    const vat = totalNoVat * VAT_RATE;
+    const totalWithVat = totalNoVat + vat;
+
+    document.getElementById("sumNoVat").textContent = fmt(totalNoVat);
+    document.getElementById("sumVat").textContent = fmt(vat);
+    document.getElementById("sumWithVat").textContent = fmt(totalWithVat);
+
+    const subsidy = Number(offer.subsidy ?? DEFAULT_SUBSIDY_EUR);
+    document.getElementById("subsidyText").textContent = "- " + fmt(subsidy);
+    const after = Math.max(0, totalWithVat - subsidy);
+    document.getElementById("afterSubsidy").textContent = "~ " + fmt(after);
+  }
+
+  const dateElement = document.getElementById('date');
+  const today = new Date();
+  dateElement.textContent = today.toLocaleDateString('sk-SK', { year:'numeric', month:'long', day:'numeric' });
+
+  const sel = document.getElementById("offerSelect");
+  sel.addEventListener("change", () => renderOffer(sel.value));
+  renderOffer(sel.value);
+</script>
+
+</body>
+</html>
