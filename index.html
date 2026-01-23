@@ -82,6 +82,8 @@
             <select id="offerSelect" class="w-full md:w-[420px] rounded-md bg-white text-slate-800 px-3 py-2 text-sm">
               <option value="mitsubishi">Mitsubishi Zubadan 12 kW + 200 l TÚV (akcia)</option>
               <option value="panasonic_split">Panasonic Aquarea K Series 9 kW + 185 l TÚV</option>
+              <option value="hyundai_supreme_10">Hyundai Supreme All-in-One 10 kW + 190 l TÚV</option>
+              <option value="midea_split_12">Midea M-Thermal Split 12 kW + All-in-One</option>
               <option value="midea_arctic_10">Midea Arctic R290 Monoblok 10 kW + Dražice 200 l</option>
               <option value="midea_arctic_12">Midea Arctic R290 Monoblok 12 kW + Dražice 200 l</option>
             </select>
@@ -94,8 +96,9 @@
         <!-- Pravá strana: Firma -->
         <div class="header-right text-right">
           <div class="text-2xl font-bold mb-2">Spektra install s.r.o.</div>
-          <p class="text-sm text-slate-300">Váš dodávateľ technológií</p>
-          <p class="text-sm text-slate-300">spektrainstall@gmail.com | 0917 572 221</p>
+          <p class="text-sm text-slate-300">prevádzka Hollého 210, Rajec 015 01</p>
+          <p class="text-sm text-slate-300 mt-1">spektrainstall@gmail.com</p>
+          <p class="text-sm text-slate-300">0917 572 221</p>
 
           <!-- LOGO -->
           <div class="mt-6 flex justify-end">
@@ -312,6 +315,54 @@
       tech: [
         { name: "Vonkajšia jednotka Panasonic Aquarea High P.", desc: "9 kW, 1-fáza, tichý režim, chladivo R32", model: "WH-UDZ09KE5", listPrice: 3100, yourPrice: 2350 },
         { name: "Vnútorná jednotka All-in-One (s TÚV)", desc: "Zásobník 185 l, zabudovaný magnetický filter, Smart Cloud", model: "WH-ADC0309K3E5", listPrice: 5100, yourPrice: 3850 },
+        { name: "Akumulačná nádoba 100 l (Buffer)", desc: "Pre hydraulickú stabilitu a zväčšenie objemu systému", model: "V 100 l", listPrice: 550, yourPrice: 420 }
+      ],
+      installBase: COMMON_INSTALL_BASE,
+      services: [
+        { label: "Preskúšanie systému a vystavenie revíznej správy (prívod TČ)", price: 120 },
+        { label: "Odvoz odpadu vzniknutého pri inštalácii", price: 60 }
+      ]
+    },
+    
+    hyundai_supreme_10: {
+      headerSubtitle: "Tepelné čerpadlo Hyundai Supreme All-in-One (Split)",
+      brand: "Hyundai – Supreme (Split)",
+      power: "10 kW (230 V)",
+      discountNote: "",
+      subsidy: 3400,
+      notes: [
+        "Prémiový čierny dizajn vonkajšej jednotky.",
+        "Kompaktná vnútorná jednotka All-in-One so 190 l zásobníkom.",
+        "Integrovaná elektrická špirála 3 kW a WiFi ovládanie.",
+        "Vysoká účinnosť s chladivom R32."
+      ],
+      tech: [
+        { name: "Vonkajšia jednotka Hyundai Supreme 10 kW", desc: "Čierny dizajn, 1-fáza, R32, invertor", model: "HPSO 10kW", listPrice: 3800, yourPrice: 2600 },
+        { name: "Vnútorná jednotka All-in-One (s TÚV)", desc: "Zásobník 190 l, záložný ohrev 3kW", model: "HPSA 190L", listPrice: 4200, yourPrice: 2900 },
+        { name: "Akumulačná nádoba 100 l (Buffer)", desc: "Pre hydraulickú stabilitu a zväčšenie objemu systému", model: "V 100 l", listPrice: 550, yourPrice: 420 }
+      ],
+      installBase: COMMON_INSTALL_BASE,
+      services: [
+        { label: "Preskúšanie systému a vystavenie revíznej správy (prívod TČ)", price: 120 },
+        { label: "Odvoz odpadu vzniknutého pri inštalácii", price: 60 }
+      ]
+    },
+
+    midea_split_12: {
+      headerSubtitle: "Tepelné čerpadlo Midea M-Thermal Arctic (Split)",
+      brand: "Midea – M-Thermal Arctic Series (Split)",
+      power: "12 kW",
+      discountNote: "",
+      subsidy: 3400,
+      notes: [
+         "Osvedčená Split konštrukcia – vonkajšia a vnútorná jednotka prepojená chladivom.",
+         "Vnútorná jednotka All-in-One (veža) s integrovaným zásobníkom TÚV.",
+         "Vysoká účinnosť vykurovania aj chladenia.",
+         "Stabilný výkon a tichá prevádzka."
+      ],
+      tech: [
+        { name: "Vonkajšia jednotka Midea M-Thermal 12 kW", desc: "Split systém, R32, invertor", model: "MHA-V12W/D2RN8-B2", listPrice: 3400, yourPrice: 2400 },
+        { name: "Vnútorná jednotka All-in-One", desc: "Integrovaný zásobník TÚV, el. špirála, hydraulika", model: "HBT-A160/240CDS90GN8-B2", listPrice: 5200, yourPrice: 3100 },
         { name: "Akumulačná nádoba 100 l (Buffer)", desc: "Pre hydraulickú stabilitu a zväčšenie objemu systému", model: "V 100 l", listPrice: 550, yourPrice: 420 }
       ],
       installBase: COMMON_INSTALL_BASE,
