@@ -281,15 +281,15 @@ Ulica 123
         { label: "Odvoz odpadu a obalového materiálu", price: 60 }
     ];
 
-    // 2. Ponuky (S OBRÁZKAMI)
+    // 2. Ponuky (S LOKÁLNYMI OBRÁZKAMI Z PRIEČINKA 'image')
     const OFFERS = {
       mitsubishi: {
         type: 'split',
         brand: "Mitsubishi Electric",
         power: "12 kW (Zubadan)",
         tags: ["Japonská kvalita", "Do -28°C", "Zásobník 200L"],
-        // Reálny obrázok Zubadanu
-        image: "https://www.lvi.eu/wp-content/uploads/2021/05/MITSUBISHI-ZUBADAN-PUHZ-SHW-1.png", 
+        // ZMENA: Cesta vedie do tvojho priečinka
+        image: "image/mitsubishi.jpg", 
         discountNote: "Aplikovaná zľava na technológiu Mitsubishi.",
         tech: [
           { name: "Vonkajšia jednotka ZUBADAN 12 kW", model: "PUD-SHWM120YAA", price: 5100 },
@@ -304,7 +304,8 @@ Ulica 123
         brand: "Panasonic Aquarea",
         power: "9 kW (K-Series)",
         tags: ["Novinka 2024", "Smart Cloud", "Dizajn"],
-        image: "https://www.panasonicproclub.com/uploads/ES/catalogues/thumb/K_L_Generacion.jpg",
+        // ZMENA
+        image: "image/panasonic.jpg",
         discountNote: "",
         tech: [
           { name: "Vonkajšia jednotka Aquarea K", model: "WH-UDZ09KE5", price: 3100 },
@@ -318,7 +319,8 @@ Ulica 123
         brand: "Hyundai Supreme",
         power: "10 kW",
         tags: ["Cena/Výkon", "Čierny dizajn", "Wifi"],
-        image: "https://mdmgroup.sk/wp-content/uploads/2023/03/hyundai-supreme.jpg",
+        // ZMENA
+        image: "image/hyundai.jpg",
         discountNote: "",
         tech: [
           { name: "Vonkajšia jednotka Hyundai", model: "HPSO 10kW", price: 3100 },
@@ -332,7 +334,8 @@ Ulica 123
         brand: "Midea Arctic R290",
         power: "10 kW",
         tags: ["Monoblok", "R290 Propán", "Rekonštrukcia"],
-        image: "https://www.klimania.sk/wp-content/uploads/2023/05/Midea-M-Thermal-Arctic-Monobloc.png",
+        // ZMENA: Použi názov súboru, aký máš v priečinku (napr. midea-mono.jpg)
+        image: "image/midea-mono.jpg",
         discountNote: "",
         tech: [
           { name: "Tepelné čerpadlo Arctic R290", model: "Midea 10 kW", price: 4600 },
@@ -346,7 +349,8 @@ Ulica 123
         brand: "Midea Arctic R290",
         power: "12 kW",
         tags: ["Vysoký výkon", "R290 Propán", "Tiché"],
-        image: "https://www.klimania.sk/wp-content/uploads/2023/05/Midea-M-Thermal-Arctic-Monobloc.png",
+        // ZMENA
+        image: "image/midea-mono.jpg",
         discountNote: "",
         tech: [
           { name: "Tepelné čerpadlo Arctic R290", model: "Midea 12 kW", price: 5100 },
@@ -360,7 +364,8 @@ Ulica 123
         brand: "Midea M-Thermal",
         power: "12 kW",
         tags: ["Split", "Overené", "Ekonomické"],
-        image: "https://klimania.sk/wp-content/uploads/2021/05/midea-m-thermal-split.jpg",
+        // ZMENA: Tu bol ten odkaz na klimania.sk
+        image: "image/midea-split.jpg",
         discountNote: "",
         tech: [
           { name: "Vonkajšia jednotka M-Thermal", model: "MHA-V12W", price: 2900 },
