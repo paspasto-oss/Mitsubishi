@@ -11,7 +11,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 
   <!-- html2pdf (html2canvas + jsPDF) -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC2k3B1r6G0n2u+Jz5mTnCk2D4j3C1c0sGf5sQF9WcF0f2c3xWfDg5h4W0U6k7vQ6dQWm2mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" xintegrity="sha512-GsLlZN/3F2ErC2k3B1r6G0n2u+Jz5mTnCk2D4j3C1c0sGf5sQF9WcF0f2c3xWfDg5h4W0U6k7vQ6dQWm2mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
   <style>
     :root{
@@ -34,7 +34,10 @@
     .panel{background:var(--card);border:1px solid var(--border);border-radius:18px;box-shadow:var(--shadow);overflow:hidden}
     .panel .hd{padding:16px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:12px}
     .title{display:flex;align-items:center;gap:10px}
-    .logo-dot{width:38px;height:38px;border-radius:999px;background:conic-gradient(from 0deg, var(--brand-red) 0 60%, #a3a3a3 60% 100%);}
+    
+    /* OPRAVA: Jednoduchá farba pre logo, aby nepadalo PDF */
+    .logo-dot{width:38px;height:38px;border-radius:999px;background:var(--brand-red);}
+    
     .title h1{font-size:16px;margin:0;font-weight:800;letter-spacing:.2px}
     .title .sub{font-size:12px;color:var(--muted);margin:0}
 
@@ -60,7 +63,10 @@
 
     .offer-header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;border-bottom:2px solid var(--border);padding-bottom:10px;margin-bottom:14px}
     .brand{display:flex;gap:12px;align-items:center}
-    .brand-mark{width:52px;height:52px;border-radius:999px;background:conic-gradient(from 0deg, var(--brand-red) 0 60%, #9ca3af 60% 100%);}
+    
+    /* OPRAVA: Jednoduchá farba pre logo v PDF */
+    .brand-mark{width:52px;height:52px;border-radius:999px;background:var(--brand-red);}
+    
     .brand h2{margin:0;font-size:18px;font-weight:800}
     .brand p{margin:2px 0 0;color:var(--muted);font-size:11px}
     .meta{font-size:11px;color:var(--muted);text-align:right}
@@ -89,6 +95,7 @@
     .badge{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;font-size:11px;font-weight:800}
     .badge-ok{background:#ecfdf5;color:var(--ok);border:1px solid #bbf7d0}
     .badge-warn{background:#fff7ed;color:var(--warn);border:1px solid #fed7aa}
+    .badge-err{background:#fee2e2;color:#991b1b;border:1px solid #fca5a5}
 
     .footer{margin-top:18px;padding-top:10px;border-top:2px solid var(--border);display:flex;justify-content:space-between;gap:10px}
     .footer p{margin:0;font-size:10.5px;color:var(--muted);line-height:1.4}
@@ -428,6 +435,7 @@
 
     function setBadge(ok=true, text='● Pripravené'){
       statusBadge.className = ok ? 'badge badge-ok' : 'badge badge-warn';
+      if(!ok && text.includes('Chyba')) statusBadge.className = 'badge badge-err';
       statusBadge.textContent = text;
     }
 
@@ -560,28 +568,42 @@
       setTimeout(()=>compute(), 700);
     }
 
-    // PDF
+    // PDF EXPORT (OPRAVENÁ VERZIA)
     async function exportPDF(){
-      compute();
+      try {
+        // 1. Kontrola internetu/knižnice
+        if (typeof html2pdf === 'undefined') {
+          alert("Chyba: Nedá sa vytvoriť PDF, pretože chýba knižnica html2pdf.\n\nSkontrolujte, či ste pripojení na internet. Ak áno, skúste obnoviť stránku.");
+          return;
+        }
 
-      const filenameSafe = (custName.value.trim() || 'Zakaznik').replace(/[^a-zA-Z0-9\u00C0-\u017F\s_-]/g,'').trim().replace(/\s+/g,'_');
-      const filename = `Cenova_ponuka_SpektraInstall_Midea_${variant.value}kW_${filenameSafe}.pdf`;
+        compute(); // Uistíme sa, že dáta sú aktuálne
 
-      const element = document.getElementById('pdfArea');
+        const filenameSafe = (custName.value.trim() || 'Zakaznik').replace(/[^a-zA-Z0-9\u00C0-\u017F\s_-]/g,'').trim().replace(/\s+/g,'_');
+        const filename = `Cenova_ponuka_Spektra_${variant.value}kW_${filenameSafe}.pdf`;
 
-      // Temporarily remove UI shadows/borders around pdf area
-      const opt = {
-        margin:       [6, 6, 6, 6],
-        filename,
-        image:        { type: 'jpeg', quality: 0.95 },
-        html2canvas:  { scale: 2, useCORS: true },
-        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
-      };
+        const element = document.getElementById('pdfArea');
 
-      setBadge(true, '● Generujem PDF...');
-      await html2pdf().set(opt).from(element).save();
-      setBadge(true, '● PDF stiahnuté');
-      setTimeout(()=>compute(), 900);
+        const opt = {
+          margin:       [0, 0, 0, 0],
+          filename:     filename,
+          image:        { type: 'jpeg', quality: 0.98 },
+          html2canvas:  { scale: 2, useCORS: true, logging: false }, 
+          jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        };
+
+        setBadge(true, '● Generujem PDF...');
+        
+        // Samotný export
+        await html2pdf().set(opt).from(element).save();
+        
+        setBadge(true, '● PDF stiahnuté');
+        
+      } catch (err) {
+        console.error(err);
+        alert("Nastala nečakaná chyba pri tvorbe PDF:\n" + err.message + "\n\nSkúste stránku obnoviť a skúsiť znova.");
+        setBadge(false, '● Chyba exportu');
+      }
     }
 
     // Events
