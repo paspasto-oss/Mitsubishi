@@ -3,556 +3,523 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Spektra Install – Cenová ponuka</title>
+  <title>Cenová ponuka – Tepelné čerpadlo | Spektra install</title>
 
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-
-  <!-- html2pdf (bez integrity checku pre istotu) -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" referrerpolicy="no-referrer"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
   <style>
     :root{
-      --brand-red:#D60000;
-      --text:#111827;
-      --muted:#6b7280;
-      --bg:#f3f4f6;
-      --card:#ffffff;
-      --border:#e5e7eb;
-      --chip:#fef2f2;
-      --ok:#16a34a;
-      --warn:#b45309;
-      --shadow: 0 10px 30px rgba(0,0,0,.08);
+      --brand-red:#dc2626; /* red-600 */
+      --brand-blue:#0f172a; /* slate-900-ish */
     }
-    *{box-sizing:border-box}
-    body{margin:0;font-family:Montserrat,Roboto,system-ui,-apple-system,Segoe UI,Arial;background:var(--bg);color:var(--text)}
-    
-    .wrap{max-width:1200px;margin:24px auto;padding:0 16px;display:grid;grid-template-columns:420px 1fr;gap:16px}
-    @media (max-width: 980px){.wrap{grid-template-columns:1fr;}}
-
-    .panel{background:var(--card);border:1px solid var(--border);border-radius:18px;box-shadow:var(--shadow);overflow:hidden}
-    .panel .hd{padding:16px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:12px}
-    
-    /* OPRAVA: Jednoduché logo bez gradientov (pre stabilitu PDF) */
-    .logo-dot{width:38px;height:38px;border-radius:999px;background:var(--brand-red);}
-    
-    .title{display:flex;align-items:center;gap:10px}
-    .title h1{font-size:16px;margin:0;font-weight:800;letter-spacing:.2px}
-    .title .sub{font-size:12px;color:var(--muted);margin:0}
-
-    .bd{padding:16px}
-    .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-    .grid-1{display:grid;grid-template-columns:1fr;gap:10px}
-    label{display:block;font-size:12px;color:var(--muted);margin:0 0 6px}
-    input, select, textarea{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:12px;font:inherit;background:#fff;outline:none}
-    textarea{min-height:80px;resize:vertical}
-    
-    .btns{display:flex;gap:10px;flex-wrap:wrap}
-    button{appearance:none;border:0;border-radius:12px;padding:10px 14px;font-weight:700;cursor:pointer}
-    .btn-primary{background:var(--brand-red);color:#fff}
-    .btn-secondary{background:#1f2937;color:#fff}
-    .btn-ghost{background:#fff;border:1px solid var(--border)}
-    .btn-soft{background:var(--chip);color:var(--brand-red);border:1px solid #fecaca}
-
-    .hint{font-size:12px;color:var(--muted);line-height:1.35;margin-top:10px}
-
-    /* Offer preview styles */
-    .page{width:210mm;min-height:297mm;margin:0 auto;background:#fff;position:relative}
-    .paper{padding:14mm}
-
-    .offer-header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;border-bottom:2px solid var(--border);padding-bottom:10px;margin-bottom:14px}
-    .brand{display:flex;gap:12px;align-items:center}
-    
-    /* OPRAVA: Jednoduché logo pre PDF */
-    .brand-mark{width:52px;height:52px;border-radius:999px;background:var(--brand-red);}
-    
-    .brand h2{margin:0;font-size:18px;font-weight:800}
-    .brand p{margin:2px 0 0;color:var(--muted);font-size:11px}
-    .meta{font-size:11px;color:var(--muted);text-align:right}
-    .meta strong{color:var(--text)}
-
-    .sec{margin:14px 0}
-    .sec h3{margin:0 0 8px;font-size:13px;font-weight:800}
-    .sec p{margin:0;color:#111827;font-size:11.5px;line-height:1.45}
-
-    .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-
-    .box{border:1px solid var(--border);border-radius:12px;padding:10px}
-    .box .k{font-size:10.5px;color:var(--muted)}
-    .box .v{font-size:12px;font-weight:700;margin-top:2px}
-
-    table{width:100%;border-collapse:collapse;font-size:11px}
-    th,td{border-bottom:1px solid var(--border);padding:8px 6px;text-align:left;vertical-align:top}
-    th{background:#fafafa;font-weight:800}
-    .right{text-align:right}
-
-    .sum{border:1px solid var(--border);border-radius:12px;overflow:hidden}
-    .sum .line{display:flex;justify-content:space-between;gap:10px;padding:10px 12px;border-bottom:1px solid var(--border);font-size:11.5px}
-    .sum .line:last-child{border-bottom:0}
-    .sum .grand{background:#fff5f5;font-weight:900}
-
-    .badge{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;font-size:11px;font-weight:800}
-    .badge-ok{background:#ecfdf5;color:var(--ok);border:1px solid #bbf7d0}
-    .badge-warn{background:#fff7ed;color:var(--warn);border:1px solid #fed7aa}
-    .badge-err{background:#fee2e2;color:#991b1b;border:1px solid #fca5a5}
-
-    .footer{margin-top:18px;padding-top:10px;border-top:2px solid var(--border);display:flex;justify-content:space-between;gap:10px}
-    .footer p{margin:0;font-size:10.5px;color:var(--muted);line-height:1.4}
-
-    /* =========================================
-       TLAČOVÉ ŠTÝLY (Native Print / PDF)
-       ========================================= */
-    @media print {
-      body { background: #fff; margin: 0; }
-      .wrap { display: block; margin: 0; padding: 0; max-width: none; }
-      
-      /* Skryť ovládací panel pri tlači */
-      .panel:first-child { display: none !important; }
-      
-      /* Skryť hlavičku náhľadu */
-      .panel .hd { display: none !important; }
-      
-      /* Upraviť panel s náhľadom pre tlač */
-      .panel { border: 0; box-shadow: none; border-radius: 0; overflow: visible; }
-      .bd { padding: 0; background: #fff !important; }
-      .page { width: 100%; min-height: auto; margin: 0; border: 0; }
-      .paper { padding: 0 10mm; } /* Menšie okraje pre tlačiareň */
-      
-      /* Skryť triedu no-print */
-      .no-print { display: none !important; }
+    body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;}
+    /* PRINT */
+    @media print{
+      @page{ size:A4; margin: 12mm; }
+      body{
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        background:#fff !important;
+      }
+      .no-print{display:none !important;}
+      .print-no-shadow{box-shadow:none !important;}
+      .print-full{max-width:100% !important; margin:0 !important;}
+      /* drž hlavičku vedľa seba */
+      .hdr-row{display:flex !important; flex-direction:row !important; flex-wrap:nowrap !important;}
+      .hdr-left{width:58% !important;}
+      .hdr-right{width:42% !important;}
+      /* nerozbi tabuľky */
+      tr{page-break-inside:avoid;}
+      .avoid-break{page-break-inside:avoid;}
     }
   </style>
 </head>
-<body>
-  <div class="wrap">
 
-    <!-- OVLÁDACÍ PANEL -->
-    <section class="panel no-print">
-      <div class="hd">
-        <div class="title">
-          <div class="logo-dot"></div>
-          <div>
-            <h1>Generátor ponuky</h1>
-            <p class="sub">Spektra Install • Midea</p>
-          </div>
-        </div>
-        <span class="badge badge-ok" id="statusBadge">● Pripravené</span>
-      </div>
+<body class="bg-slate-100 p-4 md:p-8 text-slate-800">
+  <div class="mx-auto max-w-4xl bg-white shadow-xl rounded-xl overflow-hidden print-no-shadow print-full">
 
-      <div class="bd">
-        <div class="grid">
-          <div>
-            <label>Číslo ponuky</label>
-            <input id="offerNo" value="01/2026" />
-          </div>
-          <div>
-            <label>Dátum</label>
-            <input id="offerDate" type="date" />
-          </div>
-        </div>
-        <div style="height:10px"></div>
-        <div class="grid">
-          <div>
-            <label>Meno zákazníka</label>
-            <input id="custName" placeholder="Meno Priezvisko" />
-          </div>
-          <div>
-            <label>Telefón</label>
-            <input id="custPhone" placeholder="0900 000 000" />
-          </div>
-          <div style="grid-column:1/-1">
-            <label>Adresa</label>
-            <input id="custAddr" placeholder="Ulica, mesto, PSČ" />
-          </div>
-          <div style="grid-column:1/-1">
-            <label>E-mail</label>
-            <input id="custEmail" placeholder="email@domain.sk" />
-          </div>
-        </div>
-        <div style="height:10px"></div>
-        <div class="grid-1">
-          <div>
-            <label>Vybrať variant</label>
-            <select id="variant">
-              <option value="8">Variant A – 8 kW</option>
-              <option value="12" selected>Variant B – 12 kW</option>
-              <option value="16">Variant C – 16 kW</option>
-            </select>
-          </div>
-          <div class="grid">
-            <div>
-              <label>Zásobník TÚV</label>
-              <select id="tank">
-                <option value="200">200 l</option>
-                <option value="300" selected>300 l</option>
-              </select>
-            </div>
-            <div>
-              <label>DPH</label>
-              <select id="vat">
-                <option value="20" selected>20 %</option>
-                <option value="23">23 %</option>
-                <option value="0">0 %</option>
-              </select>
-            </div>
-          </div>
-          <div class="grid">
-            <div>
-              <label>Dotácia</label>
-              <select id="voucher">
-                <option value="3400">– 3 400 € (8 kW)</option>
-                <option value="3800" selected>– 3 800 € (12–16 kW)</option>
-                <option value="0">0 €</option>
-              </select>
-            </div>
-            <div>
-              <label>Zľava</label>
-              <input id="discount" type="number" min="0" step="1" value="0" />
-            </div>
-          </div>
-          <div>
-            <label>Poznámka</label>
-            <textarea id="note" placeholder="Krátka poznámka..."></textarea>
-          </div>
-        </div>
-        <div style="height:12px"></div>
-        
-        <label>Možnosti exportu:</label>
-        <div class="btns">
-          <button class="btn-primary" id="btnPdf">Stiahnuť PDF (Script)</button>
-          <button class="btn-secondary" id="btnPrint" title="Funguje vždy">Tlačiť / PDF (Prehliadač)</button>
-          <button class="btn-ghost" id="btnReset">Reset</button>
-          <button class="btn-soft" id="btnSave">Uložiť</button>
-        </div>
-        <div class="hint">
-          Ak tlačidlo "Stiahnuť PDF" nefunguje, použite tmavé tlačidlo "Tlačiť / PDF". Otvorí sa dialóg tlače, kde vyberte "Uložiť ako PDF".
-        </div>
-      </div>
-    </section>
+    <!-- TOP BAR (tmavomodrý pás + červený pruh vľavo) -->
+    <header class="relative bg-slate-900 text-white p-8">
+      <div class="absolute left-0 top-0 h-full w-2 bg-red-600"></div>
 
-    <!-- NÁHĽAD (PRAVÁ STRANA) -->
-    <section class="panel">
-      <div class="hd no-print">
-        <div class="title">
-          <div class="logo-dot"></div>
-          <div>
-            <h1>Náhľad ponuky</h1>
-            <p class="sub">Výstupný dokument</p>
+      <div class="hdr-row flex flex-col md:flex-row md:items-start md:justify-between gap-6">
+        <!-- LEFT -->
+        <div class="hdr-left">
+          <h1 class="text-3xl font-extrabold tracking-wide uppercase leading-none">Cenová ponuka</h1>
+
+          <div class="mt-2 flex flex-wrap items-center gap-2 text-sm">
+            <span class="text-red-400 font-bold text-lg" id="offerNoView">2026/001</span>
+            <span class="text-slate-300">Tepelné čerpadlo</span>
+            <span class="text-slate-400">•</span>
+            <span class="text-slate-300" id="offerTitleView">Mitsubishi Electric – Zubadan</span>
+          </div>
+
+          <div class="mt-4 text-xs text-slate-300/90">
+            <p>Dátum vystavenia: <span id="dateView" class="font-semibold text-white"></span></p>
+            <p>Platnosť ponuky: 30 dní</p>
+          </div>
+
+          <!-- CUSTOMER -->
+          <div class="mt-7">
+            <p class="text-[11px] uppercase tracking-[0.18em] font-bold text-slate-300/80 border-b border-slate-700 inline-block pb-1">
+              Zákazník / Odberateľ
+            </p>
+            <div id="customerView" class="mt-2 whitespace-pre-line text-sm font-semibold leading-relaxed">
+Vážený zákazník
+Ulica 123
+000 00 Mesto
+            </div>
+          </div>
+
+          <!-- EDITOR (screen only) -->
+          <section class="no-print mt-8 rounded-lg border border-slate-700 bg-slate-800/60 p-4">
+            <div class="flex items-center gap-2 pb-2 mb-3 border-b border-slate-700">
+              <span class="text-lg">🛠</span>
+              <h2 class="text-xs uppercase tracking-wider font-bold text-slate-200">Editor ponuky</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div>
+                <label class="block text-[10px] uppercase tracking-wider text-slate-300 mb-1">Číslo ponuky</label>
+                <input id="offerNo" class="w-full rounded-md bg-slate-900 border border-slate-600 px-3 py-2 text-sm outline-none focus:border-red-400"
+                       value="2026/001" />
+              </div>
+
+              <div>
+                <label class="block text-[10px] uppercase tracking-wider text-slate-300 mb-1">Variant</label>
+                <select id="offerSelect" class="w-full rounded-md bg-slate-900 border border-slate-600 px-3 py-2 text-sm outline-none focus:border-red-400">
+                  <option value="mitsubishi_zubadan">Mitsubishi Zubadan 12 kW + TÚV 200 l</option>
+                  <option value="panasonic_k_9">Panasonic Aquarea K 9 kW + TÚV</option>
+                  <option value="midea_arctic_r290_10">Midea Arctic R290 10 kW (monoblok) + Dražice 200 l</option>
+                  <option value="midea_arctic_r290_12">Midea Arctic R290 12 kW (monoblok) + Dražice 200 l</option>
+                </select>
+              </div>
+
+              <div class="md:col-span-2">
+                <label class="block text-[10px] uppercase tracking-wider text-slate-300 mb-1">Údaje o zákazníkovi</label>
+                <textarea id="customerInput" rows="3"
+                  class="w-full rounded-md bg-slate-900 border border-slate-600 px-3 py-2 text-sm outline-none focus:border-red-400 resize-none">Vážený zákazník
+Ulica 123
+000 00 Mesto</textarea>
+              </div>
+
+              <div class="md:col-span-2 flex flex-col md:flex-row gap-2">
+                <button onclick="window.print()"
+                  class="inline-flex items-center justify-center rounded-md bg-red-600 hover:bg-red-700 px-4 py-2 text-sm font-bold shadow">
+                  Stiahnuť PDF
+                </button>
+                <p class="text-[11px] text-slate-300 leading-snug md:self-center">
+                  Pre čisté PDF vypni v dialógu tlače <b>Hlavičky a päty</b> (inak sa ukáže URL/Netlify) a zapni <b>Tlačiť pozadia</b>.
+                </p>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <!-- RIGHT -->
+        <div class="hdr-right text-right">
+          <div class="text-2xl font-bold tracking-tight">Spektra install s.r.o.</div>
+          <div class="mt-2 text-sm text-slate-300 leading-relaxed">
+            <div>prevádzka Hollého 210</div>
+            <div>015 01 Rajec</div>
+            <div class="mt-2 font-semibold text-white">spektrainstall@gmail.com</div>
+            <div class="font-semibold text-white">0917 572 221</div>
+          </div>
+
+          <!-- LOGO (vložíš svoj ONE1.webp do rovnakého priečinka) -->
+          <div class="mt-6 flex justify-end">
+            <img src="ONE1.webp" alt="Logo Spektra Install"
+              class="h-20 w-auto bg-white/5 p-2 rounded-md"
+              onerror="this.style.display='none'" />
           </div>
         </div>
       </div>
+    </header>
 
-      <div class="bd" style="background:#f8fafc">
-        <div id="pdfArea" class="page">
-          <div class="paper">
-            
-            <!-- HLAVIČKA DOKUMENTU -->
-            <div class="offer-header">
-              <div class="brand">
-                <div class="brand-mark" aria-hidden="true"></div>
-                <div>
-                  <h2>Spektra Install s. r. o.</h2>
-                  <p>Hollého 210, 015 01 Rajec • www.spektrainstall.sk</p>
-                  <p style="margin-top:4px"><span class="badge badge-ok">Midea Nature R290</span></p>
-                </div>
-              </div>
-              <div class="meta">
-                <div><strong>Cenová ponuka</strong></div>
-                <div>Číslo: <strong id="vOfferNo">01/2026</strong></div>
-                <div>Dátum: <strong id="vOfferDate">23. 1. 2026</strong></div>
-              </div>
-            </div>
+    <!-- INFO O PROJEKTE -->
+    <section class="p-8 border-b border-slate-200">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="h-10 w-2 bg-red-600 rounded-sm"></div>
+        <h2 class="text-lg font-bold text-slate-800">Informácie o projekte</h2>
+      </div>
 
-            <!-- ADRESY -->
-            <div class="two">
-              <div class="sec box">
-                <div class="k">Dodávateľ</div>
-                <div class="v">Spektra Install s. r. o.</div>
-                <div class="k">Adresa</div>
-                <div class="v" style="font-weight:600">Hollého 210, Rajec 015 01</div>
-                <div class="k">Kontakt</div>
-                <div class="v" style="font-weight:600">www.spektrainstall.sk</div>
-              </div>
-              <div class="sec box">
-                <div class="k">Investor</div>
-                <div class="v" id="vCustName">—</div>
-                <div class="k">Adresa</div>
-                <div class="v" id="vCustAddr">—</div>
-                <div class="k">Telefón / e‑mail</div>
-                <div class="v"><span id="vCustPhone">—</span> • <span id="vCustEmail">—</span></div>
-              </div>
-            </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
+        <div>
+          <div class="text-[10px] uppercase tracking-wider text-slate-500 font-bold">Objekt</div>
+          <div class="mt-1 text-base font-semibold">Rodinný dom</div>
 
-            <!-- ÚVOD -->
-            <div class="sec">
-              <h3>Úvod</h3>
-              <p>
-                Ďakujeme za Váš záujem. Na základe poskytnutých vstupných údajov predkladáme cenovú ponuku na dodávku a montáž
-                tepelného čerpadla <b>Midea Nature R290</b> vrátane montážnych prác a potrebného materiálu.
-                <span id="vNoteInline"></span>
-              </p>
-            </div>
+          <div class="mt-4 text-[10px] uppercase tracking-wider text-slate-500 font-bold">Systém</div>
+          <div class="mt-1 text-base font-semibold">Vzduch / Voda</div>
+        </div>
 
-            <!-- RIEŠENIE -->
-            <div class="sec">
-              <h3>Navrhované riešenie</h3>
-              <div class="two">
-                <div class="box">
-                  <div class="k">Zvolený variant</div>
-                  <div class="v" id="vVariant">Variant B – 12 kW</div>
-                </div>
-                <div class="box">
-                  <div class="k">Zásobník TÚV</div>
-                  <div class="v" id="vTank">300 l</div>
-                </div>
-              </div>
-            </div>
+        <div>
+          <div class="text-[10px] uppercase tracking-wider text-slate-500 font-bold">Zvolená technológia</div>
+          <div class="mt-1 text-base font-semibold" id="brandText">—</div>
 
-            <!-- POLOŽKY -->
-            <div class="sec">
-              <h3>Podrobný rozpis dodávky</h3>
-              <table>
-                <thead>
-                  <tr>
-                    <th>Položka</th>
-                    <th class="right">Cena bez DPH</th>
-                    <th class="right">DPH</th>
-                    <th class="right">Cena s DPH</th>
-                  </tr>
-                </thead>
-                <tbody id="itemsBody"></tbody>
-              </table>
-            </div>
-
-            <!-- SÚHRN -->
-            <div class="sec">
-              <h3>Celkový súhrn</h3>
-              <div class="sum">
-                <div class="line"><span>Medzisúčet (bez DPH)</span><strong id="sumNet">0 €</strong></div>
-                <div class="line"><span>DPH</span><strong id="sumVat">0 €</strong></div>
-                <div class="line"><span>Zľava</span><strong id="sumDisc">0 €</strong></div>
-                <div class="line"><span>Dotácia (Zelená domácnostiam)</span><strong id="sumVoucher">0 €</strong></div>
-                <div class="line grand"><span>Konečná cena</span><strong id="sumGrand">0 €</strong></div>
-              </div>
-              <p style="margin-top:8px;font-size:10.5px;color:var(--muted)">
-                Pozn.: Výška dotácie je orientačná a závisí od podmienok programu a schválenia poukážky.
-              </p>
-            </div>
-
-            <!-- TERMÍNY -->
-            <div class="sec">
-              <h3>Termíny a podmienky</h3>
-              <p>
-                Platnosť ponuky: <b>30 dní</b>. Termín realizácie: zvyčajne <b>10–15 pracovných dní</b> od potvrdenia objednávky.
-                Dĺžka montáže: <b>1–2 dni</b> (podľa rozsahu). Záruka na montážne práce: <b>24 mesiacov</b>.
-              </p>
-            </div>
-
-            <!-- PÄTIČKA -->
-            <div class="footer">
-              <p>
-                <b>Spektra Install</b><br>
-                montáž • servis • predaj
-              </p>
-              <p style="text-align:right">
-                Vypracoval: <b>Pavol Pastorek</b><br>
-                Podpis: ______________________
-              </p>
-            </div>
-
-          </div>
+          <div class="mt-4 text-[10px] uppercase tracking-wider text-slate-500 font-bold">Výkon</div>
+          <div class="mt-1 text-base font-semibold" id="powerText">—</div>
         </div>
       </div>
     </section>
 
+    <!-- SEKCIÁLNY NADPIS helper: červený pás -->
+    <template id="sectionTitleTpl">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="h-10 w-2 bg-red-600 rounded-sm"></div>
+        <h3 class="text-lg font-extrabold text-slate-800"></h3>
+      </div>
+    </template>
+
+    <!-- 1 TECH -->
+    <section class="p-8">
+      <div id="secTechTitle"></div>
+
+      <div class="overflow-hidden rounded-lg border border-slate-200">
+        <table class="w-full text-sm">
+          <thead class="bg-slate-50 text-xs uppercase tracking-wider text-slate-600 border-b border-slate-200">
+            <tr>
+              <th class="py-3 px-4 text-left w-5/12">Položka</th>
+              <th class="py-3 px-4 text-left w-3/12">Typ / Model</th>
+              <th class="py-3 px-4 text-right text-slate-400 font-medium" id="listHdr">Cenníková cena</th>
+              <th class="py-3 px-4 text-right font-extrabold text-slate-900">Vaša cena</th>
+            </tr>
+          </thead>
+          <tbody id="techBody" class="divide-y divide-slate-100"></tbody>
+          <tfoot class="bg-slate-50 border-t border-slate-200">
+            <tr>
+              <td colspan="3" class="py-3 px-4 text-right font-semibold text-slate-600">Spolu za technológiu:</td>
+              <td class="py-3 px-4 text-right text-lg font-black text-slate-900" id="techTotal">0,00 €</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+
+      <div class="mt-2 text-right text-xs italic font-semibold text-red-600" id="discountNote"></div>
+    </section>
+
+    <!-- 2 MONTÁŽ -->
+    <section class="px-8 pb-8">
+      <div id="secInstallTitle"></div>
+
+      <div class="overflow-hidden rounded-lg border border-slate-200">
+        <table class="w-full text-sm">
+          <tbody id="installBody" class="divide-y divide-slate-100"></tbody>
+          <tfoot class="bg-slate-50 border-t border-slate-200">
+            <tr>
+              <td class="py-3 px-4 text-right font-semibold text-slate-600">Spolu za montáž:</td>
+              <td class="py-3 px-4 text-right font-black text-slate-900" id="installTotal">0,00 €</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </section>
+
+    <!-- 3 SLUŽBY -->
+    <section class="px-8 pb-8">
+      <div id="secServicesTitle"></div>
+
+      <div class="overflow-hidden rounded-lg border border-slate-200">
+        <table class="w-full text-sm">
+          <tbody id="servicesBody" class="divide-y divide-slate-100"></tbody>
+          <tfoot class="bg-slate-50 border-t border-slate-200">
+            <tr>
+              <td class="py-3 px-4 text-right font-semibold text-slate-600">Spolu za služby:</td>
+              <td class="py-3 px-4 text-right font-black text-slate-900" id="servicesTotal">0,00 €</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </section>
+
+    <!-- SUMMARY -->
+    <section class="bg-slate-50 border-t border-slate-200 p-8">
+      <div class="flex flex-col md:flex-row gap-8">
+        <div class="w-full md:w-1/2">
+          <div class="flex items-center gap-3 mb-3">
+            <div class="h-10 w-2 bg-red-600 rounded-sm"></div>
+            <h4 class="text-sm uppercase tracking-wider font-extrabold text-slate-800">Poznámky</h4>
+          </div>
+
+          <ul id="notesList" class="text-sm text-slate-700 list-disc list-inside space-y-2"></ul>
+
+          <div class="mt-6 rounded-lg border border-slate-200 bg-white p-4 text-xs text-slate-700">
+            <div class="font-extrabold text-slate-900 mb-1">Poznámka k chladivám (EÚ):</div>
+            <div>
+              Prebieha postupné sprísňovanie pravidiel pre F-plyny. Pri nových projektoch odporúčame
+              preferovať riešenia s <b>R290 (propán)</b>. Chladivo <b>R32</b> je postupne obmedzované a trend smeruje k R290.
+            </div>
+          </div>
+        </div>
+
+        <div class="w-full md:w-1/2">
+          <div class="rounded-xl border border-slate-200 bg-white p-6">
+            <div class="flex justify-between py-1 text-sm text-slate-600">
+              <span>Cena bez DPH:</span>
+              <span class="font-semibold" id="sumNoVat">0,00 €</span>
+            </div>
+            <div class="flex justify-between py-1 text-sm text-slate-600 border-b border-slate-100 mb-2 pb-2">
+              <span>DPH (20%):</span>
+              <span class="font-semibold" id="sumVat">0,00 €</span>
+            </div>
+            <div class="flex justify-between items-end py-2">
+              <span class="text-lg font-extrabold text-slate-900">SPOLU s DPH:</span>
+              <span class="text-2xl font-black text-slate-900" id="sumWithVat">0,00 €</span>
+            </div>
+
+            <div class="mt-4 rounded-lg border border-emerald-200 bg-emerald-50 p-4">
+              <div class="flex justify-between text-sm text-emerald-800">
+                <span>Možná dotácia:</span>
+                <span class="font-extrabold" id="subsidyText">- 3 400,00 €</span>
+              </div>
+              <div class="mt-2 pt-2 border-t border-emerald-200 flex justify-between font-extrabold text-emerald-900">
+                <span>Po odrátaní dotácie:</span>
+                <span id="afterSubsidy">~ 0,00 €</span>
+              </div>
+              <div class="mt-1 text-[10px] text-emerald-700 italic">* Dotácia „Zelená domácnostiam“ podlieha schváleniu SIEA.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-900 text-slate-300 text-xs text-center p-4">
+      Táto cenová ponuka je nezáväzná. Ceny sú uvedené vrátane recyklačných poplatkov. © 2026 Spektra install s.r.o.
+    </footer>
   </div>
 
-  <script>
-    // =========================
-    // PRICES (CENNÍK)
-    // =========================
-    const PRICES = {
-      hp: { 
-        8: 7200,
-        12: 8400,
-        16: 9600,
-      },
-      tank: {
-        200: 1050,
-        300: 1290,
-      },
-      material: [
-        { name: 'Hydraulické napojenie vykurovania', gross: 420 },
-        { name: 'Filtrácia systému (magnetický filter)', gross: 150 },
-        { name: 'Expanzná nádoba TÚV + poistná skupina', gross: 160 },
-        { name: 'Elektroinštalačný materiál', gross: 180 },
-        { name: 'Drobný montážny materiál', gross: 120 },
+<script>
+  // ========== DATA ==========
+  const VAT = 0.20;
+  const DEFAULT_SUBSIDY = 3400;
+
+  // Montáž (zjednotená položka materiálu – ako si chcel)
+  const COMMON_INSTALL = [
+    { label: "Odborná montáž certifikovaným technikom (záruka kvality)", price: 950 },
+    { label: "Chladiarenské prepojenie (vákuovanie, skúška tesnosti)", price: 380 },
+    { label: "Profesionálne napojenie na vykurovací systém domu", price: 320 },
+    { label: "Montážny materiál (voda/kúrenie + Cu potrubie + kaučuková izolácia + fitingy + kotvenie)", price: 650 },
+    { label: "Elektroinštalácia, istenie a komunikačné prepojenie", price: 250 },
+    { label: "Prestup stenou jadrovým vŕtaním (čistý rez)", price: 65 },
+    { label: "Spustenie, hydraulické vyváženie a zaškolenie obsluhy", price: 180 },
+  ];
+
+  const SERVICE_PROTOCOL = { label: "Protokol o uvedení do prevádzky (kontrola + spustenie)", price: 120 };
+
+  const OFFERS = {
+    mitsubishi_zubadan: {
+      title: "Mitsubishi Electric – Zubadan",
+      brand: "Mitsubishi Electric – Zubadan",
+      power: "10 – 12 kW (ZUBADAN)",
+      discountNote: "* Uplatnená mimoriadna zľava na technológiu.",
+      subsidy: 3400,
+      notes: [
+        "Flash Injection – plný výkon pri -15 °C.",
+        "Garantovaná prevádzka až do -28 °C.",
+        "Vhodné pre radiátory aj podlahové kúrenie.",
+        "Kompaktná vnútorná jednotka so zásobníkom TÚV.",
       ],
-      labor: [
-        { name: 'Osadenie a napojenie tepelného čerpadla', gross: 650 },
-        { name: 'Elektroinštalačné práce', gross: 280 },
-        { name: 'Napustenie, preplach a odvzdušnenie systému', gross: 220 },
-        { name: 'Uvedenie do prevádzky a nastavenie regulácie', gross: 250 },
-      ]
-    };
+      tech: [
+        { name:"Vonkajšia jednotka ZUBADAN 12 kW", desc:"400 V, garantovaný výkon do -15 °C", model:"PUD-SHWM120YAA", list:6535, your:4990 },
+        { name:"Hydrobox (vnútorná jednotka) + TÚV", desc:"Zásobník TÚV 200 l", model:"ERST20D-YM9D", list:6841, your:5290 },
+        { name:"Regulácia Mitsubishi (FTC)", desc:"Súčasť setu", model:"Súčasť setu", list:null, your:0 },
+      ],
+      install: COMMON_INSTALL,
+      services: [ SERVICE_PROTOCOL, { label:"Odvoz odpadu vzniknutého pri inštalácii", price:60 } ],
+    },
 
-    // Helpers
-    const eur = (n) => new Intl.NumberFormat('sk-SK', { style:'currency', currency:'EUR', maximumFractionDigits:0 }).format(n);
-    const pad2 = (n) => String(n).padStart(2,'0');
-    const formatDateSK = (iso) => {
-      if(!iso) return '—';
-      const d = new Date(iso);
-      return `${d.getDate()}. ${d.getMonth()+1}. ${d.getFullYear()}`;
-    };
+    panasonic_k_9: {
+      title: "Panasonic – Aquarea K 9 kW",
+      brand: "Panasonic – Aquarea K Series",
+      power: "9 kW",
+      discountNote: "",
+      subsidy: 3400,
+      notes: [
+        "Tichá prevádzka – vhodné do hustej zástavby.",
+        "Moderné ovládanie a dobrá účinnosť.",
+        "Vhodné pre rekonštrukcie aj novostavby.",
+      ],
+      tech: [
+        { name:"Vonkajšia jednotka Panasonic Aquarea 9 kW", desc:"Split, R32", model:"WH-UDZ09KE5", list:4100, your:3100 },
+        { name:"Vnútorná jednotka (s TÚV)", desc:"All-in-one / so zásobníkom", model:"WH-ADC0309K3E5", list:6500, your:4900 },
+      ],
+      install: COMMON_INSTALL,
+      services: [ SERVICE_PROTOCOL, { label:"Odvoz odpadu vzniknutého pri inštalácii", price:60 } ],
+    },
 
-    // DOM Elements
-    const el = (id) => document.getElementById(id);
-    const inputs = ['offerNo','offerDate','custName','custPhone','custAddr','custEmail','variant','tank','vat','voucher','discount','note']
-      .map(id => el(id));
-    
-    // Status Badge
-    const statusBadge = el('statusBadge');
-    function setBadge(ok=true, text='● Pripravené'){
-      statusBadge.className = ok ? 'badge badge-ok' : 'badge badge-warn';
-      if(!ok && text.includes('Chyba')) statusBadge.className = 'badge badge-err';
-      statusBadge.textContent = text;
-    }
+    midea_arctic_r290_10: {
+      title: "Midea Arctic R290 – monoblok 10 kW",
+      brand: "Midea – Arctic R290 (monoblok)",
+      power: "cca 10 kW",
+      discountNote: "",
+      subsidy: 3400,
+      notes: [
+        "R290 (propán) – perspektívne chladivo bez trendu obmedzovania.",
+        "Monoblok – bez chladiva v interiéri (hydraulika do domu).",
+        "Dražice zásobník určený pre tepelné čerpadlá.",
+        "Možnosť vyššej teploty vody pre radiátory (podľa návrhu).",
+      ],
+      tech: [
+        { name:"Tepelné čerpadlo Midea Arctic R290 10 kW", desc:"Monoblok, invertor, WiFi", model:"Arctic 10 kW", list:6500, your:4600 },
+        { name:"Zásobník TÚV Dražice OKC 200 NTR/HP", desc:"Zásobník pre TČ, 200 l", model:"OKC 200 NTR/HP", list:1150, your:938.21 },
+        { name:"Akumulačná nádoba 100 l", desc:"Stabilnejší chod systému", model:"100 l", list:null, your:520 },
+      ],
+      install: COMMON_INSTALL,
+      services: [ SERVICE_PROTOCOL, { label:"Odvoz odpadu vzniknutého pri inštalácii", price:60 } ],
+    },
 
-    // MAIN LOGIC
-    function compute(){
-      // Copy basic info
-      el('vOfferNo').textContent = el('offerNo').value || '—';
-      el('vOfferDate').textContent = formatDateSK(el('offerDate').value);
-      el('vCustName').textContent = el('custName').value || '—';
-      el('vCustPhone').textContent = el('custPhone').value || '—';
-      el('vCustAddr').textContent = el('custAddr').value || '—';
-      el('vCustEmail').textContent = el('custEmail').value || '—';
-      
-      const vVal = el('variant').value;
-      const tVal = el('tank').value;
-      el('vVariant').textContent = vVal === '8' ? 'Variant A – 8 kW' : (vVal === '12' ? 'Variant B – 12 kW' : 'Variant C – 16 kW');
-      el('vTank').textContent = `${tVal} l`;
-      
-      const nVal = el('note').value.trim();
-      el('vNoteInline').textContent = nVal ? ` Poznámka: ${nVal}` : '';
+    midea_arctic_r290_12: {
+      title: "Midea Arctic R290 – monoblok 12 kW",
+      brand: "Midea – Arctic R290 (monoblok)",
+      power: "cca 12 kW",
+      discountNote: "",
+      subsidy: 3400,
+      notes: [
+        "Rezerva výkonu pre chladnejšie dni.",
+        "R290 – ekologické chladivo, trend do budúcna.",
+        "Kompletné riešenie so zásobníkom a AKU nádobou.",
+      ],
+      tech: [
+        { name:"Tepelné čerpadlo Midea Arctic R290 12 kW", desc:"Monoblok, invertor, WiFi", model:"Arctic 12 kW", list:7500, your:5100 },
+        { name:"Zásobník TÚV Dražice OKC 200 NTR/HP", desc:"Zásobník pre TČ, 200 l", model:"OKC 200 NTR/HP", list:1150, your:938.21 },
+        { name:"Akumulačná nádoba 100 l", desc:"Stabilnejší chod systému", model:"100 l", list:null, your:520 },
+      ],
+      install: COMMON_INSTALL,
+      services: [ SERVICE_PROTOCOL, { label:"Odvoz odpadu vzniknutého pri inštalácii", price:60 } ],
+    },
+  };
 
-      // Calculate Prices
-      const vatRate = Number(el('vat').value)/100;
-      const disc = Number(el('discount').value || 0);
-      const vouch = Number(el('voucher').value || 0);
+  // ========== HELPERS ==========
+  const fmt = (n) => Number(n||0).toLocaleString("sk-SK",{minimumFractionDigits:2,maximumFractionDigits:2})+" €";
+  const sumPrices = (arr) => arr.reduce((a,x)=>a+(Number(x.price)||0),0);
+  const sumTech = (arr) => arr.reduce((a,x)=>a+(Number(x.your)||0),0);
 
-      const items = [];
-      items.push({ name: `Tepelné čerpadlo Midea Nature R290 – ${vVal} kW`, gross: PRICES.hp[vVal] });
-      items.push({ name: `Zásobník TÚV ${tVal} l`, gross: PRICES.tank[tVal] });
-      PRICES.material.forEach(x=>items.push({ name: x.name, gross: x.gross }));
-      PRICES.labor.forEach(x=>items.push({ name: x.name, gross: x.gross }));
+  function sectionTitle(targetId, title){
+    const tpl = document.getElementById("sectionTitleTpl");
+    const node = tpl.content.cloneNode(true);
+    node.querySelector("h3").textContent = title;
+    const target = document.getElementById(targetId);
+    target.innerHTML = "";
+    target.appendChild(node);
+  }
 
-      el('itemsBody').innerHTML = '';
-      let totalGross = 0, totalNet = 0, totalVat = 0;
+  // ========== RENDER ==========
+  function render(key){
+    const o = OFFERS[key];
 
-      items.forEach(it => {
-        const gross = it.gross;
-        const net = vatRate === 0 ? gross : gross / (1 + vatRate);
-        const vatAmt = gross - net;
-        totalGross += gross;
-        totalNet += net;
-        totalVat += vatAmt;
+    // headers
+    document.getElementById("offerTitleView").textContent = o.title;
+    document.getElementById("brandText").textContent = o.brand;
+    document.getElementById("powerText").textContent = o.power;
+    document.getElementById("discountNote").textContent = o.discountNote || "";
 
-        el('itemsBody').innerHTML += `
-          <tr>
-            <td>${it.name}</td>
-            <td class="right">${eur(net)}</td>
-            <td class="right">${eur(vatAmt)}</td>
-            <td class="right"><b>${eur(gross)}</b></td>
-          </tr>
-        `;
-      });
+    // section titles
+    sectionTitle("secTechTitle","Technológia");
+    sectionTitle("secInstallTitle","Montáž a inštalácia");
+    sectionTitle("secServicesTitle","Ostatné služby");
 
-      const grandGross = Math.max(0, totalGross - disc - vouch);
-      const grandNet = vatRate === 0 ? grandGross : grandGross / (1 + vatRate);
-      
-      el('sumNet').textContent = eur(totalNet);
-      el('sumVat').textContent = eur(totalVat);
-      el('sumDisc').textContent = eur(disc);
-      el('sumVoucher').textContent = eur(vouch);
-      el('sumGrand').textContent = eur(grandGross);
+    // tech table
+    const techBody = document.getElementById("techBody");
+    techBody.innerHTML = "";
+    const showList = o.tech.some(x => typeof x.list === "number");
+    document.getElementById("listHdr").textContent = showList ? "Cenníková cena" : "Poznámka";
 
-      setBadge(Boolean(el('custName').value), Boolean(el('custName').value) ? '● Pripravené' : '● Doplň meno');
-    }
+    o.tech.forEach(row=>{
+      const tr = document.createElement("tr");
+      tr.className = "hover:bg-slate-50";
+      const listCell = showList
+        ? (typeof row.list === "number"
+            ? `<td class="py-3 px-4 text-right text-slate-400 line-through decoration-red-300 text-xs">${fmt(row.list)}</td>`
+            : `<td class="py-3 px-4 text-right text-slate-400 text-xs">-</td>`
+          )
+        : `<td class="py-3 px-4 text-right text-slate-400 text-xs">${row.desc ? "" : "-"}</td>`;
 
-    // INIT
-    (function initDate(){
-      const now = new Date();
-      el('offerDate').value = `${now.getFullYear()}-${pad2(now.getMonth()+1)}-${pad2(now.getDate())}`;
-      compute();
-    })();
-
-    // EVENTS
-    inputs.forEach(i => {
-      i.addEventListener('input', compute);
-      i.addEventListener('change', compute);
+      tr.innerHTML = `
+        <td class="py-3 px-4 font-semibold text-slate-900">
+          ${row.name}
+          ${row.desc ? `<div class="text-xs font-normal text-slate-500 mt-0.5">${row.desc}</div>` : ``}
+        </td>
+        <td class="py-3 px-4 text-slate-700">${row.model || "-"}</td>
+        ${listCell}
+        <td class="py-3 px-4 text-right font-extrabold text-emerald-700">${fmt(row.your)}</td>
+      `;
+      techBody.appendChild(tr);
     });
 
-    // 1. JS PDF Export (html2pdf)
-    el('btnPdf').addEventListener('click', async () => {
-      try {
-        if (typeof html2pdf === 'undefined') throw new Error("Knižnica html2pdf sa nenačítala (skontrolujte internet).");
-        
-        compute();
-        window.scrollTo(0, 0); // Dôležité: posunúť hore, inak môže orezať PDF
-        
-        const name = (el('custName').value.trim() || 'Zakaznik').replace(/[^a-zA-Z0-9]/g,'_');
-        const element = document.getElementById('pdfArea');
-        const opt = {
-          margin: 0,
-          filename: `Ponuka_${name}.pdf`,
-          image: { type: 'jpeg', quality: 0.98 },
-          html2canvas: { scale: 2, useCORS: true },
-          jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-        };
-        
-        setBadge(true, '● Generujem...');
-        await html2pdf().set(opt).from(element).save();
-        setBadge(true, '● Hotovo');
-      } catch (e) {
-        alert("Chyba exportu: " + e.message + "\n\nSkúste použiť tmavé tlačidlo 'Tlačiť / PDF' vedľa.");
-        setBadge(false, '● Chyba');
-      }
+    const techTotal = sumTech(o.tech);
+    document.getElementById("techTotal").textContent = fmt(techTotal);
+
+    // install
+    const instBody = document.getElementById("installBody");
+    instBody.innerHTML = "";
+    o.install.forEach(r=>{
+      const tr = document.createElement("tr");
+      tr.className = "hover:bg-slate-50";
+      tr.innerHTML = `
+        <td class="py-3 px-4 text-slate-800">${r.label}</td>
+        <td class="py-3 px-4 text-right font-semibold text-slate-900">${fmt(r.price)}</td>
+      `;
+      instBody.appendChild(tr);
+    });
+    const instTotal = sumPrices(o.install);
+    document.getElementById("installTotal").textContent = fmt(instTotal);
+
+    // services
+    const srvBody = document.getElementById("servicesBody");
+    srvBody.innerHTML = "";
+    o.services.forEach(r=>{
+      const tr = document.createElement("tr");
+      tr.className = "hover:bg-slate-50";
+      tr.innerHTML = `
+        <td class="py-3 px-4 text-slate-800">${r.label}</td>
+        <td class="py-3 px-4 text-right font-semibold text-slate-900">${fmt(r.price)}</td>
+      `;
+      srvBody.appendChild(tr);
+    });
+    const srvTotal = sumPrices(o.services);
+    document.getElementById("servicesTotal").textContent = fmt(srvTotal);
+
+    // notes
+    const notes = document.getElementById("notesList");
+    notes.innerHTML = "";
+    (o.notes||[]).forEach(t=>{
+      const li = document.createElement("li");
+      li.textContent = t;
+      notes.appendChild(li);
     });
 
-    // 2. Native Print / PDF (Fallback)
-    el('btnPrint').addEventListener('click', () => {
-      compute();
-      window.print();
-    });
+    // totals
+    const noVat = techTotal + instTotal + srvTotal;
+    const vat = noVat * VAT;
+    const withVat = noVat + vat;
 
-    // Storage
-    const KEY = 'spektra_offer_v2';
-    el('btnSave').addEventListener('click', () => {
-      const data = {};
-      inputs.forEach(i => data[i.id] = i.value);
-      localStorage.setItem(KEY, JSON.stringify(data));
-      setBadge(true, '● Uložené');
-    });
-    
-    el('btnReset').addEventListener('click', () => {
-      if(confirm('Naozaj vymazať formulár?')) {
-        localStorage.removeItem(KEY);
-        location.reload();
-      }
-    });
+    document.getElementById("sumNoVat").textContent = fmt(noVat);
+    document.getElementById("sumVat").textContent = fmt(vat);
+    document.getElementById("sumWithVat").textContent = fmt(withVat);
 
-    // Load
-    try {
-      const saved = JSON.parse(localStorage.getItem(KEY));
-      if(saved) {
-        Object.keys(saved).forEach(k => { if(el(k)) el(k).value = saved[k]; });
-        compute();
-      }
-    } catch(e){}
+    const sub = Number(o.subsidy ?? DEFAULT_SUBSIDY);
+    document.getElementById("subsidyText").textContent = "- " + fmt(sub);
+    document.getElementById("afterSubsidy").textContent = "~ " + fmt(Math.max(0, withVat - sub));
+  }
 
-  </script>
+  // ========== INPUTS ==========
+  const offerNo = document.getElementById("offerNo");
+  const offerNoView = document.getElementById("offerNoView");
+  const customerInput = document.getElementById("customerInput");
+  const customerView = document.getElementById("customerView");
+  const offerSelect = document.getElementById("offerSelect");
+
+  offerNo.addEventListener("input", ()=> offerNoView.textContent = offerNo.value || "2026/001");
+  customerInput.addEventListener("input", ()=> customerView.textContent = customerInput.value);
+  offerSelect.addEventListener("change", ()=> render(offerSelect.value));
+
+  // date
+  const d = new Date();
+  document.getElementById("dateView").textContent = d.toLocaleDateString("sk-SK",{year:"numeric",month:"long",day:"numeric"});
+
+  // first render
+  render(offerSelect.value);
+</script>
 </body>
 </html>
