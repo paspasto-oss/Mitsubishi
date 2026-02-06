@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spektra Install – Generátor Ponúk v3.10 (Ultra Kompaktná A4)</title>
+    <title>Spektra Install – Generátor Ponúk v3.13 (Baltrio Split Gen J)</title>
     
     <!-- Písmo Roboto -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -29,7 +29,7 @@
             margin: 0;
             padding: 0;
             color: var(--gray-900);
-            line-height: 1.35; /* Ešte menší riadkový priestor */
+            line-height: 1.35;
             -webkit-font-smoothing: antialiased;
         }
 
@@ -112,7 +112,7 @@
             width: 210mm;
             min-height: 297mm;
             background: white;
-            padding: 10mm 15mm; /* Ešte menšie okraje (1cm hore/dole) */
+            padding: 10mm 15mm; 
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
             position: relative;
             box-sizing: border-box;
@@ -125,12 +125,12 @@
             display: flex; 
             justify-content: space-between; 
             border-bottom: 2px solid var(--primary);
-            padding-bottom: 5px; /* Minimalizovaná medzera */
+            padding-bottom: 5px; 
             margin-bottom: 10px; 
         }
         
         .logo-placeholder { 
-            font-size: 22px; font-weight: 900; color: var(--primary); /* Menšie logo */
+            font-size: 22px; font-weight: 900; color: var(--primary); 
             letter-spacing: -0.5px; line-height: 1; 
         }
         .logo-placeholder span { color: var(--gray-900); }
@@ -145,7 +145,7 @@
             margin-bottom: 15px; 
         }
         .addr-box h3 { font-size: 9px; text-transform: uppercase; color: var(--gray-500); border-bottom: 1px solid var(--gray-200); padding-bottom: 2px; margin-bottom: 4px; letter-spacing: 0.5px; }
-        .addr-box p { margin: 0; font-size: 11px; font-weight: 400; line-height: 1.3; } /* Menšie písmo adresy */
+        .addr-box p { margin: 0; font-size: 11px; font-weight: 400; line-height: 1.3; }
         .addr-box .highlight { font-weight: 700; font-size: 12px; color: var(--gray-900); }
 
         .intro { margin-bottom: 10px; font-size: 11px; text-align: justify; line-height: 1.3; }
@@ -153,7 +153,7 @@
         /* Tabuľka - Ultra Kompaktná */
         .pricing-table { width: 100%; border-collapse: collapse; margin-bottom: 10px; font-size: 11px; }
         .pricing-table th { 
-            background: var(--gray-100); text-align: left; padding: 4px 6px; /* Minimálny padding */
+            background: var(--gray-100); text-align: left; padding: 4px 6px;
             font-weight: 700; border-bottom: 2px solid var(--gray-200);
             -webkit-print-color-adjust: exact; print-color-adjust: exact; 
         }
@@ -171,7 +171,7 @@
         /* Dotácie */
         .subsidy-box {
             margin-top: 5px;
-            padding: 8px; /* Menší padding */
+            padding: 8px; 
             border: 1px dashed var(--primary); 
             border-radius: 6px; 
             background-color: #fffafa; 
@@ -192,7 +192,6 @@
             .controls { display: none !important; }
             .preview-container { display: block; background: white; padding: 0; margin: 0; border: none; overflow: visible; }
             
-            /* Fixné okraje pre tlač */
             .a4-page { 
                 width: 100%; 
                 min-height: 100vh; 
@@ -251,8 +250,36 @@
         <hr style="border:0; border-top:1px solid #eee; width:100%;">
 
         <div class="form-group">
-            <label>Výber Tepelného Čerpadla</label>
+            <label>Zariadenie / Model</label>
             <select id="inp-model">
+                <optgroup label="Panasonic High Performance Split (Baltrio Gen J) - NOVÉ">
+                    <option value="pana_baltrio_split_j_3">Panasonic Aquarea Split Gen J 3kW</option>
+                    <option value="pana_baltrio_split_j_5">Panasonic Aquarea Split Gen J 5kW</option>
+                    <option value="pana_baltrio_split_j_7">Panasonic Aquarea Split Gen J 7kW</option>
+                    <option value="pana_baltrio_split_j_9">Panasonic Aquarea Split Gen J 9kW</option>
+                </optgroup>
+                <optgroup label="Panasonic All-in-One (Baltrio Gen J/H)">
+                    <option value="pana_baltrio_aio_j_3">Panasonic Aquarea AiO Gen J 3kW (High Perf.)</option>
+                    <option value="pana_baltrio_aio_j_5">Panasonic Aquarea AiO Gen J 5kW (High Perf.)</option>
+                    <option value="pana_baltrio_aio_j_7">Panasonic Aquarea AiO Gen J 7kW (High Perf.)</option>
+                    <option value="pana_baltrio_aio_j_9">Panasonic Aquarea AiO Gen J 9kW (High Perf.)</option>
+                    <option value="pana_baltrio_tcap_aio_h_9">Panasonic Aquarea T-CAP AiO Gen H 9kW</option>
+                    <option value="pana_baltrio_tcap_aio_h_12">Panasonic Aquarea T-CAP AiO Gen H 12kW</option>
+                    <option value="pana_baltrio_tcap_aio_h_16">Panasonic Aquarea T-CAP AiO Gen H 16kW</option>
+                </optgroup>
+                <optgroup label="Panasonic T-CAP Split (Baltrio Gen H)">
+                    <option value="pana_baltrio_tcap_split_h_9">Panasonic Aquarea T-CAP Split Gen H 9kW</option>
+                    <option value="pana_baltrio_tcap_split_h_12">Panasonic Aquarea T-CAP Split Gen H 12kW</option>
+                    <option value="pana_baltrio_tcap_split_h_16">Panasonic Aquarea T-CAP Split Gen H 16kW</option>
+                </optgroup>
+                <optgroup label="Klimatizácie Mitsubishi">
+                    <option value="mitsubishi_hr_25">Mitsubishi HR 2.5kW (MSZ-HR25VF)</option>
+                    <option value="mitsubishi_hr_35">Mitsubishi HR 3.5kW (MSZ-HR35VF)</option>
+                    <option value="mitsubishi_ay_25">Mitsubishi AY 2.5kW (MSZ-AY25VGK)</option>
+                    <option value="mitsubishi_ay_35">Mitsubishi AY 3.5kW (MSZ-AY35VGK)</option>
+                    <option value="mitsubishi_ln_25">Mitsubishi LN 2.5kW Luxury (MSZ-LN25)</option>
+                    <option value="mitsubishi_ln_35">Mitsubishi LN 3.5kW Luxury (MSZ-LN35)</option>
+                </optgroup>
                 <optgroup label="Midea Nature (R290 Monoblok)">
                     <option value="midea_nature_8">Midea Nature 8kW (R290)</option>
                     <option value="midea_nature_12" selected>Midea Nature 12kW (R290)</option>
@@ -289,13 +316,6 @@
                     <option value="midea_aio_16">Midea M-Thermal All-in-One 16kW (240L)</option>
                     <option value="daikin_aio_6">Daikin Altherma 3 R F 6kW (180L)</option>
                     <option value="daikin_aio_8">Daikin Altherma 3 R F 8kW (230L)</option>
-                    <option value="pana_aio_9">Panasonic Aquarea T-CAP All-in-One 9kW</option>
-                    <option value="pana_aio_12">Panasonic Aquarea T-CAP All-in-One 12kW</option>
-                </optgroup>
-                <optgroup label="Panasonic Aquarea (T-CAP Split)">
-                    <option value="panasonic_split_9">Panasonic Aquarea T-CAP 9kW Split</option>
-                    <option value="panasonic_split_12">Panasonic Aquarea T-CAP 12kW Split</option>
-                    <option value="panasonic_split_16">Panasonic Aquarea T-CAP 16kW Split</option>
                 </optgroup>
                 <optgroup label="Mitsubishi Zubadan (Split)">
                     <option value="zubadan_split_8">Mitsubishi Zubadan 8kW Split</option>
@@ -306,17 +326,18 @@
         </div>
 
         <div class="form-row">
-            <div class="form-group">
+            <div class="form-group" id="grp-tank">
                 <label>Zásobník TÚV</label>
                 <select id="inp-tank">
                     <option value="200">200 litrov (Externý)</option>
                     <option value="300" selected>300 litrov (Externý)</option>
                     <!-- Možnosť "Integrovaný" sa vyberie automaticky cez JS -->
                     <option value="integrated" disabled style="display:none">Integrovaný v jednotke</option>
+                    <option value="none" disabled style="display:none">Bez zásobníka (Klimatizácia)</option>
                 </select>
                 <div id="tank-hint" style="font-size:10px; color:#16a34a; display:none;">● Súčasťou tepelného čerpadla</div>
             </div>
-            <div class="form-group">
+            <div class="form-group" id="grp-voucher">
                 <label>Dotácia (Zelená d.)</label>
                 <select id="inp-voucher">
                     <option value="3400">- 3 400 €</option>
@@ -393,7 +414,7 @@
             <!-- Úvod -->
             <div class="intro">
                 <p>Vážený zákazník,</p>
-                <p>na základe Vašich požiadaviek Vám predkladáme cenovú ponuku na dodávku a montáž tepelného čerpadla <strong id="out-hp-name">Midea Nature R290</strong>. <span id="out-note-inline"></span></p>
+                <p>na základe Vašich požiadaviek Vám predkladáme cenovú ponuku na dodávku a montáž zariadenia <strong id="out-hp-name">Midea Nature R290</strong>. <span id="out-note-inline"></span></p>
             </div>
 
             <!-- Tabuľka -->
@@ -431,7 +452,7 @@
                 </div>
             </div>
 
-            <!-- Dotácie -->
+            <!-- Dotácie (Iba pre TČ) -->
             <div id="subsidy-section" class="subsidy-box" style="display:none;">
                 <h4>Možnosť štátnej dotácie (Zelená domácnostiam)</h4>
                 <p>Vzhľadom na aktuálnu vyčerpanosť alebo podmienky programu "Zelená domácnostiam" je táto kalkulácia informatívna. Dotácia sa uplatňuje formou poukážky po splnení podmienok.</p>
@@ -465,66 +486,85 @@
     // === CENY A MODELY 2026 (S DPH) ===
     const PRICES = {
         models: {
-            // Midea Nature (Znížené pre konkurencieschopnosť)
-            'midea_nature_8': { name: 'Midea Nature 8kW (R290 Monoblok)', price: 6990, isAiO: false },
-            'midea_nature_12': { name: 'Midea Nature 12kW (R290 Monoblok)', price: 8200, isAiO: false },
-            'midea_nature_16': { name: 'Midea Nature 16kW (R290 Monoblok)', price: 9400, isAiO: false },
+            // === PANASONIC HIGH PERFORMANCE SPLIT (BALTRIO GEN J) - NOVÉ ===
+            'pana_baltrio_split_j_3': { name: 'Panasonic Aquarea Split Gen J 3kW (High Perf.)', price: 4100, type: 'hp', isAiO: false },
+            'pana_baltrio_split_j_5': { name: 'Panasonic Aquarea Split Gen J 5kW (High Perf.)', price: 4400, type: 'hp', isAiO: false },
+            'pana_baltrio_split_j_7': { name: 'Panasonic Aquarea Split Gen J 7kW (High Perf.)', price: 4900, type: 'hp', isAiO: false },
+            'pana_baltrio_split_j_9': { name: 'Panasonic Aquarea Split Gen J 9kW (High Perf.)', price: 5600, type: 'hp', isAiO: false },
+
+            // === PANASONIC ALL-IN-ONE (BALTRIO GEN J/H) ===
+            'pana_baltrio_aio_j_3': { name: 'Panasonic Aquarea AiO Gen J 3kW (High Perf.)', price: 5800, type: 'hp', isAiO: true },
+            'pana_baltrio_aio_j_5': { name: 'Panasonic Aquarea AiO Gen J 5kW (High Perf.)', price: 6300, type: 'hp', isAiO: true },
+            'pana_baltrio_aio_j_7': { name: 'Panasonic Aquarea AiO Gen J 7kW (High Perf.)', price: 6900, type: 'hp', isAiO: true },
+            'pana_baltrio_aio_j_9': { name: 'Panasonic Aquarea AiO Gen J 9kW (High Perf.)', price: 7500, type: 'hp', isAiO: true },
+            'pana_baltrio_tcap_aio_h_9': { name: 'Panasonic Aquarea T-CAP AiO Gen H 9kW', price: 8900, type: 'hp', isAiO: true },
+            'pana_baltrio_tcap_aio_h_12': { name: 'Panasonic Aquarea T-CAP AiO Gen H 12kW', price: 9900, type: 'hp', isAiO: true },
+            'pana_baltrio_tcap_aio_h_16': { name: 'Panasonic Aquarea T-CAP AiO Gen H 16kW', price: 10900, type: 'hp', isAiO: true },
             
-            // Midea Arctic (Agresívne zníženie)
-            'midea_arctic_8': { name: 'Midea Arctic Split 8kW (R32)', price: 4990, isAiO: false },
-            'midea_arctic_10': { name: 'Midea Arctic Split 10kW (R32)', price: 5500, isAiO: false },
-            'midea_arctic_12': { name: 'Midea Arctic Split 12kW (R32)', price: 6100, isAiO: false },
-            'midea_arctic_16': { name: 'Midea Arctic Split 16kW (R32)', price: 6900, isAiO: false },
+            // === PANASONIC T-CAP SPLIT (BALTRIO GEN H) ===
+            'pana_baltrio_tcap_split_h_9': { name: 'Panasonic Aquarea T-CAP Split Gen H 9kW', price: 7200, type: 'hp', isAiO: false },
+            'pana_baltrio_tcap_split_h_12': { name: 'Panasonic Aquarea T-CAP Split Gen H 12kW', price: 8100, type: 'hp', isAiO: false },
+            'pana_baltrio_tcap_split_h_16': { name: 'Panasonic Aquarea T-CAP Split Gen H 16kW', price: 9200, type: 'hp', isAiO: false },
 
-            // Mitsubishi Zubadan All-in-One (Znížené podľa Eco3Energy)
-            'zuba_aio_8_200': { name: 'Mitsubishi Zubadan 8kW + 200L Zásobník', price: 12600, isAiO: true },
-            'zuba_aio_8_300': { name: 'Mitsubishi Zubadan 8kW + 300L Zásobník', price: 12900, isAiO: true },
-            'zuba_aio_10_200': { name: 'Mitsubishi Zubadan 10kW + 200L Zásobník', price: 13200, isAiO: true },
-            'zuba_aio_10_300': { name: 'Mitsubishi Zubadan 10kW + 300L Zásobník', price: 13600, isAiO: true },
-            'zuba_aio_12_200': { name: 'Mitsubishi Zubadan 12kW + 200L Zásobník', price: 13900, isAiO: true },
-            'zuba_aio_12_300': { name: 'Mitsubishi Zubadan 12kW + 300L Zásobník', price: 14300, isAiO: true },
-            'zuba_aio_14_200': { name: 'Mitsubishi Zubadan 14kW + 200L Zásobník', price: 14600, isAiO: true },
-            'zuba_aio_14_300': { name: 'Mitsubishi Zubadan 14kW + 300L Zásobník', price: 14900, isAiO: true },
+            // === KLIMATIZÁCIE ===
+            'mitsubishi_hr_25': { name: 'Klimatizácia Mitsubishi MSZ-HR25VF (2.5kW)', price: 950, type: 'ac', isAiO: false },
+            'mitsubishi_hr_35': { name: 'Klimatizácia Mitsubishi MSZ-HR35VF (3.5kW)', price: 1100, type: 'ac', isAiO: false },
+            'mitsubishi_ay_25': { name: 'Klimatizácia Mitsubishi MSZ-AY25VGK (2.5kW)', price: 1320, type: 'ac', isAiO: false },
+            'mitsubishi_ay_35': { name: 'Klimatizácia Mitsubishi MSZ-AY35VGK (3.5kW)', price: 1550, type: 'ac', isAiO: false },
+            'mitsubishi_ln_25': { name: 'Klimatizácia Mitsubishi MSZ-LN25 (Luxury 2.5kW)', price: 2300, type: 'ac', isAiO: false },
+            'mitsubishi_ln_35': { name: 'Klimatizácia Mitsubishi MSZ-LN35 (Luxury 3.5kW)', price: 2600, type: 'ac', isAiO: false },
 
-            // Panasonic Aquarea All-in-One Gen K (High Performance) - ZNÍŽENÉ
-            'pana_aio_genk_3': { name: 'Panasonic Aquarea All-in-One Gen K 3kW (High Perf.)', price: 6950, isAiO: true },
-            'pana_aio_genk_5': { name: 'Panasonic Aquarea All-in-One Gen K 5kW (High Perf.)', price: 7650, isAiO: true },
-            'pana_aio_genk_7': { name: 'Panasonic Aquarea All-in-One Gen K 7kW (High Perf.)', price: 8400, isAiO: true },
-            'pana_aio_genk_9': { name: 'Panasonic Aquarea All-in-One Gen K 9kW (High Perf.)', price: 9390, isAiO: true },
-            'pana_aio_genk_12': { name: 'Panasonic Aquarea All-in-One Gen K 12kW (T-CAP podobné)', price: 10600, isAiO: true },
-            'pana_aio_genk_16': { name: 'Panasonic Aquarea All-in-One Gen K 16kW (T-CAP podobné)', price: 12200, isAiO: true },
-
-            // Iné All-in-One
-            'midea_aio_8': { name: 'Midea M-Thermal All-in-One 8kW (190L)', price: 7700, isAiO: true },
-            'midea_aio_10': { name: 'Midea M-Thermal All-in-One 10kW (190L)', price: 8300, isAiO: true },
-            'midea_aio_12': { name: 'Midea M-Thermal All-in-One 12kW (240L)', price: 9100, isAiO: true },
-            'midea_aio_16': { name: 'Midea M-Thermal All-in-One 16kW (240L)', price: 9800, isAiO: true },
-            'daikin_aio_6': { name: 'Daikin Altherma 3 R F 6kW (180L)', price: 8500, isAiO: true },
-            'daikin_aio_8': { name: 'Daikin Altherma 3 R F 8kW (230L)', price: 9650, isAiO: true },
-            'pana_aio_9': { name: 'Panasonic Aquarea T-CAP All-in-One 9kW', price: 11600, isAiO: true },
-            'pana_aio_12': { name: 'Panasonic Aquarea T-CAP All-in-One 12kW', price: 12900, isAiO: true },
-
-            // Panasonic Split T-CAP - ZNÍŽENÉ
-            'panasonic_split_9': { name: 'Panasonic Aquarea T-CAP 9kW Split (Gen H)', price: 8990, isAiO: false },
-            'panasonic_split_12': { name: 'Panasonic Aquarea T-CAP 12kW Split (Gen H)', price: 10300, isAiO: false },
-            'panasonic_split_16': { name: 'Panasonic Aquarea T-CAP 16kW Split (Gen H)', price: 11600, isAiO: false },
-
-            // Mitsubishi Split - ZNÍŽENÉ
-            'zubadan_split_8': { name: 'Mitsubishi Zubadan 8kW Split (PUD-SHWM)', price: 11100, isAiO: false },
-            'zubadan_split_12': { name: 'Mitsubishi Zubadan 12kW Split (PUD-SHWM)', price: 13100, isAiO: false },
-            'zubadan_split_14': { name: 'Mitsubishi Zubadan 14kW Split (PUD-SHWM)', price: 14500, isAiO: false }
+            // === TEPELNÉ ČERPADLÁ (Pôvodné) ===
+            'midea_nature_8': { name: 'Midea Nature 8kW (R290 Monoblok)', price: 6990, type: 'hp', isAiO: false },
+            'midea_nature_12': { name: 'Midea Nature 12kW (R290 Monoblok)', price: 8200, type: 'hp', isAiO: false },
+            'midea_nature_16': { name: 'Midea Nature 16kW (R290 Monoblok)', price: 9400, type: 'hp', isAiO: false },
+            'midea_arctic_8': { name: 'Midea Arctic Split 8kW (R32)', price: 4990, type: 'hp', isAiO: false },
+            'midea_arctic_10': { name: 'Midea Arctic Split 10kW (R32)', price: 5500, type: 'hp', isAiO: false },
+            'midea_arctic_12': { name: 'Midea Arctic Split 12kW (R32)', price: 6100, type: 'hp', isAiO: false },
+            'midea_arctic_16': { name: 'Midea Arctic Split 16kW (R32)', price: 6900, type: 'hp', isAiO: false },
+            'zuba_aio_8_200': { name: 'Mitsubishi Zubadan 8kW + 200L Zásobník', price: 12600, type: 'hp', isAiO: true },
+            'zuba_aio_8_300': { name: 'Mitsubishi Zubadan 8kW + 300L Zásobník', price: 12900, type: 'hp', isAiO: true },
+            'zuba_aio_10_200': { name: 'Mitsubishi Zubadan 10kW + 200L Zásobník', price: 13200, type: 'hp', isAiO: true },
+            'zuba_aio_10_300': { name: 'Mitsubishi Zubadan 10kW + 300L Zásobník', price: 13600, type: 'hp', isAiO: true },
+            'zuba_aio_12_200': { name: 'Mitsubishi Zubadan 12kW + 200L Zásobník', price: 13900, type: 'hp', isAiO: true },
+            'zuba_aio_12_300': { name: 'Mitsubishi Zubadan 12kW + 300L Zásobník', price: 14300, type: 'hp', isAiO: true },
+            'zuba_aio_14_200': { name: 'Mitsubishi Zubadan 14kW + 200L Zásobník', price: 14600, type: 'hp', isAiO: true },
+            'zuba_aio_14_300': { name: 'Mitsubishi Zubadan 14kW + 300L Zásobník', price: 14900, type: 'hp', isAiO: true },
+            'pana_aio_genk_3': { name: 'Panasonic Aquarea AiO Gen K 3kW (High Perf.)', price: 6950, type: 'hp', isAiO: true },
+            'pana_aio_genk_5': { name: 'Panasonic Aquarea AiO Gen K 5kW (High Perf.)', price: 7650, type: 'hp', isAiO: true },
+            'pana_aio_genk_7': { name: 'Panasonic Aquarea AiO Gen K 7kW (High Perf.)', price: 8400, type: 'hp', isAiO: true },
+            'pana_aio_genk_9': { name: 'Panasonic Aquarea AiO Gen K 9kW (High Perf.)', price: 9390, type: 'hp', isAiO: true },
+            'pana_aio_genk_12': { name: 'Panasonic Aquarea AiO Gen K 12kW (T-CAP)', price: 10600, type: 'hp', isAiO: true },
+            'pana_aio_genk_16': { name: 'Panasonic Aquarea AiO Gen K 16kW (T-CAP)', price: 12200, type: 'hp', isAiO: true },
+            'midea_aio_8': { name: 'Midea M-Thermal All-in-One 8kW (190L)', price: 7700, type: 'hp', isAiO: true },
+            'midea_aio_10': { name: 'Midea M-Thermal All-in-One 10kW (190L)', price: 8300, type: 'hp', isAiO: true },
+            'midea_aio_12': { name: 'Midea M-Thermal All-in-One 12kW (240L)', price: 9100, type: 'hp', isAiO: true },
+            'midea_aio_16': { name: 'Midea M-Thermal All-in-One 16kW (240L)', price: 9800, type: 'hp', isAiO: true },
+            'daikin_aio_6': { name: 'Daikin Altherma 3 R F 6kW (180L)', price: 8500, type: 'hp', isAiO: true },
+            'daikin_aio_8': { name: 'Daikin Altherma 3 R F 8kW (230L)', price: 9650, type: 'hp', isAiO: true },
+            'zubadan_split_8': { name: 'Mitsubishi Zubadan 8kW Split (PUD-SHWM)', price: 11100, type: 'hp', isAiO: false },
+            'zubadan_split_12': { name: 'Mitsubishi Zubadan 12kW Split (PUD-SHWM)', price: 13100, type: 'hp', isAiO: false },
+            'zubadan_split_14': { name: 'Mitsubishi Zubadan 14kW Split (PUD-SHWM)', price: 14500, type: 'hp', isAiO: false }
         },
         tank: {
             200: 1050,
             300: 1290,
-            'integrated': 0 // Cena integrovaného je 0, lebo je v cene HP
+            'integrated': 0,
+            'none': 0
         },
-        work: [
+        work_hp: [
             { name: "Montážny materiál (chladiarenské potrubie, izolácie, konzoly)", price: 650 },
             { name: "Elektroinštalačný materiál, istenie a zapojenie", price: 450 },
             { name: "Hydraulické zapojenie, filtre a armatúry", price: 680 },
             { name: "Odborná montáž, vákuovanie, spustenie a zaškolenie", price: 1200 },
             { name: "Doprava, manipulácia a logistika", price: 200 }
+        ],
+        work_ac: [
+            { name: "Montážny materiál (konzola, lišty, potrubie do 3m)", price: 250 },
+            { name: "Elektroinštalačný materiál (komunikácia, napájanie)", price: 50 },
+            { name: "Odborná montáž vnútornej a vonkajšej jednotky", price: 450 },
+            { name: "Vákuovanie, skúška tesnosti a spustenie", price: 0 }, /* V cene montáže */
+            { name: "Doprava", price: 100 }
         ]
     };
 
@@ -544,6 +584,9 @@
         vat: document.getElementById('inp-vat'),
         discount: document.getElementById('inp-discount'),
         note: document.getElementById('inp-note'),
+        
+        grpTank: document.getElementById('grp-tank'),
+        grpVoucher: document.getElementById('grp-voucher'),
         
         outNo: document.getElementById('out-no'),
         outDate: document.getElementById('out-date'),
@@ -567,33 +610,44 @@
     // Global state pre predchádzajúci výber bojlera
     let previousTankVal = '300';
 
-    function checkAiO() {
+    function checkModelType() {
         const modelKey = ui.model.value;
         const modelData = PRICES.models[modelKey];
         
-        if (modelData.isAiO) {
-            // Ak je AiO, uložíme si čo mal user vybraté, ak to nebol integrated
-            if (ui.tank.value !== 'integrated') {
-                previousTankVal = ui.tank.value;
-            }
-            // Nastavíme na Integrated a zamkneme
-            ui.tank.value = 'integrated';
+        if (modelData.type === 'ac') {
+            // KLIMATIZÁCIA
+            ui.tank.value = 'none';
             ui.tank.disabled = true;
-            ui.tankHint.style.display = 'block';
-        } else {
-            // Ak nie je AiO, odomkneme
-            ui.tank.disabled = false;
+            ui.grpTank.style.opacity = '0.5';
+            ui.grpVoucher.style.opacity = '0.5';
+            ui.voucher.value = '0';
+            ui.voucher.disabled = true;
             ui.tankHint.style.display = 'none';
-            // Ak bol doteraz zamknutý na integrated, vrátime pôvodnú hodnotu
-            if (ui.tank.value === 'integrated') {
-                ui.tank.value = previousTankVal;
+        } else {
+            // TEPELNÉ ČERPADLO (HP)
+            ui.grpTank.style.opacity = '1';
+            ui.grpVoucher.style.opacity = '1';
+            ui.voucher.disabled = false;
+            
+            if (modelData.isAiO) {
+                if (ui.tank.value !== 'integrated' && ui.tank.value !== 'none') {
+                    previousTankVal = ui.tank.value;
+                }
+                ui.tank.value = 'integrated';
+                ui.tank.disabled = true;
+                ui.tankHint.style.display = 'block';
+            } else {
+                ui.tank.disabled = false;
+                ui.tankHint.style.display = 'none';
+                if (ui.tank.value === 'integrated' || ui.tank.value === 'none') {
+                    ui.tank.value = previousTankVal;
+                }
             }
         }
     }
 
     function render() {
-        // Kontrola AiO logiky pred výpočtom
-        checkAiO();
+        checkModelType();
 
         ui.outNo.textContent = ui.no.value || '—';
         const d = new Date(ui.date.value);
@@ -612,19 +666,25 @@
 
         let items = [];
         
-        // 1. Tepelko
-        items.push({ name: `Tepelné čerpadlo ${modelData.name}`, gross: modelData.price });
+        // 1. Zariadenie
+        items.push({ name: modelData.name, gross: modelData.price });
         
-        // 2. Zásobník
-        if (modelData.isAiO) {
-            items.push({ name: `Integrovaný nerezový zásobník TÚV`, gross: 0 });
-        } else {
-            items.push({ name: `Zásobník TÚV ${selectedTankKey} litrov - smalt`, gross: PRICES.tank[selectedTankKey] });
+        // 2. Zásobník (Iba pre HP)
+        if (modelData.type === 'hp') {
+            if (modelData.isAiO) {
+                items.push({ name: `Integrovaný nerezový zásobník TÚV`, gross: 0 });
+            } else {
+                items.push({ name: `Zásobník TÚV ${selectedTankKey} litrov - smalt`, gross: PRICES.tank[selectedTankKey] });
+            }
         }
 
-        // 3. Práce
-        PRICES.work.forEach(w => {
-            items.push({ name: w.name, gross: w.price });
+        // 3. Práce (Rozdielne pre AC a HP)
+        const workItems = (modelData.type === 'ac') ? PRICES.work_ac : PRICES.work_hp;
+        
+        workItems.forEach(w => {
+            if (w.price > 0) { // Zobrazuj len položky s cenou > 0
+                items.push({ name: w.name, gross: w.price });
+            }
         });
 
         ui.tbody.innerHTML = '';
@@ -661,7 +721,8 @@
         document.getElementById('row-discount').style.display = discount > 0 ? 'flex' : 'none';
         ui.tGrand.textContent = eur.format(grandToPay);
 
-        if (voucher > 0) {
+        // Dotácie zobrazuj len ak je vybraté HP a je zvolená dotácia
+        if (voucher > 0 && modelData.type === 'hp') {
             ui.subSection.style.display = 'block';
             ui.subVal.textContent = `- ${eur.format(voucher)}`;
             ui.subTotal.textContent = eur.format(afterSubsidy);
