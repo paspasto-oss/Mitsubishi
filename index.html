@@ -4,8 +4,11 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spektra Install – Generátor Ponúk v3.13 (Baltrio Split Gen J)</title>
+    <title>Spektra Install – Generátor Ponúk v3.18 (Fix na 1 stranu)</title>
     
+    <!-- FAVICON -->
+    <link rel="icon" href="data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23D60000'/%3E%3Ctext x='32' y='47' fill='white' font-family='sans-serif' font-weight='900' font-size='44' text-anchor='middle'%3ES%3C/text%3E%3C/svg%3E">
+
     <!-- Písmo Roboto -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -184,21 +187,80 @@
 
         .footer { margin-top: auto; border-top: 1px solid var(--gray-200); padding-top: 8px; display: flex; justify-content: space-between; font-size: 9px; color: var(--gray-700); }
 
-        /* === TLAČ (PRINT) === */
+        /* === TLAČ (PRINT) - AGRESÍVNA OPTIMALIZÁCIA NA 1 STRANU === */
         @media print {
-            @page { size: A4; margin: 0; }
-            body { background: white; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-            .app-container { display: block; margin: 0; padding: 0; height: auto; }
+            @page { 
+                size: A4; 
+                margin: 0; 
+            }
+            html, body { 
+                margin: 0; 
+                padding: 0; 
+                background: white;
+            }
+            
+            .app-container { 
+                display: block; 
+                margin: 0; 
+                padding: 0; 
+                height: auto;
+            }
             .controls { display: none !important; }
-            .preview-container { display: block; background: white; padding: 0; margin: 0; border: none; overflow: visible; }
+            
+            .preview-container { 
+                display: block; 
+                background: white; 
+                padding: 0; 
+                margin: 0; 
+                border: none; 
+                overflow: visible; 
+            }
             
             .a4-page { 
                 width: 100%; 
-                min-height: 100vh; 
+                /* Zrušenie fixnej výšky, nech sa prispôsobí obsahu */
+                height: auto; 
                 box-shadow: none; 
                 margin: 0; 
+                /* Menšie okraje pre tlač */
                 padding: 10mm 15mm; 
+                /* Kľúčové pre nedelenie */
+                page-break-inside: avoid;
             }
+
+            /* Kompresia obsahu pri tlači */
+            .header { margin-bottom: 5px; padding-bottom: 3px; }
+            .logo-placeholder { font-size: 20px; }
+            .meta-data h1 { font-size: 14px; margin-bottom: 1px; }
+            
+            .addresses { margin-bottom: 10px; gap: 10px; }
+            .addr-box h3 { font-size: 8px; margin-bottom: 2px; }
+            .addr-box p { font-size: 10px; line-height: 1.2; }
+
+            .intro { margin-bottom: 8px; font-size: 10px; }
+            
+            /* Tabuľka - menšie písmo a padding */
+            .pricing-table { margin-bottom: 5px; font-size: 10px; }
+            .pricing-table th, .pricing-table td { padding: 2px 4px; }
+            
+            .totals { margin-bottom: 5px; }
+            .totals-box { width: auto; min-width: 200px; }
+            
+            .subsidy-box { 
+                margin-top: 5px; 
+                padding: 5px; 
+                border-width: 1px;
+                page-break-inside: avoid; /* Nedeliť box s dotáciou */
+            }
+
+            /* Päticka - už nie je na spodku (auto), ale hneď za obsahom */
+            .footer { 
+                margin-top: 15px; /* Pevný odstup namiesto auto */
+                padding-top: 5px; 
+                font-size: 8px;
+                page-break-inside: avoid;
+            }
+
             .btn-group, .hint { display: none; }
         }
 
@@ -252,7 +314,38 @@
         <div class="form-group">
             <label>Zariadenie / Model</label>
             <select id="inp-model">
-                <optgroup label="Panasonic High Performance Split (Baltrio Gen J) - NOVÉ">
+                <optgroup label="Vaillant aroTHERM plus (Baltrio Akcia - R290)">
+                    <option value="vaillant_aro_plus_3">Vaillant aroTHERM plus 3kW + UniTOWER</option>
+                    <option value="vaillant_aro_plus_5">Vaillant aroTHERM plus 5kW + UniTOWER</option>
+                    <option value="vaillant_aro_plus_7">Vaillant aroTHERM plus 7kW + UniTOWER</option>
+                    <option value="vaillant_aro_plus_10">Vaillant aroTHERM plus 10kW + UniTOWER</option>
+                    <option value="vaillant_aro_plus_12">Vaillant aroTHERM plus 12kW + UniTOWER</option>
+                    <option value="vaillant_aro_split_4">Vaillant aroTHERM Split 4kW + Nástenný modul</option>
+                    <option value="vaillant_aro_split_6">Vaillant aroTHERM Split 6kW + Nástenný modul</option>
+                    <option value="vaillant_aro_split_8">Vaillant aroTHERM Split 8kW + Nástenný modul</option>
+                    <option value="vaillant_aro_split_10">Vaillant aroTHERM Split 10kW + Nástenný modul</option>
+                </optgroup>
+                <optgroup label="Klimatizácie Samsung (WindFree)">
+                    <option value="samsung_cebu_25">Samsung Cebu 2.5kW (WindFree)</option>
+                    <option value="samsung_cebu_35">Samsung Cebu 3.5kW (WindFree)</option>
+                    <option value="samsung_comfort_25">Samsung WindFree Comfort 2.5kW</option>
+                    <option value="samsung_comfort_35">Samsung WindFree Comfort 3.5kW</option>
+                </optgroup>
+                <optgroup label="Klimatizácie Daikin">
+                    <option value="daikin_sensira_25">Daikin Sensira 2.5kW (FTXF25)</option>
+                    <option value="daikin_sensira_35">Daikin Sensira 3.5kW (FTXF35)</option>
+                    <option value="daikin_comfora_25">Daikin Comfora 2.5kW (FTXP25)</option>
+                    <option value="daikin_comfora_35">Daikin Comfora 3.5kW (FTXP35)</option>
+                </optgroup>
+                <optgroup label="Klimatizácie Mitsubishi">
+                    <option value="mitsubishi_hr_25">Mitsubishi HR 2.5kW (MSZ-HR25VF)</option>
+                    <option value="mitsubishi_hr_35">Mitsubishi HR 3.5kW (MSZ-HR35VF)</option>
+                    <option value="mitsubishi_ay_25">Mitsubishi AY 2.5kW (MSZ-AY25VGK)</option>
+                    <option value="mitsubishi_ay_35">Mitsubishi AY 3.5kW (MSZ-AY35VGK)</option>
+                    <option value="mitsubishi_ln_25">Mitsubishi LN 2.5kW Luxury (MSZ-LN25)</option>
+                    <option value="mitsubishi_ln_35">Mitsubishi LN 3.5kW Luxury (MSZ-LN35)</option>
+                </optgroup>
+                <optgroup label="Panasonic High Performance Split (Baltrio Gen J)">
                     <option value="pana_baltrio_split_j_3">Panasonic Aquarea Split Gen J 3kW</option>
                     <option value="pana_baltrio_split_j_5">Panasonic Aquarea Split Gen J 5kW</option>
                     <option value="pana_baltrio_split_j_7">Panasonic Aquarea Split Gen J 7kW</option>
@@ -271,14 +364,6 @@
                     <option value="pana_baltrio_tcap_split_h_9">Panasonic Aquarea T-CAP Split Gen H 9kW</option>
                     <option value="pana_baltrio_tcap_split_h_12">Panasonic Aquarea T-CAP Split Gen H 12kW</option>
                     <option value="pana_baltrio_tcap_split_h_16">Panasonic Aquarea T-CAP Split Gen H 16kW</option>
-                </optgroup>
-                <optgroup label="Klimatizácie Mitsubishi">
-                    <option value="mitsubishi_hr_25">Mitsubishi HR 2.5kW (MSZ-HR25VF)</option>
-                    <option value="mitsubishi_hr_35">Mitsubishi HR 3.5kW (MSZ-HR35VF)</option>
-                    <option value="mitsubishi_ay_25">Mitsubishi AY 2.5kW (MSZ-AY25VGK)</option>
-                    <option value="mitsubishi_ay_35">Mitsubishi AY 3.5kW (MSZ-AY35VGK)</option>
-                    <option value="mitsubishi_ln_25">Mitsubishi LN 2.5kW Luxury (MSZ-LN25)</option>
-                    <option value="mitsubishi_ln_35">Mitsubishi LN 3.5kW Luxury (MSZ-LN35)</option>
                 </optgroup>
                 <optgroup label="Midea Nature (R290 Monoblok)">
                     <option value="midea_nature_8">Midea Nature 8kW (R290)</option>
@@ -486,7 +571,30 @@
     // === CENY A MODELY 2026 (S DPH) ===
     const PRICES = {
         models: {
-            // === PANASONIC HIGH PERFORMANCE SPLIT (BALTRIO GEN J) - NOVÉ ===
+            // === SAMSUNG (BALTRIO AKCIA) - NOVÉ! ===
+            'samsung_cebu_25': { name: 'Klimatizácia Samsung Cebu 2.5kW (WindFree)', price: 920, type: 'ac', isAiO: false },
+            'samsung_cebu_35': { name: 'Klimatizácia Samsung Cebu 3.5kW (WindFree)', price: 1080, type: 'ac', isAiO: false },
+            'samsung_comfort_25': { name: 'Klimatizácia Samsung WindFree Comfort 2.5kW', price: 1150, type: 'ac', isAiO: false },
+            'samsung_comfort_35': { name: 'Klimatizácia Samsung WindFree Comfort 3.5kW', price: 1320, type: 'ac', isAiO: false },
+
+            // === DAIKIN (BALTRIO AKCIA) - NOVÉ! ===
+            'daikin_sensira_25': { name: 'Klimatizácia Daikin Sensira 2.5kW (FTXF25)', price: 880, type: 'ac', isAiO: false },
+            'daikin_sensira_35': { name: 'Klimatizácia Daikin Sensira 3.5kW (FTXF35)', price: 1020, type: 'ac', isAiO: false },
+            'daikin_comfora_25': { name: 'Klimatizácia Daikin Comfora 2.5kW (FTXP25)', price: 1350, type: 'ac', isAiO: false },
+            'daikin_comfora_35': { name: 'Klimatizácia Daikin Comfora 3.5kW (FTXP35)', price: 1550, type: 'ac', isAiO: false },
+
+            // === VAILLANT (BALTRIO AKCIA) ===
+            'vaillant_aro_plus_3': { name: 'Vaillant aroTHERM plus 3kW + UniTOWER (R290)', price: 7200, type: 'hp', isAiO: true },
+            'vaillant_aro_plus_5': { name: 'Vaillant aroTHERM plus 5kW + UniTOWER (R290)', price: 7900, type: 'hp', isAiO: true },
+            'vaillant_aro_plus_7': { name: 'Vaillant aroTHERM plus 7kW + UniTOWER (R290)', price: 8500, type: 'hp', isAiO: true },
+            'vaillant_aro_plus_10': { name: 'Vaillant aroTHERM plus 10kW + UniTOWER (R290)', price: 9990, type: 'hp', isAiO: true },
+            'vaillant_aro_plus_12': { name: 'Vaillant aroTHERM plus 12kW + UniTOWER (R290)', price: 11200, type: 'hp', isAiO: true },
+            'vaillant_aro_split_4': { name: 'Vaillant aroTHERM Split 4kW + Nástenný modul', price: 5200, type: 'hp', isAiO: false },
+            'vaillant_aro_split_6': { name: 'Vaillant aroTHERM Split 6kW + Nástenný modul', price: 5800, type: 'hp', isAiO: false },
+            'vaillant_aro_split_8': { name: 'Vaillant aroTHERM Split 8kW + Nástenný modul', price: 6500, type: 'hp', isAiO: false },
+            'vaillant_aro_split_10': { name: 'Vaillant aroTHERM Split 10kW + Nástenný modul', price: 7200, type: 'hp', isAiO: false },
+
+            // === PANASONIC HIGH PERFORMANCE SPLIT (BALTRIO GEN J) ===
             'pana_baltrio_split_j_3': { name: 'Panasonic Aquarea Split Gen J 3kW (High Perf.)', price: 4100, type: 'hp', isAiO: false },
             'pana_baltrio_split_j_5': { name: 'Panasonic Aquarea Split Gen J 5kW (High Perf.)', price: 4400, type: 'hp', isAiO: false },
             'pana_baltrio_split_j_7': { name: 'Panasonic Aquarea Split Gen J 7kW (High Perf.)', price: 4900, type: 'hp', isAiO: false },
@@ -552,19 +660,20 @@
             'integrated': 0,
             'none': 0
         },
+        // UPRAVENÉ CENY MONTÁŽE PODĽA BALTRIO (Nižšie ako v17)
         work_hp: [
-            { name: "Montážny materiál (chladiarenské potrubie, izolácie, konzoly)", price: 650 },
-            { name: "Elektroinštalačný materiál, istenie a zapojenie", price: 450 },
-            { name: "Hydraulické zapojenie, filtre a armatúry", price: 680 },
-            { name: "Odborná montáž, vákuovanie, spustenie a zaškolenie", price: 1200 },
-            { name: "Doprava, manipulácia a logistika", price: 200 }
+            { name: "Montážny materiál (chladiarenské potrubie, izolácie, konzoly)", price: 590 }, /* Znížené z 650 */
+            { name: "Elektroinštalačný materiál, istenie a zapojenie", price: 390 }, /* Znížené z 450 */
+            { name: "Hydraulické zapojenie, filtre a armatúry", price: 550 }, /* Znížené z 680 */
+            { name: "Odborná montáž, vákuovanie, spustenie a zaškolenie", price: 990 }, /* Znížené z 1200 */
+            { name: "Doprava, manipulácia a logistika", price: 150 } /* Znížené z 200 */
         ],
         work_ac: [
-            { name: "Montážny materiál (konzola, lišty, potrubie do 3m)", price: 250 },
-            { name: "Elektroinštalačný materiál (komunikácia, napájanie)", price: 50 },
-            { name: "Odborná montáž vnútornej a vonkajšej jednotky", price: 450 },
-            { name: "Vákuovanie, skúška tesnosti a spustenie", price: 0 }, /* V cene montáže */
-            { name: "Doprava", price: 100 }
+            { name: "Montážny materiál (konzola, lišty, potrubie do 3m)", price: 190 }, /* Znížené z 250 */
+            { name: "Elektroinštalačný materiál (komunikácia, napájanie)", price: 40 }, /* Znížené z 50 */
+            { name: "Odborná montáž vnútornej a vonkajšej jednotky", price: 390 }, /* Znížené z 450 */
+            { name: "Vákuovanie, skúška tesnosti a spustenie", price: 0 },
+            { name: "Doprava", price: 80 } /* Znížené z 100 */
         ]
     };
 
