@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spektra Install – Generátor Ponúk v3.18 (Fix na 1 stranu)</title>
+    <title>Spektra Install – Generátor Ponúk v3.20 (Panasonic -18%)</title>
     
     <!-- FAVICON -->
     <link rel="icon" href="data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23D60000'/%3E%3Ctext x='32' y='47' fill='white' font-family='sans-serif' font-weight='900' font-size='44' text-anchor='middle'%3ES%3C/text%3E%3C/svg%3E">
@@ -314,6 +314,18 @@
         <div class="form-group">
             <label>Zariadenie / Model</label>
             <select id="inp-model">
+                <optgroup label="Panasonic Aquarea K Gen (Klimavex akcia -18%)">
+                    <option value="pana_kgen_3">Panasonic K Gen AiO 3kW (1f)</option>
+                    <option value="pana_kgen_5">Panasonic K Gen AiO 5kW (1f)</option>
+                    <option value="pana_kgen_7">Panasonic K Gen AiO 7kW (1f)</option>
+                    <option value="pana_kgen_9">Panasonic K Gen AiO 9kW (1f)</option>
+                    <option value="pana_kgen_9_3f">Panasonic K Gen AiO 9kW (3f)</option>
+                    <option value="pana_kgen_12_3f">Panasonic K Gen AiO 12kW (3f)</option>
+                    <option value="pana_kgen_16_3f">Panasonic K Gen AiO 16kW (3f)</option>
+                    <option value="pana_kgen_tcap_9_3f">Panasonic K Gen T-CAP AiO 9kW (3f)</option>
+                    <option value="pana_kgen_tcap_12_3f">Panasonic K Gen T-CAP AiO 12kW (3f)</option>
+                    <option value="pana_kgen_tcap_16_3f">Panasonic K Gen T-CAP AiO 16kW (3f)</option>
+                </optgroup>
                 <optgroup label="Vaillant aroTHERM plus (Baltrio Akcia - R290)">
                     <option value="vaillant_aro_plus_3">Vaillant aroTHERM plus 3kW + UniTOWER</option>
                     <option value="vaillant_aro_plus_5">Vaillant aroTHERM plus 5kW + UniTOWER</option>
@@ -346,10 +358,10 @@
                     <option value="mitsubishi_ln_35">Mitsubishi LN 3.5kW Luxury (MSZ-LN35)</option>
                 </optgroup>
                 <optgroup label="Panasonic High Performance Split (Baltrio Gen J)">
-                    <option value="pana_baltrio_split_j_3">Panasonic Aquarea Split Gen J 3kW</option>
-                    <option value="pana_baltrio_split_j_5">Panasonic Aquarea Split Gen J 5kW</option>
-                    <option value="pana_baltrio_split_j_7">Panasonic Aquarea Split Gen J 7kW</option>
-                    <option value="pana_baltrio_split_j_9">Panasonic Aquarea Split Gen J 9kW</option>
+                    <option value="pana_baltrio_split_j_3">Panasonic Aquarea Split Gen J 3kW (High Perf.)</option>
+                    <option value="pana_baltrio_split_j_5">Panasonic Aquarea Split Gen J 5kW (High Perf.)</option>
+                    <option value="pana_baltrio_split_j_7">Panasonic Aquarea Split Gen J 7kW (High Perf.)</option>
+                    <option value="pana_baltrio_split_j_9">Panasonic Aquarea Split Gen J 9kW (High Perf.)</option>
                 </optgroup>
                 <optgroup label="Panasonic All-in-One (Baltrio Gen J/H)">
                     <option value="pana_baltrio_aio_j_3">Panasonic Aquarea AiO Gen J 3kW (High Perf.)</option>
@@ -571,6 +583,19 @@
     // === CENY A MODELY 2026 (S DPH) ===
     const PRICES = {
         models: {
+            // === PANASONIC K GEN (KLIMAVEX AKCIA -18%) - NOVÉ! ===
+            'pana_kgen_3': { name: 'Panasonic Aquarea K Gen AiO 3kW (1f) + 185L TÚV', price: 7580, type: 'hp', isAiO: true },
+            'pana_kgen_5': { name: 'Panasonic Aquarea K Gen AiO 5kW (1f) + 185L TÚV', price: 7870, type: 'hp', isAiO: true },
+            'pana_kgen_7': { name: 'Panasonic Aquarea K Gen AiO 7kW (1f) + 185L TÚV', price: 8520, type: 'hp', isAiO: true },
+            'pana_kgen_9': { name: 'Panasonic Aquarea K Gen AiO 9kW (1f) + 185L TÚV', price: 8730, type: 'hp', isAiO: true },
+            'pana_kgen_9_3f': { name: 'Panasonic Aquarea K Gen AiO 9kW (3f) + 185L TÚV', price: 11360, type: 'hp', isAiO: true },
+            'pana_kgen_12_3f': { name: 'Panasonic Aquarea K Gen AiO 12kW (3f) + 185L TÚV', price: 12050, type: 'hp', isAiO: true },
+            'pana_kgen_16_3f': { name: 'Panasonic Aquarea K Gen AiO 16kW (3f) + 185L TÚV', price: 13200, type: 'hp', isAiO: true },
+            // T-CAP
+            'pana_kgen_tcap_9_3f': { name: 'Panasonic Aquarea K Gen T-CAP AiO 9kW (3f) + 185L TÚV', price: 12290, type: 'hp', isAiO: true },
+            'pana_kgen_tcap_12_3f': { name: 'Panasonic Aquarea K Gen T-CAP AiO 12kW (3f) + 185L TÚV', price: 13110, type: 'hp', isAiO: true },
+            'pana_kgen_tcap_16_3f': { name: 'Panasonic Aquarea K Gen T-CAP AiO 16kW (3f) + 185L TÚV', price: 14390, type: 'hp', isAiO: true },
+
             // === SAMSUNG (BALTRIO AKCIA) - NOVÉ! ===
             'samsung_cebu_25': { name: 'Klimatizácia Samsung Cebu 2.5kW (WindFree)', price: 920, type: 'ac', isAiO: false },
             'samsung_cebu_35': { name: 'Klimatizácia Samsung Cebu 3.5kW (WindFree)', price: 1080, type: 'ac', isAiO: false },
