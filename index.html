@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spektra Install – Generátor Ponúk v3.21 (Hydraulika + Anuloid)</title>
+    <title>Spektra Install – Generátor Ponúk v3.23 (Final Layout)</title>
     
     <!-- FAVICON -->
     <link rel="icon" href="data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23D60000'/%3E%3Ctext x='32' y='47' fill='white' font-family='sans-serif' font-weight='900' font-size='44' text-anchor='middle'%3ES%3C/text%3E%3C/svg%3E">
@@ -185,9 +185,61 @@
         .sub-row { display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 2px; }
         .sub-row.final { font-weight: 700; border-top: 1px dashed #d1d5db; margin-top: 3px; padding-top: 3px; }
 
-        .footer { margin-top: auto; border-top: 1px solid var(--gray-200); padding-top: 8px; display: flex; justify-content: space-between; font-size: 9px; color: var(--gray-700); }
+        /* NOVÁ SEKCIA - POZNÁMKY K REALIZÁCII (Nad pätou) */
+        .notes-section {
+            margin-top: 15px;
+            font-size: 10px;
+            color: var(--gray-700);
+            border-top: 2px solid var(--gray-200);
+            padding-top: 8px;
+            break-inside: avoid;
+        }
+        .notes-section h4 {
+            font-size: 11px;
+            font-weight: 700;
+            margin: 0 0 6px 0;
+            color: var(--gray-900);
+            text-transform: uppercase;
+        }
+        .notes-section ul {
+            margin: 0;
+            padding-left: 14px;
+            line-height: 1.4;
+        }
+        .notes-section li {
+            margin-bottom: 3px;
+        }
+        
+        .greeting {
+            margin-top: 12px; 
+            font-size: 11px;
+            color: var(--gray-900);
+            break-inside: avoid;
+        }
 
-        /* === TLAČ (PRINT) - AGRESÍVNA OPTIMALIZÁCIA NA 1 STRANU === */
+        /* NOVÁ PÄTIČKA - LEN PODPISY */
+        .footer { 
+            margin-top: auto; 
+            padding-top: 20px; 
+            display: flex; 
+            justify-content: flex-end; 
+            align-items: flex-end;
+            font-size: 10px; 
+            color: var(--gray-900); 
+            break-inside: avoid;
+        }
+        
+        .signature-box {
+            text-align: center;
+            width: 200px;
+        }
+        .signature-line {
+            border-bottom: 1px solid var(--gray-900);
+            margin-top: 30px;
+            margin-bottom: 4px;
+        }
+
+        /* === TLAČ (PRINT) === */
         @media print {
             @page { 
                 size: A4; 
@@ -218,46 +270,29 @@
             
             .a4-page { 
                 width: 100%; 
-                /* Zrušenie fixnej výšky, nech sa prispôsobí obsahu */
                 height: auto; 
                 box-shadow: none; 
                 margin: 0; 
-                /* Menšie okraje pre tlač */
                 padding: 10mm 15mm; 
-                /* Kľúčové pre nedelenie */
                 page-break-inside: avoid;
             }
 
-            /* Kompresia obsahu pri tlači */
             .header { margin-bottom: 5px; padding-bottom: 3px; }
-            .logo-placeholder { font-size: 20px; }
-            .meta-data h1 { font-size: 14px; margin-bottom: 1px; }
-            
             .addresses { margin-bottom: 10px; gap: 10px; }
-            .addr-box h3 { font-size: 8px; margin-bottom: 2px; }
-            .addr-box p { font-size: 10px; line-height: 1.2; }
-
             .intro { margin-bottom: 8px; font-size: 10px; }
-            
-            /* Tabuľka - menšie písmo a padding */
             .pricing-table { margin-bottom: 5px; font-size: 10px; }
             .pricing-table th, .pricing-table td { padding: 2px 4px; }
-            
             .totals { margin-bottom: 5px; }
-            .totals-box { width: auto; min-width: 200px; }
-            
-            .subsidy-box { 
-                margin-top: 5px; 
-                padding: 5px; 
-                border-width: 1px;
-                page-break-inside: avoid; /* Nedeliť box s dotáciou */
+            .subsidy-box { margin-top: 5px; padding: 5px; }
+
+            .notes-section {
+                margin-top: 10px;
+                padding-top: 8px;
+                page-break-inside: avoid;
             }
 
-            /* Päticka - už nie je na spodku (auto), ale hneď za obsahom */
             .footer { 
-                margin-top: 15px; /* Pevný odstup namiesto auto */
-                padding-top: 5px; 
-                font-size: 8px;
+                margin-top: 25px; /* Odstup podpisu od poznámok */
                 page-break-inside: avoid;
             }
 
@@ -563,15 +598,30 @@
                 </div>
             </div>
 
-            <!-- Pätička -->
-            <div class="footer">
-                <div>
-                    <strong>Záručné podmienky:</strong> 5 rokov na kompresor, 2 roky na montáž.<br>
-                    <strong>Termín dodania:</strong> Do 14 dní od potvrdenia objednávky.
+            <!-- NOVÁ SEKCIA: POZNÁMKY A PODMIENKY (NAD PÄTOU) -->
+            <div class="notes-section">
+                <h4>Poznámky k realizácii a podmienky</h4>
+                <ul>
+                    <li>Cena zahŕňa kompletnú dodávku, montáž a uvedenie zariadenia do prevádzky.</li>
+                    <li>Tepelné čerpadlo je navrhnuté pre efektívnu prevádzku s radiátormi pri teplote vykurovacej vody cca 50 °C.</li>
+                    <li>Ponuka nezahŕňa stavebné úpravy nad rámec štandardnej montáže.</li>
+                    <li><strong>Záručné podmienky:</strong> 5 rokov na kompresor, 2 roky na montáž.</li>
+                    <li><strong>Termín dodania:</strong> Do 14 dní od potvrdenia objednávky.</li>
+                    <li>Platnosť cenovej ponuky: 14 dní.</li>
+                    <li>V prípade otázok alebo záujmu o úpravu riešenia nás neváhajte kontaktovať.</li>
+                </ul>
+                <div class="greeting">
+                    S pozdravom<br>
+                    <strong>Spektra Install s. r. o.</strong>
                 </div>
-                <div style="text-align: right;">
-                    Vypracoval: <strong>Pavol Pastorek</strong><br>
-                    Podpis: .......................................
+            </div>
+
+            <!-- Pätička (LEN PODPISY) -->
+            <div class="footer">
+                <div class="signature-box">
+                    <div>Vypracoval: <strong>Pavol Pastorek</strong></div>
+                    <div class="signature-line"></div>
+                    <div style="font-size: 8px;">Podpis a pečiatka</div>
                 </div>
             </div>
 
