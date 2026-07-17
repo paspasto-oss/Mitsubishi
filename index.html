@@ -1,637 +1,238 @@
 <!DOCTYPE html>
 <html lang="sk">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spektra Install – Generátor Ponúk v3.23 (Final Layout)</title>
-    
-    <!-- FAVICON -->
-    <link rel="icon" href="data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23D60000'/%3E%3Ctext x='32' y='47' fill='white' font-family='sans-serif' font-weight='900' font-size='44' text-anchor='middle'%3ES%3C/text%3E%3C/svg%3E">
-
-    <!-- Písmo Roboto -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&subset=latin,latin-ext&display=swap" rel="stylesheet">
-
-    <style>
-        :root {
-            --primary: #D60000;
-            --primary-dark: #a50000;
-            --gray-50: #F9FAFB;
-            --gray-100: #F3F4F6;
-            --gray-200: #E5E7EB;
-            --gray-700: #374151;
-            --gray-900: #111827;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-        }
-
-        body {
-            background-color: var(--gray-100);
-            font-family: 'Roboto', Arial, Helvetica, sans-serif;
-            margin: 0;
-            padding: 0;
-            color: var(--gray-900);
-            line-height: 1.35;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        /* === LAYOUT === */
-        .app-container {
-            display: grid;
-            grid-template-columns: 420px 1fr;
-            gap: 24px;
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 24px;
-            height: 100vh;
-            box-sizing: border-box;
-        }
-
-        /* OVLÁDANIE */
-        .controls {
-            background: white;
-            padding: 20px;
-            border-radius: 16px;
-            box-shadow: var(--shadow);
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            height: calc(100vh - 48px);
-        }
-
-        .controls h2 { margin: 0 0 8px 0; font-size: 16px; color: var(--gray-900); display: flex; align-items: center; gap: 8px; }
-        .controls h2::before { content:''; display:block; width: 10px; height: 10px; background: var(--primary); border-radius: 50%; }
-
-        .form-group { display: flex; flex-direction: column; gap: 4px; }
-        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-        
-        label { font-size: 10px; font-weight: 700; color: var(--gray-700); text-transform: uppercase; letter-spacing: 0.03em; }
-        
-        input, select, textarea {
-            padding: 6px 8px;
-            border: 1px solid var(--gray-200);
-            border-radius: 6px;
-            font-family: inherit;
-            font-size: 12px;
-            transition: border-color 0.2s;
-            background: #fff;
-        }
-        input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary); }
-        input:disabled, select:disabled { background: #f3f4f6; color: #9ca3af; cursor: not-allowed; }
-        textarea { resize: vertical; min-height: 50px; }
-        
-        optgroup { font-weight: 700; color: var(--gray-900); }
-
-        .btn-group { margin-top: auto; display: flex; gap: 8px; flex-wrap: wrap; }
-        
-        button {
-            padding: 8px 14px;
-            border: none;
-            border-radius: 6px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-size: 12px;
-        }
-        .btn-primary { background: var(--primary); color: white; flex: 2; }
-        .btn-primary:hover { background: var(--primary-dark); }
-        .btn-secondary { background: var(--gray-200); color: var(--gray-900); flex: 1; }
-        .btn-secondary:hover { background: #d1d5db; }
-
-        /* === A4 PREVIEW (ULTRA KOMPAKTNÝ) === */
-        .preview-container {
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            overflow-y: auto;
-            background: #dbeafe;
-            border-radius: 16px;
-            padding: 20px;
-        }
-
-        .a4-page {
-            width: 210mm;
-            min-height: 297mm;
-            background: white;
-            padding: 10mm 15mm; 
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-            position: relative;
-            box-sizing: border-box;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* Design Ponuky */
-        .header { 
-            display: flex; 
-            justify-content: space-between; 
-            border-bottom: 2px solid var(--primary);
-            padding-bottom: 5px; 
-            margin-bottom: 10px; 
-        }
-        
-        .logo-placeholder { 
-            font-size: 22px; font-weight: 900; color: var(--primary); 
-            letter-spacing: -0.5px; line-height: 1; 
-        }
-        .logo-placeholder span { color: var(--gray-900); }
-        
-        .meta-data { text-align: right; font-size: 10px; color: var(--gray-700); }
-        .meta-data h1 { font-size: 16px; margin: 0 0 2px 0; color: var(--gray-900); letter-spacing: 0.5px; }
-
-        .addresses { 
-            display: grid; 
-            grid-template-columns: 1fr 1fr; 
-            gap: 20px; 
-            margin-bottom: 15px; 
-        }
-        .addr-box h3 { font-size: 9px; text-transform: uppercase; color: var(--gray-500); border-bottom: 1px solid var(--gray-200); padding-bottom: 2px; margin-bottom: 4px; letter-spacing: 0.5px; }
-        .addr-box p { margin: 0; font-size: 11px; font-weight: 400; line-height: 1.3; }
-        .addr-box .highlight { font-weight: 700; font-size: 12px; color: var(--gray-900); }
-
-        .intro { margin-bottom: 10px; font-size: 11px; text-align: justify; line-height: 1.3; }
-
-        /* Tabuľka - Ultra Kompaktná */
-        .pricing-table { width: 100%; border-collapse: collapse; margin-bottom: 10px; font-size: 11px; }
-        .pricing-table th { 
-            background: var(--gray-100); text-align: left; padding: 4px 6px;
-            font-weight: 700; border-bottom: 2px solid var(--gray-200);
-            -webkit-print-color-adjust: exact; print-color-adjust: exact; 
-        }
-        .pricing-table td { padding: 3px 6px; border-bottom: 1px solid var(--gray-200); vertical-align: middle; }
-        .pricing-table td.num { text-align: right; white-space: nowrap; font-feature-settings: "tnum"; }
-        .pricing-table tr:last-child td { border-bottom: none; }
-        tr { break-inside: avoid; }
-
-        /* Súčty */
-        .totals { display: flex; justify-content: flex-end; margin-bottom: 10px; break-inside: avoid; }
-        .totals-box { width: 220px; }
-        .t-row { display: flex; justify-content: space-between; padding: 2px 0; font-size: 11px; }
-        .t-row.grand { border-top: 2px solid var(--gray-900); margin-top: 4px; padding-top: 4px; font-weight: 800; font-size: 14px; color: var(--primary); }
-
-        /* Dotácie */
-        .subsidy-box {
-            margin-top: 5px;
-            padding: 8px; 
-            border: 1px dashed var(--primary); 
-            border-radius: 6px; 
-            background-color: #fffafa; 
-            break-inside: avoid;
-        }
-        .subsidy-box h4 { margin: 0 0 2px 0; color: var(--primary); font-size: 11px; font-weight: 700; text-transform: uppercase; }
-        .subsidy-box p { font-size: 10px; margin: 0 0 4px 0; color: var(--gray-700); line-height: 1.2; }
-        .sub-row { display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 2px; }
-        .sub-row.final { font-weight: 700; border-top: 1px dashed #d1d5db; margin-top: 3px; padding-top: 3px; }
-
-        /* NOVÁ SEKCIA - POZNÁMKY K REALIZÁCII (Nad pätou) */
-        .notes-section {
-            margin-top: 15px;
-            font-size: 10px;
-            color: var(--gray-700);
-            border-top: 2px solid var(--gray-200);
-            padding-top: 8px;
-            break-inside: avoid;
-        }
-        .notes-section h4 {
-            font-size: 11px;
-            font-weight: 700;
-            margin: 0 0 6px 0;
-            color: var(--gray-900);
-            text-transform: uppercase;
-        }
-        .notes-section ul {
-            margin: 0;
-            padding-left: 14px;
-            line-height: 1.4;
-        }
-        .notes-section li {
-            margin-bottom: 3px;
-        }
-        
-        .greeting {
-            margin-top: 12px; 
-            font-size: 11px;
-            color: var(--gray-900);
-            break-inside: avoid;
-        }
-
-        /* NOVÁ PÄTIČKA - LEN PODPISY */
-        .footer { 
-            margin-top: auto; 
-            padding-top: 20px; 
-            display: flex; 
-            justify-content: flex-end; 
-            align-items: flex-end;
-            font-size: 10px; 
-            color: var(--gray-900); 
-            break-inside: avoid;
-        }
-        
-        .signature-box {
-            text-align: center;
-            width: 200px;
-        }
-        .signature-line {
-            border-bottom: 1px solid var(--gray-900);
-            margin-top: 30px;
-            margin-bottom: 4px;
-        }
-
-        /* === TLAČ (PRINT) === */
-        @media print {
-            @page { 
-                size: A4; 
-                margin: 0; 
-            }
-            html, body { 
-                margin: 0; 
-                padding: 0; 
-                background: white;
-            }
-            
-            .app-container { 
-                display: block; 
-                margin: 0; 
-                padding: 0; 
-                height: auto;
-            }
-            .controls { display: none !important; }
-            
-            .preview-container { 
-                display: block; 
-                background: white; 
-                padding: 0; 
-                margin: 0; 
-                border: none; 
-                overflow: visible; 
-            }
-            
-            .a4-page { 
-                width: 100%; 
-                height: auto; 
-                box-shadow: none; 
-                margin: 0; 
-                padding: 10mm 15mm; 
-                page-break-inside: avoid;
-            }
-
-            .header { margin-bottom: 5px; padding-bottom: 3px; }
-            .addresses { margin-bottom: 10px; gap: 10px; }
-            .intro { margin-bottom: 8px; font-size: 10px; }
-            .pricing-table { margin-bottom: 5px; font-size: 10px; }
-            .pricing-table th, .pricing-table td { padding: 2px 4px; }
-            .totals { margin-bottom: 5px; }
-            .subsidy-box { margin-top: 5px; padding: 5px; }
-
-            .notes-section {
-                margin-top: 10px;
-                padding-top: 8px;
-                page-break-inside: avoid;
-            }
-
-            .footer { 
-                margin-top: 25px; /* Odstup podpisu od poznámok */
-                page-break-inside: avoid;
-            }
-
-            .btn-group, .hint { display: none; }
-        }
-
-        @media (max-width: 900px) {
-            .app-container { grid-template-columns: 1fr; height: auto; }
-            .controls { height: auto; }
-            .preview-container { padding: 10px; overflow-x: scroll; }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light">
+  <title>Spektra Install – Generátor cenových ponúk V4</title>
+  <link rel="icon" href="data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='13' fill='%23d10a0a'/%3E%3Ctext x='32' y='46' fill='white' font-family='Arial' font-weight='900' font-size='42' text-anchor='middle'%3ES%3C/text%3E%3C/svg%3E">
+  <style>
+    :root {
+      --red:#d10a0a; --red-dark:#a90808; --red-soft:#fff1f1;
+      --ink:#16181d; --muted:#69707d; --line:#dfe3e8; --panel:#ffffff;
+      --bg:#eef1f5; --green:#17803d; --amber:#9a6700; --blue:#1456a0;
+      --radius:12px; --shadow:0 12px 32px rgba(18,25,38,.10);
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;min-height:100%;font-family:Inter,Segoe UI,Roboto,Arial,sans-serif;color:var(--ink);background:var(--bg)}
+    button,input,select,textarea{font:inherit}
+    button{cursor:pointer}
+    .app{display:grid;grid-template-columns:minmax(390px,480px) 1fr;min-height:100vh}
+    .sidebar{background:#f8f9fb;border-right:1px solid var(--line);display:flex;flex-direction:column;min-height:100vh;position:sticky;top:0;height:100vh}
+    .app-head{padding:15px 18px 12px;background:#fff;border-bottom:1px solid var(--line)}
+    .brand-row{display:flex;justify-content:space-between;align-items:center;gap:12px}
+    .brand{display:flex;align-items:center;gap:10px;font-weight:900;letter-spacing:-.02em}
+    .brand-mark{width:34px;height:34px;border-radius:9px;background:var(--red);color:#fff;display:grid;place-items:center;font-size:20px}
+    .brand small{display:block;font-weight:600;color:var(--muted);font-size:10px;letter-spacing:.02em}
+    .status-pill{font-size:10px;font-weight:800;border:1px solid #cad2dc;border-radius:999px;padding:5px 8px;background:#fff;color:var(--muted)}
+    .tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:10px 12px;background:#fff;border-bottom:1px solid var(--line)}
+    .tab{border:0;border-radius:8px;padding:8px 5px;background:#eef1f4;color:#4a5360;font-size:11px;font-weight:800}
+    .tab.active{background:var(--red);color:#fff}
+    .panel-scroll{overflow:auto;padding:14px;flex:1}
+    .tab-panel{display:none}.tab-panel.active{display:block}
+    .section{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:13px;margin-bottom:11px;box-shadow:0 2px 8px rgba(20,30,45,.035)}
+    .section-title{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0 0 10px;font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.045em}
+    .section-title:before{content:"";width:7px;height:7px;border-radius:50%;background:var(--red);flex:0 0 auto}
+    .section-title span{flex:1}
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:9px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+    .field{display:flex;flex-direction:column;gap:4px;min-width:0}.field.full{grid-column:1/-1}
+    label{font-size:9px;text-transform:uppercase;letter-spacing:.055em;font-weight:800;color:#59616d}
+    input,select,textarea{width:100%;border:1px solid #ccd3dc;border-radius:7px;background:#fff;color:var(--ink);padding:7px 8px;font-size:12px;outline:none}
+    textarea{min-height:64px;resize:vertical;line-height:1.35}
+    input:focus,select:focus,textarea:focus{border-color:var(--red);box-shadow:0 0 0 3px rgba(209,10,10,.08)}
+    .hint{font-size:10px;color:var(--muted);line-height:1.3;margin-top:5px}.danger-hint{color:#9c1c1c}
+    .btn{border:0;border-radius:8px;padding:9px 11px;font-weight:800;font-size:11px;display:inline-flex;align-items:center;justify-content:center;gap:6px}
+    .btn-primary{background:var(--red);color:#fff}.btn-primary:hover{background:var(--red-dark)}
+    .btn-dark{background:#1d232c;color:#fff}.btn-light{background:#e9edf2;color:#26303c}.btn-outline{background:#fff;border:1px solid #cfd6df;color:#26303c}
+    .btn-danger{background:#fff0f0;color:#aa1111;border:1px solid #f3caca}.btn-small{padding:6px 8px;font-size:10px}
+    .button-row{display:flex;flex-wrap:wrap;gap:7px}.button-row .grow{flex:1}
+    .actions{padding:10px 12px;border-top:1px solid var(--line);background:#fff;display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:7px}
+    .actions .wide{grid-column:1/-1}
+    .items-toolbar{display:flex;gap:7px;margin-bottom:9px}
+    .item-card{border:1px solid #dce2e9;border-radius:9px;padding:9px;margin-bottom:8px;background:#fff}
+    .item-head{display:flex;align-items:center;gap:7px;margin-bottom:7px}.item-no{width:22px;height:22px;border-radius:6px;background:#edf0f4;display:grid;place-items:center;font-size:10px;font-weight:900;color:#586270}.item-name{flex:1}.icon-btn{border:0;background:#edf0f4;border-radius:6px;width:25px;height:25px;font-weight:900;color:#4b5563}.icon-btn.remove{background:#fff0f0;color:#b01111}
+    .item-grid{display:grid;grid-template-columns:.72fr .72fr 1fr 1fr;gap:6px}.item-grid .price{grid-column:span 1}
+    .internal-summary{background:#1d232c;color:#fff;border-radius:10px;padding:11px;margin-top:10px}.internal-summary .line{display:flex;justify-content:space-between;font-size:11px;padding:3px 0}.internal-summary .big{border-top:1px solid rgba(255,255,255,.22);margin-top:4px;padding-top:7px;font-size:14px;font-weight:900}.positive{color:#7ce7a2}.warning{color:#ffd47a}
+    .preview-wrap{padding:24px;overflow:auto;background:linear-gradient(135deg,#e6ebf2,#f5f7fa)}
+    .sheet{width:210mm;min-height:297mm;margin:0 auto;background:#fff;padding:11mm 13mm 10mm;box-shadow:var(--shadow);position:relative}
+    .doc-head{display:flex;justify-content:space-between;gap:20px;border-bottom:2.5px solid var(--red);padding-bottom:6px;margin-bottom:10px}
+    .doc-brand{display:flex;gap:9px;align-items:flex-start}.doc-mark{width:37px;height:37px;border-radius:9px;background:var(--red);color:#fff;display:grid;place-items:center;font-size:23px;font-weight:900}.doc-logo{font-size:21px;font-weight:950;letter-spacing:-.04em;line-height:1}.doc-logo span{color:var(--red)}.doc-tagline{font-size:8.5px;color:var(--muted);font-weight:700;margin-top:4px;letter-spacing:.02em}
+    .doc-meta{text-align:right;font-size:8.5px;line-height:1.45;color:#545c67}.doc-meta h1{font-size:17px;color:var(--ink);margin:0 0 2px;letter-spacing:.06em}.doc-meta strong{color:var(--ink)}
+    .address-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-bottom:10px}.address-box{border:1px solid var(--line);border-radius:7px;padding:7px 9px;min-height:78px}.address-title{font-size:7.5px;color:var(--muted);font-weight:900;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}.address-box p{font-size:8.7px;margin:1px 0;line-height:1.3}.address-box .name{font-size:10px;font-weight:900;margin-bottom:3px}
+    .project-title{font-size:14px;font-weight:900;margin:3px 0 5px}.intro{font-size:9px;line-height:1.42;margin-bottom:7px}.tech-box{background:#f5f6f8;border-left:3px solid var(--red);padding:6px 8px;margin:6px 0 9px;font-size:8.4px;line-height:1.4}.tech-box strong{color:#20252c}
+    .price-table{width:100%;border-collapse:collapse;font-size:8px;margin:5px 0 7px}.price-table thead{display:table-header-group}.price-table th{background:#edf0f3;border-bottom:1.5px solid #bcc4ce;padding:4px 4px;text-align:left;font-weight:900}.price-table td{padding:4px;border-bottom:1px solid #e1e5ea;vertical-align:top}.price-table tr{break-inside:avoid;page-break-inside:avoid}.price-table .num{text-align:right;white-space:nowrap}.price-table .center{text-align:center}.price-table .item-desc{font-weight:700}
+    .sum-area{display:flex;justify-content:flex-end;margin:6px 0 7px;break-inside:avoid}.sum-box{width:74mm;border-top:1px solid #cbd1d8;padding-top:3px}.sum-line{display:flex;justify-content:space-between;font-size:8.7px;padding:2px 0}.sum-line.discount{color:var(--green)}.sum-line.grand{margin-top:3px;padding-top:5px;border-top:2px solid #1f242b;font-size:12px;font-weight:950;color:var(--red)}
+    .subsidy{border:1px dashed var(--red);background:#fff8f8;border-radius:7px;padding:6px 8px;margin:5px 0 8px;break-inside:avoid}.subsidy h3{font-size:9px;color:var(--red);margin:0 0 3px}.subsidy p{font-size:7.7px;color:#606873;margin:0 0 4px;line-height:1.35}.sub-line{display:flex;justify-content:space-between;font-size:8.5px;padding:1px 0}.sub-line.final{border-top:1px dashed #cfcfcf;margin-top:3px;padding-top:4px;font-weight:900}
+    .scope-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:7px 0;break-inside:avoid}.scope{border:1px solid var(--line);border-radius:7px;padding:6px 8px}.scope h3,.conditions h3{font-size:8.7px;text-transform:uppercase;letter-spacing:.04em;margin:0 0 4px}.scope ul,.conditions ul{margin:0;padding-left:13px;font-size:7.7px;line-height:1.45}.scope li,.conditions li{margin-bottom:2px}
+    .conditions{border-top:1.5px solid #cfd4da;margin-top:8px;padding-top:6px;break-inside:avoid}.note-box{font-size:8px;background:#f6f7f9;border-radius:6px;padding:6px 8px;margin-top:6px;white-space:pre-line;break-inside:avoid}.legal-note{font-size:7.2px;color:#6d7480;line-height:1.35;margin-top:6px}
+    .signature-grid{display:grid;grid-template-columns:1fr 1fr;gap:25mm;margin-top:18px;break-inside:avoid}.signature{text-align:center;font-size:8px}.sig-line{border-bottom:1px solid #333;height:22px;margin-bottom:4px}.signature strong{font-size:8.5px}.acceptance{margin-top:7px;font-size:7.5px;line-height:1.35}
+    .doc-footer{margin-top:10px;border-top:1px solid #d9dde3;padding-top:4px;display:flex;justify-content:space-between;font-size:6.8px;color:#6f7680;break-inside:avoid}
+    .empty{padding:18px;border:1px dashed #cbd2da;border-radius:8px;text-align:center;color:var(--muted);font-size:11px}
+    .modal{position:fixed;inset:0;background:rgba(18,22,28,.58);z-index:20;display:none;align-items:center;justify-content:center;padding:20px}.modal.open{display:flex}.modal-card{background:#fff;width:min(880px,96vw);max-height:88vh;border-radius:14px;box-shadow:0 24px 80px rgba(0,0,0,.28);display:flex;flex-direction:column}.modal-head{padding:14px 16px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}.modal-head h2{margin:0;font-size:16px}.modal-body{padding:12px 16px 16px;overflow:auto}.archive-row{display:grid;grid-template-columns:1.2fr 1.4fr .7fr auto;gap:8px;align-items:center;border-bottom:1px solid #e7eaee;padding:9px 0;font-size:11px}.archive-row strong{display:block;font-size:12px}.archive-row small{color:var(--muted)}
+    .hide{display:none!important}
+    @media(max-width:1050px){.app{grid-template-columns:410px 1fr}.preview-wrap{padding:12px}}
+    @media(max-width:820px){.app{display:block}.sidebar{position:relative;height:auto;min-height:0}.panel-scroll{max-height:none}.preview-wrap{overflow-x:auto}.sheet{transform-origin:top left}.actions{position:sticky;bottom:0;z-index:5}.grid3{grid-template-columns:1fr 1fr}}
+    @media print{
+      @page{size:A4;margin:0}
+      html,body{background:#fff}.sidebar,.modal{display:none!important}.app{display:block}.preview-wrap{padding:0;background:#fff;overflow:visible}.sheet{width:210mm;min-height:297mm;margin:0;box-shadow:none;padding:10mm 12mm 9mm}.price-table tr,.sum-area,.subsidy,.scope-grid,.conditions,.signature-grid,.doc-footer{break-inside:avoid;page-break-inside:avoid}.price-table thead{display:table-header-group}
+    }
+  </style>
 </head>
 <body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="app-head">
+      <div class="brand-row">
+        <div class="brand"><div class="brand-mark">S</div><div>Spektra Ponuky V4<small>kalkulácia • ponuka • archív</small></div></div>
+        <div class="status-pill" id="uiStatus">Rozpracovaná</div>
+      </div>
+    </div>
+    <div class="tabs">
+      <button class="tab active" data-tab="offer">Ponuka</button>
+      <button class="tab" data-tab="items">Položky</button>
+      <button class="tab" data-tab="terms">Podmienky</button>
+    </div>
+    <div class="panel-scroll">
+      <div class="tab-panel active" id="tab-offer">
+        <section class="section">
+          <h3 class="section-title"><span>Základné údaje</span></h3>
+          <div class="grid2">
+            <div class="field"><label>Číslo ponuky</label><input data-field="no"></div>
+            <div class="field"><label>Dátum</label><input type="date" data-field="date"></div>
+            <div class="field"><label>Platnosť dní</label><input type="number" min="1" data-field="validityDays"></div>
+            <div class="field"><label>Stav</label><select data-field="status"><option>Rozpracovaná</option><option>Odoslaná</option><option>Prijatá</option><option>Zamietnutá</option><option>Realizovaná</option></select></div>
+            <div class="field full"><label>Názov zákazky</label><input data-field="projectTitle" placeholder="Tepelné čerpadlo pre rodinný dom"></div>
+          </div>
+        </section>
+        <section class="section">
+          <h3 class="section-title"><span>Odberateľ</span></h3>
+          <div class="grid2">
+            <div class="field full"><label>Meno / firma</label><input data-field="customerName"></div>
+            <div class="field"><label>Telefón</label><input data-field="customerPhone"></div>
+            <div class="field"><label>E-mail</label><input data-field="customerEmail"></div>
+            <div class="field full"><label>Adresa realizácie</label><textarea data-field="customerAddress"></textarea></div>
+            <div class="field"><label>IČO</label><input data-field="customerIco"></div>
+            <div class="field"><label>IČ DPH</label><input data-field="customerVatId"></div>
+          </div>
+        </section>
+        <section class="section">
+          <h3 class="section-title"><span>Riešenie</span></h3>
+          <div class="grid2">
+            <div class="field"><label>Typ ponuky</label><select data-field="offerType" id="offerType"><option value="hp">Tepelné čerpadlo</option><option value="ac">Klimatizácia</option><option value="boiler">Kotol / kotolňa</option><option value="heating">Kúrenie / rekonštrukcia</option><option value="service">Servis</option><option value="custom">Vlastná ponuka</option></select></div>
+            <div class="field"><label>DPH</label><select data-field="vatRate"><option value="23">23 %</option><option value="20">20 %</option><option value="10">10 %</option><option value="0">0 %</option></select></div>
+            <div class="field full"><label>Zariadenie z katalógu</label><select data-field="modelKey" id="modelSelect"></select></div>
+            <div class="field" id="tankField"><label>Zásobník TÚV</label><select data-field="tankSize"><option value="200">200 l</option><option value="300">300 l</option><option value="none">Bez zásobníka</option></select></div>
+            <div class="field"><label>Dotácia / poukážka €</label><input type="number" min="0" step="10" data-field="subsidyGross"></div>
+            <div class="field full"><button class="btn btn-primary" id="loadPackage">Načítať štandardnú zostavu</button><div class="hint danger-hint">Načítanie zostavy nahradí aktuálne položky ponuky.</div></div>
+          </div>
+        </section>
+        <section class="section" id="hpDetails">
+          <h3 class="section-title"><span>Technické údaje TČ</span></h3>
+          <div class="grid3">
+            <div class="field"><label>Plocha m²</label><input type="number" data-field="heatedArea"></div>
+            <div class="field"><label>Tepelná strata kW</label><input type="number" step="0.1" data-field="heatLoss"></div>
+            <div class="field"><label>Teplota vody °C</label><input type="number" data-field="waterTemp"></div>
+            <div class="field"><label>Sústava</label><select data-field="heatingSystem"><option>Radiátory</option><option>Podlahové vykurovanie</option><option>Kombinovaná</option></select></div>
+            <div class="field"><label>Počet osôb</label><input type="number" min="0" data-field="persons"></div>
+            <div class="field"><label>Napájanie</label><select data-field="powerSupply"><option>Podľa zariadenia</option><option>1-fázové</option><option>3-fázové</option></select></div>
+          </div>
+        </section>
+        <section class="section">
+          <h3 class="section-title"><span>Cena a zľava</span></h3>
+          <div class="grid2">
+            <div class="field"><label>Zľava s DPH €</label><input type="number" min="0" step="10" data-field="discountGross"></div>
+            <div class="field"><label>Záloha %</label><input type="number" min="0" max="100" data-field="advancePercent"></div>
+            <div class="field full"><label>Poznámka pre zákazníka</label><textarea data-field="customerNote" placeholder="Doplňujúce informácie k riešeniu..."></textarea></div>
+          </div>
+        </section>
+      </div>
 
-<div class="app-container">
-    
-    <!-- EDITOVACÍ PANEL -->
-    <section class="controls">
-        <h2>Nastavenia Ponuky</h2>
+      <div class="tab-panel" id="tab-items">
+        <section class="section">
+          <h3 class="section-title"><span>Položkový rozpočet</span><strong id="itemCount">0</strong></h3>
+          <div class="items-toolbar"><button class="btn btn-primary grow" id="addItem">+ Pridať položku</button><button class="btn btn-light" id="clearItems">Vymazať</button></div>
+          <div id="itemsEditor"></div>
+          <div class="hint">Interný náklad sa netlačí zákazníkovi. Slúži len na kontrolu zisku a marže.</div>
+          <div class="internal-summary" id="internalSummary"></div>
+        </section>
+      </div>
 
-        <div class="form-row">
-            <div class="form-group">
-                <label>Číslo ponuky</label>
-                <input type="text" id="inp-no" value="CP-2026-001">
-            </div>
-            <div class="form-group">
-                <label>Dátum</label>
-                <input type="date" id="inp-date">
-            </div>
-        </div>
-        <hr style="border:0; border-top:1px solid #eee; width:100%;">
-        <div class="form-group">
-            <label>Meno Zákazníka</label>
-            <input type="text" id="inp-name" placeholder="Ján Novák">
-        </div>
-        <div class="form-row">
-            <div class="form-group">
-                <label>Tel. číslo</label>
-                <input type="text" id="inp-phone" placeholder="09xx xxx xxx">
-            </div>
-            <div class="form-group">
-                <label>Email</label>
-                <input type="text" id="inp-email" placeholder="@">
-            </div>
-        </div>
-        <div class="form-group">
-            <label>Adresa inštalácie</label>
-            <textarea id="inp-addr" rows="2" placeholder="Ulica, Mesto, PSČ"></textarea>
-        </div>
+      <div class="tab-panel" id="tab-terms">
+        <section class="section">
+          <h3 class="section-title"><span>Realizácia</span></h3>
+          <div class="grid2">
+            <div class="field full"><label>Termín dodania</label><input data-field="deliveryTerm"></div>
+            <div class="field"><label>Dĺžka realizácie</label><input data-field="workDuration"></div>
+            <div class="field"><label>Splatnosť doplatku</label><input data-field="paymentDue"></div>
+            <div class="field"><label>Záruka montáž mes.</label><input type="number" data-field="workWarrantyMonths"></div>
+            <div class="field"><label>Záruka zariadenia</label><input data-field="equipmentWarranty"></div>
+          </div>
+        </section>
+        <section class="section">
+          <h3 class="section-title"><span>Rozsah ponuky</span></h3>
+          <div class="field"><label>Zahrnuté v cene – jeden bod na riadok</label><textarea data-field="includedScope" rows="6"></textarea></div>
+          <div class="field" style="margin-top:9px"><label>Nezahrnuté v cene – jeden bod na riadok</label><textarea data-field="excludedScope" rows="6"></textarea></div>
+        </section>
+        <section class="section">
+          <h3 class="section-title"><span>Ďalšie podmienky</span></h3>
+          <div class="field"><label>Text podmienok</label><textarea data-field="additionalTerms" rows="7"></textarea></div>
+          <div class="field" style="margin-top:9px"><label><input type="checkbox" data-field="showAcceptance" style="width:auto;margin-right:6px"> Zobraziť prijatie ponuky zákazníkom</label></div>
+        </section>
+        <section class="section">
+          <h3 class="section-title"><span>Dodávateľ</span></h3>
+          <div class="grid2">
+            <div class="field full"><label>Vypracoval</label><input data-field="preparedBy"></div>
+            <div class="field"><label>Telefón</label><input data-field="supplierPhone"></div>
+            <div class="field"><label>E-mail</label><input data-field="supplierEmail"></div>
+          </div>
+        </section>
+      </div>
+    </div>
+    <div class="actions">
+      <button class="btn btn-primary wide" id="printBtn">Tlačiť / uložiť PDF</button>
+      <button class="btn btn-dark" id="saveBtn">Uložiť</button>
+      <button class="btn btn-light" id="newBtn">Nová</button>
+      <button class="btn btn-outline" id="archiveBtn">Archív</button>
+      <button class="btn btn-outline" id="exportBtn">Export</button>
+      <button class="btn btn-outline" id="importBtn">Import</button>
+      <input type="file" accept="application/json" id="importFile" hidden>
+    </div>
+  </aside>
 
-        <hr style="border:0; border-top:1px solid #eee; width:100%;">
+  <main class="preview-wrap">
+    <article class="sheet" id="document">
+      <header class="doc-head">
+        <div class="doc-brand"><div class="doc-mark">S</div><div><div class="doc-logo"><span>SPEKTRA</span> INSTALL</div><div class="doc-tagline">PROFESIONÁLNE VYKUROVANIE • CHLADENIE • SERVIS</div></div></div>
+        <div class="doc-meta"><h1>CENOVÁ PONUKA</h1><div>Číslo: <strong id="outNo"></strong></div><div>Dátum: <strong id="outDate"></strong></div><div>Platnosť do: <strong id="outValidUntil"></strong></div></div>
+      </header>
+      <section class="address-grid">
+        <div class="address-box"><div class="address-title">Dodávateľ</div><p class="name">Spektra Install s. r. o.</p><p>Hollého 210, 015 01 Rajec</p><p>IČO: 53690036 • IČ DPH: SK2121459450</p><p id="outSupplierContact"></p><p>www.spektrainstall.sk</p></div>
+        <div class="address-box"><div class="address-title">Odberateľ / miesto realizácie</div><p class="name" id="outCustomerName"></p><p id="outCustomerAddress" style="white-space:pre-line"></p><p id="outCustomerIds"></p><p id="outCustomerContact"></p></div>
+      </section>
+      <div class="project-title" id="outProjectTitle"></div>
+      <div class="intro" id="outIntro"></div>
+      <div class="tech-box" id="outTech"></div>
+      <table class="price-table">
+        <thead><tr><th style="width:46%">Položka</th><th class="center">Množ.</th><th class="center">MJ</th><th class="num">Jedn. cena<br>bez DPH</th><th class="num">Spolu<br>bez DPH</th><th class="num">Spolu<br>s DPH</th></tr></thead>
+        <tbody id="outItems"></tbody>
+      </table>
+      <div class="sum-area"><div class="sum-box"><div class="sum-line"><span>Spolu bez DPH:</span><strong id="sumNet"></strong></div><div class="sum-line"><span>DPH <span id="vatLabel"></span>:</span><strong id="sumVat"></strong></div><div class="sum-line discount" id="discountRow"><span>Zľava s DPH:</span><strong id="sumDiscount"></strong></div><div class="sum-line grand"><span>CELKOM S DPH:</span><span id="sumGross"></span></div></div></div>
+      <section class="subsidy" id="subsidyBox"><h3>Predpokladané uplatnenie poukážky / dotácie</h3><p>Celková zmluvná cena zostáva uvedená vyššie. Výsledná platba zákazníka závisí od schválenia a platnosti poukážky a splnenia podmienok programu.</p><div class="sub-line"><span>Hodnota poukážky:</span><strong id="subsidyValue"></strong></div><div class="sub-line final"><span>Predpokladaná platba zákazníka:</span><strong id="customerPayment"></strong></div></section>
+      <section class="scope-grid"><div class="scope"><h3>Zahrnuté v cene</h3><ul id="outIncluded"></ul></div><div class="scope"><h3>Nie je zahrnuté v cene</h3><ul id="outExcluded"></ul></div></section>
+      <section class="conditions"><h3>Obchodné a realizačné podmienky</h3><ul id="outConditions"></ul><div class="note-box" id="outNote"></div><div class="legal-note">Cena zahŕňa výhradne položky a práce uvedené v tejto ponuke. Práce alebo materiál nad uvedený rozsah budú vykonané až po odsúhlasení zákazníkom a účtované samostatne. Záruka na zariadenie sa riadi podmienkami výrobcu a môže byť podmienená registráciou a pravidelným servisom.</div></section>
+      <section class="signature-grid"><div class="signature"><div class="sig-line"></div><strong id="outPreparedBy"></strong><div>za Spektra Install s. r. o.</div></div><div class="signature" id="customerSignature"><div class="sig-line"></div><strong>Objednávateľ</strong><div>meno, dátum a podpis</div></div></section>
+      <div class="acceptance" id="acceptanceText">Podpisom objednávateľ potvrdzuje súhlas s rozsahom, cenou a podmienkami tejto cenovej ponuky a objednáva uvedené dodávky a práce.</div>
+      <footer class="doc-footer"><span>Spektra Install s. r. o. • Hollého 210 • 015 01 Rajec</span><span id="outFooterNo"></span></footer>
+    </article>
+  </main>
+</div>
 
-        <div class="form-group">
-            <label>Zariadenie / Model</label>
-            <select id="inp-model">
-                <optgroup label="Panasonic Aquarea K Gen (Klimavex akcia -18%)">
-                    <option value="pana_kgen_3">Panasonic K Gen AiO 3kW (1f)</option>
-                    <option value="pana_kgen_5">Panasonic K Gen AiO 5kW (1f)</option>
-                    <option value="pana_kgen_7">Panasonic K Gen AiO 7kW (1f)</option>
-                    <option value="pana_kgen_9">Panasonic K Gen AiO 9kW (1f)</option>
-                    <option value="pana_kgen_9_3f">Panasonic K Gen AiO 9kW (3f)</option>
-                    <option value="pana_kgen_12_3f">Panasonic K Gen AiO 12kW (3f)</option>
-                    <option value="pana_kgen_16_3f">Panasonic K Gen AiO 16kW (3f)</option>
-                    <option value="pana_kgen_tcap_9_3f">Panasonic K Gen T-CAP AiO 9kW (3f)</option>
-                    <option value="pana_kgen_tcap_12_3f">Panasonic K Gen T-CAP AiO 12kW (3f)</option>
-                    <option value="pana_kgen_tcap_16_3f">Panasonic K Gen T-CAP AiO 16kW (3f)</option>
-                </optgroup>
-                <optgroup label="Vaillant aroTHERM plus (Baltrio Akcia - R290)">
-                    <option value="vaillant_aro_plus_Aux">Tepelné čerpadlo AUX AI Therma R290 Monoblok 12 kW ACHP-H12/5R2HA-M - dvojzónové vykurovanie a chladenie</option>
-                    <option value="vaillant_aro_plus_5">Vaillant aroTHERM plus 5kW + UniTOWER</option>
-                    <option value="vaillant_aro_plus_7">Vaillant aroTHERM plus 7kW + UniTOWER</option>
-                    <option value="vaillant_aro_plus_10">Vaillant aroTHERM plus 10kW + UniTOWER</option>
-                    <option value="vaillant_aro_plus_12">Vaillant aroTHERM plus 12kW + UniTOWER</option>
-                    <option value="vaillant_aro_split_4">Vaillant aroTHERM Split 4kW + Nástenný modul</option>
-                    <option value="vaillant_aro_split_6">Vaillant aroTHERM Split 6kW + Nástenný modul</option>
-                    <option value="vaillant_aro_split_8">Vaillant aroTHERM Split 8kW + Nástenný modul</option>
-                    <option value="vaillant_aro_split_10">Vaillant aroTHERM Split 10kW + Nástenný modul</option>
-                </optgroup>
-                <optgroup label="Klimatizácie Samsung (WindFree)">
-                    <option value="samsung_cebu_25">Samsung Cebu 2.5kW (WindFree)</option>
-                    <option value="samsung_cebu_35">Samsung Cebu 3.5kW (WindFree)</option>
-                    <option value="samsung_comfort_25">Samsung WindFree Comfort 2.5kW</option>
-                    <option value="samsung_comfort_35">Samsung WindFree Comfort 3.5kW</option>
-                </optgroup>
-                <optgroup label="Klimatizácie Daikin">
-                    <option value="daikin_sensira_25">Daikin Sensira 2.5kW (FTXF25)</option>
-                    <option value="daikin_sensira_35">Daikin Sensira 3.5kW (FTXF35)</option>
-                    <option value="daikin_comfora_25">Daikin Comfora 2.5kW (FTXP25)</option>
-                    <option value="daikin_comfora_35">Daikin Comfora 3.5kW (FTXP35)</option>
-                </optgroup>
-                <optgroup label="Klimatizácie Mitsubishi">
-                    <option value="mitsubishi_hr_25">Mitsubishi HR 2.5kW (MSZ-HR25VF)</option>
-                    <option value="mitsubishi_hr_35">Mitsubishi HR 3.5kW (MSZ-HR35VF)</option>
-                    <option value="mitsubishi_ay_25">Mitsubishi AY 2.5kW (MSZ-AY25VGK)</option>
-                    <option value="mitsubishi_ay_35">Mitsubishi AY 3.5kW (MSZ-AY35VGK)</option>
-                    <option value="mitsubishi_ln_25">Mitsubishi LN 2.5kW Luxury (MSZ-LN25)</option>
-                    <option value="mitsubishi_ln_35">Mitsubishi LN 3.5kW Luxury (MSZ-LN35)</option>
-                </optgroup>
-                <optgroup label="Panasonic High Performance Split (Baltrio Gen J)">
-                    <option value="pana_baltrio_split_j_3">Panasonic Aquarea Split Gen J 3kW (High Perf.)</option>
-                    <option value="pana_baltrio_split_j_5">Panasonic Aquarea Split Gen J 5kW (High Perf.)</option>
-                    <option value="pana_baltrio_split_j_7">Panasonic Aquarea Split Gen J 7kW (High Perf.)</option>
-                    <option value="pana_baltrio_split_j_9">Panasonic Aquarea Split Gen J 9kW (High Perf.)</option>
-                </optgroup>
-                <optgroup label="Panasonic All-in-One (Baltrio Gen J/H)">
-                    <option value="pana_baltrio_aio_j_3">Panasonic Aquarea AiO Gen J 3kW (High Perf.)</option>
-                    <option value="pana_baltrio_aio_j_5">Panasonic Aquarea AiO Gen J 5kW (High Perf.)</option>
-                    <option value="pana_baltrio_aio_j_7">Panasonic Aquarea AiO Gen J 7kW (High Perf.)</option>
-                    <option value="pana_baltrio_aio_j_9">Panasonic Aquarea AiO Gen J 9kW (High Perf.)</option>
-                    <option value="pana_baltrio_tcap_aio_h_9">Panasonic Aquarea T-CAP AiO Gen H 9kW</option>
-                    <option value="pana_baltrio_tcap_aio_h_12">Panasonic Aquarea T-CAP AiO Gen H 12kW</option>
-                    <option value="pana_baltrio_tcap_aio_h_16">Panasonic Aquarea T-CAP AiO Gen H 16kW</option>
-                </optgroup>
-                <optgroup label="Panasonic T-CAP Split (Baltrio Gen H)">
-                    <option value="pana_baltrio_tcap_split_h_9">Panasonic Aquarea T-CAP Split Gen H 9kW</option>
-                    <option value="pana_baltrio_tcap_split_h_12">Panasonic Aquarea T-CAP Split Gen H 12kW</option>
-                    <option value="pana_baltrio_tcap_split_h_16">Panasonic Aquarea T-CAP Split Gen H 16kW</option>
-                </optgroup>
-                <optgroup label="Midea Nature (R290 Monoblok)">
-                    <option value="midea_nature_8">Midea Nature 8kW (R290)</option>
-                    <option value="midea_nature_12" selected>Midea Nature 12kW (R290)</option>
-                    <option value="midea_nature_16">Midea Nature 16kW (R290)</option>
-                </optgroup>
-                <optgroup label="Midea Arctic (R32 Split)">
-                    <option value="midea_arctic_8">Midea Arctic Split 8kW</option>
-                    <option value="midea_arctic_10">Midea Arctic Split 10kW</option>
-                    <option value="midea_arctic_12">Midea Arctic Split 12kW</option>
-                    <option value="midea_arctic_16">Midea Arctic Split 16kW</option>
-                </optgroup>
-                <optgroup label="Mitsubishi Zubadan All-in-One (Integrovaný)">
-                    <option value="zuba_aio_8_200">Mitsubishi Zubadan 8kW + 200L Zásobník</option>
-                    <option value="zuba_aio_8_300">Mitsubishi Zubadan 8kW + 300L Zásobník</option>
-                    <option value="zuba_aio_10_200">Mitsubishi Zubadan 10kW + 200L Zásobník</option>
-                    <option value="zuba_aio_10_300">Mitsubishi Zubadan 10kW + 300L Zásobník</option>
-                    <option value="zuba_aio_12_200">Mitsubishi Zubadan 12kW + 200L Zásobník</option>
-                    <option value="zuba_aio_12_300">Mitsubishi Zubadan 12kW + 300L Zásobník</option>
-                    <option value="zuba_aio_14_200">Mitsubishi Zubadan 14kW + 200L Zásobník</option>
-                    <option value="zuba_aio_14_300">Mitsubishi Zubadan 14kW + 300L Zásobník</option>
-                </optgroup>
-                <optgroup label="Panasonic All-in-One Gen K (High Performance)">
-                    <option value="pana_aio_genk_3">Panasonic Aquarea AiO Gen K 3kW</option>
-                    <option value="pana_aio_genk_5">Panasonic Aquarea AiO Gen K 5kW</option>
-                    <option value="pana_aio_genk_7">Panasonic Aquarea AiO Gen K 7kW</option>
-                    <option value="pana_aio_genk_9">Panasonic Aquarea AiO Gen K 9kW</option>
-                    <option value="pana_aio_genk_12">Panasonic Aquarea AiO Gen K 12kW</option>
-                    <option value="pana_aio_genk_16">Panasonic Aquarea AiO Gen K 16kW</option>
-                </optgroup>
-                <optgroup label="Iné All-in-One (Integrovaný zásobník)">
-                    <option value="midea_aio_8">Midea M-Thermal All-in-One 8kW (190L)</option>
-                    <option value="midea_aio_10">Midea M-Thermal All-in-One 10kW (190L)</option>
-                    <option value="midea_aio_12">Midea M-Thermal All-in-One 12kW (240L)</option>
-                    <option value="midea_aio_16">Midea M-Thermal All-in-One 16kW (240L)</option>
-                    <option value="daikin_aio_6">Daikin Altherma 3 R F 6kW (180L)</option>
-                    <option value="daikin_aio_8">Daikin Altherma 3 R F 8kW (230L)</option>
-                </optgroup>
-                <optgroup label="Mitsubishi Zubadan (Split)">
-                    <option value="zubadan_split_8">Mitsubishi Zubadan 8kW Split</option>
-                    <option value="zubadan_split_12">Mitsubishi Zubadan 12kW Split</option>
-                    <option value="zubadan_split_14">Mitsubishi Zubadan 14kW Split</option>
-                </optgroup>
-            </select>
-        </div>
-
-        <div class="form-row">
-            <div class="form-group" id="grp-tank">
-                <label>Zásobník TÚV</label>
-                <select id="inp-tank">
-                    <option value="200">200 litrov (Externý)</option>
-                    <option value="300" selected>300 litrov (Externý)</option>
-                    <!-- Možnosť "Integrovaný" sa vyberie automaticky cez JS -->
-                    <option value="integrated" disabled style="display:none">Integrovaný v jednotke</option>
-                    <option value="none" disabled style="display:none">Bez zásobníka (Klimatizácia)</option>
-                </select>
-                <div id="tank-hint" style="font-size:10px; color:#16a34a; display:none;">● Súčasťou tepelného čerpadla</div>
-            </div>
-            <div class="form-group" id="grp-voucher">
-                <label>Dotácia (Zelená d.)</label>
-                <select id="inp-voucher">
-                    <option value="3400">- 3 400 €</option>
-                    <option value="3800" selected>- 3 800 €</option>
-                    <option value="0">Bez dotácie</option>
-                </select>
-            </div>
-        </div>
-
-        <div class="form-row">
-            <div class="form-group">
-                <label>DPH (%)</label>
-                <select id="inp-vat">
-                    <option value="23" selected>23 %</option>
-                    <option value="20">20 %</option>
-                    <option value="0">0 %</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Zľava (€)</label>
-                <input type="number" id="inp-discount" value="0">
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label>Poznámka</label>
-            <textarea id="inp-note" placeholder="Doplnkové informácie pre zákazníka..."></textarea>
-        </div>
-
-        <div class="btn-group">
-            <button class="btn-primary" onclick="window.print()">🖨️ Tlačiť / PDF</button>
-            <button class="btn-secondary" onclick="resetForm()">↺ Reset</button>
-            <button class="btn-secondary" onclick="saveLocal()">💾 Uložiť</button>
-        </div>
-    </section>
-
-    <!-- NÁHĽAD DOKUMENTU -->
-    <section class="preview-container">
-        <div class="a4-page" id="document">
-            
-            <!-- Hlavička -->
-            <div class="header">
-                <div class="logo-area">
-                    <div class="logo-placeholder">SPEKTRA <span>INSTALL</span></div>
-                    <div style="font-size:11px; color:#666; margin-top:4px; font-weight:500;">Profesionálne chladenie a vykurovanie</div>
-                </div>
-                <div class="meta-data">
-                    <h1>CENOVÁ PONUKA</h1>
-                    <div>Číslo: <strong id="out-no">CP-2026-001</strong></div>
-                    <div>Dátum: <strong id="out-date">24.01.2026</strong></div>
-                    <div>Platnosť: <strong>30 dní</strong></div>
-                </div>
-            </div>
-
-            <!-- Adresy -->
-            <div class="addresses">
-                <div class="addr-box">
-                    <h3>Dodávateľ</h3>
-                    <p class="highlight">Spektra Install s. r. o.</p>
-                    <p>Hollého 210</p>
-                    <p>015 01 Rajec</p>
-                    <p style="margin-top:5px">IČO: 53690036</p>
-                    <p>E-mail: spektrainstall@gmail.com</p>
-                    <p>Web: www.spektrainstall.sk</p>
-                </div>
-                <div class="addr-box">
-                    <h3>Odberateľ</h3>
-                    <p class="highlight" id="out-name">Ján Novák</p>
-                    <p id="out-addr" style="white-space: pre-line;">Ulica 123, Mesto</p>
-                    <p style="margin-top:5px" id="out-contact">09xx xxx xxx • email@email.com</p>
-                </div>
-            </div>
-
-            <!-- Úvod -->
-            <div class="intro">
-                <p>Vážený zákazník,</p>
-                <p>na základe Vašich požiadaviek Vám predkladáme cenovú ponuku na dodávku a montáž zariadenia <strong id="out-hp-name">Midea Nature R290</strong>. <span id="out-note-inline"></span></p>
-            </div>
-
-            <!-- Tabuľka -->
-            <table class="pricing-table">
-                <thead>
-                    <tr>
-                        <th style="width: 50%">Položka</th>
-                        <th class="num">Cena bez DPH</th>
-                        <th class="num">DPH</th>
-                        <th class="num">Spolu s DPH</th>
-                    </tr>
-                </thead>
-                <tbody id="table-body"></tbody>
-            </table>
-
-            <!-- Súčty -->
-            <div class="totals">
-                <div class="totals-box">
-                    <div class="t-row">
-                        <span>Spolu bez DPH:</span>
-                        <span id="t-net">0,00 €</span>
-                    </div>
-                    <div class="t-row">
-                        <span>DPH:</span>
-                        <span id="t-vat">0,00 €</span>
-                    </div>
-                    <div class="t-row" id="row-discount" style="display:none; color:green;">
-                        <span>Zľava:</span>
-                        <span id="t-disc">- 0,00 €</span>
-                    </div>
-                    <div class="t-row grand">
-                        <span>K ÚHRADE:</span>
-                        <span id="t-grand">0,00 €</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Dotácie (Iba pre TČ) -->
-            <div id="subsidy-section" class="subsidy-box" style="display:none;">
-                <h4>Možnosť štátnej dotácie (Zelená domácnostiam)</h4>
-                <p>Vzhľadom na aktuálnu vyčerpanosť alebo podmienky programu "Zelená domácnostiam" je táto kalkulácia informatívna. Dotácia sa uplatňuje formou poukážky po splnení podmienok.</p>
-                <div class="sub-row">
-                    <span>Odhadovaná výška dotácie:</span>
-                    <span id="sub-val" style="color:var(--primary); font-weight:700">- 0,00 €</span>
-                </div>
-                <div class="sub-row final">
-                    <span>Výsledná cena po uplatnení dotácie:</span>
-                    <span id="sub-total">0,00 €</span>
-                </div>
-            </div>
-
-            <!-- NOVÁ SEKCIA: POZNÁMKY A PODMIENKY (NAD PÄTOU) -->
-            <div class="notes-section">
-                <h4>Poznámky k realizácii a podmienky</h4>
-                <ul>
-                    <li>Cena zahŕňa kompletnú dodávku, montáž a uvedenie zariadenia do prevádzky.</li>
-                    <li>Tepelné čerpadlo je navrhnuté pre efektívnu prevádzku s radiátormi pri teplote vykurovacej vody cca 50 °C.</li>
-                    <li>Ponuka nezahŕňa stavebné úpravy nad rámec štandardnej montáže.</li>
-                    <li><strong>Záručné podmienky:</strong> 5 rokov na kompresor, 2 roky na montáž.</li>
-                    <li><strong>Termín dodania:</strong> Do 14 dní od potvrdenia objednávky.</li>
-                    <li>Platnosť cenovej ponuky: 14 dní.</li>
-                    <li>V prípade otázok alebo záujmu o úpravu riešenia nás neváhajte kontaktovať.</li>
-                </ul>
-                <div class="greeting">
-                    S pozdravom<br>
-                    <strong>Spektra Install s. r. o.</strong>
-                </div>
-            </div>
-
-            <!-- Pätička (LEN PODPISY) -->
-            <div class="footer">
-                <div class="signature-box">
-                    <div>Vypracoval: <strong>Pavol Pastorek</strong></div>
-                    <div class="signature-line"></div>
-                    <div style="font-size: 8px;">Podpis a pečiatka</div>
-                </div>
-            </div>
-
-        </div>
-    </section>
+<div class="modal" id="archiveModal">
+  <div class="modal-card"><div class="modal-head"><h2>Archív cenových ponúk</h2><button class="icon-btn" id="closeArchive">×</button></div><div class="modal-body" id="archiveList"></div></div>
 </div>
 
 <script>
-    // === CENY A MODELY 2026 (S DPH) ===
-    const PRICES = {
+const PRICES = {
         models: {
             // === PANASONIC K GEN (KLIMAVEX AKCIA -18%) - NOVÉ! ===
             'pana_kgen_3': { name: 'Panasonic Aquarea K Gen AiO 3kW (1f) + 185L TÚV', price: 7580, type: 'hp', isAiO: true },
@@ -752,207 +353,276 @@
         ]
     };
 
-    const eur = new Intl.NumberFormat('sk-SK', { style: 'currency', currency: 'EUR' });
+  // Oprava chýbajúceho modelu AUX z pôvodnej verzie.
+  PRICES.models.aux_ai_therma_12 = {
+    name: 'AUX AI Therma R290 Monoblok 12 kW ACHP-H12/5R2HA-M',
+    price: 7990,
+    type: 'hp',
+    isAiO: false
+  };
 
-    const ui = {
-        no: document.getElementById('inp-no'),
-        date: document.getElementById('inp-date'),
-        name: document.getElementById('inp-name'),
-        phone: document.getElementById('inp-phone'),
-        email: document.getElementById('inp-email'),
-        addr: document.getElementById('inp-addr'),
-        model: document.getElementById('inp-model'),
-        tank: document.getElementById('inp-tank'),
-        tankHint: document.getElementById('tank-hint'),
-        voucher: document.getElementById('inp-voucher'),
-        vat: document.getElementById('inp-vat'),
-        discount: document.getElementById('inp-discount'),
-        note: document.getElementById('inp-note'),
-        
-        grpTank: document.getElementById('grp-tank'),
-        grpVoucher: document.getElementById('grp-voucher'),
-        
-        outNo: document.getElementById('out-no'),
-        outDate: document.getElementById('out-date'),
-        outName: document.getElementById('out-name'),
-        outAddr: document.getElementById('out-addr'),
-        outContact: document.getElementById('out-contact'),
-        outHpName: document.getElementById('out-hp-name'),
-        outNote: document.getElementById('out-note-inline'),
-        tbody: document.getElementById('table-body'),
-        
-        tNet: document.getElementById('t-net'),
-        tVat: document.getElementById('t-vat'),
-        tDisc: document.getElementById('t-disc'),
-        tGrand: document.getElementById('t-grand'),
+  const BASE_CATALOG_VAT = 0.23;
+  const CURRENT_KEY = 'spektra_offer_current_v4';
+  const ARCHIVE_KEY = 'spektra_offer_archive_v4';
+  const moneyFmt = new Intl.NumberFormat('sk-SK',{style:'currency',currency:'EUR',minimumFractionDigits:2});
+  const qtyFmt = new Intl.NumberFormat('sk-SK',{maximumFractionDigits:2});
+  const $ = (s,root=document)=>root.querySelector(s);
+  const $$ = (s,root=document)=>[...root.querySelectorAll(s)];
+  const clone = obj => JSON.parse(JSON.stringify(obj));
+  const money = n => moneyFmt.format(Number(n)||0);
+  const asNumber = v => Number(String(v ?? '').replace(',','.')) || 0;
+  const grossToNet = gross => asNumber(gross)/(1+BASE_CATALOG_VAT);
+  const esc = s => String(s ?? '').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+  const formatDate = value => {
+    if(!value) return '—';
+    const [y,m,d]=value.split('-'); return `${d}.${m}.${y}`;
+  };
+  const addDays = (value,days) => {
+    if(!value) return '';
+    const [y,m,d]=value.split('-').map(Number); const dt=new Date(y,m-1,d); dt.setDate(dt.getDate()+asNumber(days));
+    return `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}-${String(dt.getDate()).padStart(2,'0')}`;
+  };
+  const lines = text => String(text||'').split(/\n+/).map(x=>x.trim()).filter(Boolean);
+  const uid = () => 'OF-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,7);
 
-        subSection: document.getElementById('subsidy-section'),
-        subVal: document.getElementById('sub-val'),
-        subTotal: document.getElementById('sub-total')
+  function todayISO(){
+    const d=new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+  }
+  function nextOfferNo(){
+    const year=new Date().getFullYear(); const key=`spektra_offer_seq_${year}`;
+    let seq=asNumber(localStorage.getItem(key))+1; localStorage.setItem(key,String(seq));
+    return `CP-${year}-${String(seq).padStart(3,'0')}`;
+  }
+  function baseState(generateNumber=true){
+    return {
+      id:uid(), no:generateNumber?nextOfferNo():'', date:todayISO(), validityDays:14, status:'Rozpracovaná',
+      projectTitle:'Dodávka a montáž tepelného čerpadla',
+      customerName:'', customerPhone:'', customerEmail:'', customerAddress:'', customerIco:'', customerVatId:'',
+      offerType:'hp', vatRate:23, modelKey:'midea_nature_12', tankSize:'300', subsidyGross:0, discountGross:0, advancePercent:50,
+      heatedArea:'', heatLoss:'', waterTemp:50, heatingSystem:'Radiátory', persons:4, powerSupply:'Podľa zariadenia',
+      customerNote:'', deliveryTerm:'podľa dostupnosti zariadenia, predpoklad 14 až 30 dní', workDuration:'2 až 3 pracovné dni', paymentDue:'po odovzdaní diela',
+      workWarrantyMonths:24, equipmentWarranty:'podľa podmienok výrobcu',
+      includedScope:'Dodávka položiek uvedených v rozpočte\nOdborná montáž a uvedenie zariadenia do prevádzky\nSkúška funkčnosti a základné zaškolenie obsluhy\nDoprava v rozsahu uvedenom v položkovom rozpočte',
+      excludedScope:'Stavebné a murárske práce nad rámec štandardnej montáže\nÚprava hlavného elektrického prívodu a revízia elektroinštalácie\nÚpravy vykurovacej sústavy, ktoré nie sú uvedené v rozpočte\nPráce a materiál neuvedené v tejto ponuke',
+      additionalTerms:'Termín realizácie bude záväzne potvrdený po prijatí objednávky a úhrade dohodnutej zálohy.\nKonečný technický návrh môže byť upravený podľa výsledku obhliadky a skutočného stavu rozvodov.',
+      showAcceptance:true, preparedBy:'Pavol Pastorek', supplierPhone:'0917 572 221', supplierEmail:'spektrainstall@gmail.com',
+      items:[], createdAt:new Date().toISOString(), updatedAt:new Date().toISOString()
     };
+  }
 
-    // Global state pre predchádzajúci výber bojlera
-    let previousTankVal = '300';
+  let state;
 
-    function checkModelType() {
-        const modelKey = ui.model.value;
-        const modelData = PRICES.models[modelKey];
-        
-        if (modelData.type === 'ac') {
-            // KLIMATIZÁCIA
-            ui.tank.value = 'none';
-            ui.tank.disabled = true;
-            ui.grpTank.style.opacity = '0.5';
-            ui.grpVoucher.style.opacity = '0.5';
-            ui.voucher.value = '0';
-            ui.voucher.disabled = true;
-            ui.tankHint.style.display = 'none';
-        } else {
-            // TEPELNÉ ČERPADLO (HP)
-            ui.grpTank.style.opacity = '1';
-            ui.grpVoucher.style.opacity = '1';
-            ui.voucher.disabled = false;
-            
-            if (modelData.isAiO) {
-                if (ui.tank.value !== 'integrated' && ui.tank.value !== 'none') {
-                    previousTankVal = ui.tank.value;
-                }
-                ui.tank.value = 'integrated';
-                ui.tank.disabled = true;
-                ui.tankHint.style.display = 'block';
-            } else {
-                ui.tank.disabled = false;
-                ui.tankHint.style.display = 'none';
-                if (ui.tank.value === 'integrated' || ui.tank.value === 'none') {
-                    ui.tank.value = previousTankVal;
-                }
-            }
-        }
+  function getGroup(key,model){
+    if(key.startsWith('pana_kgen')) return 'Panasonic Aquarea K / T-CAP';
+    if(key.startsWith('pana_')) return 'Panasonic Aquarea';
+    if(key.startsWith('vaillant_')) return 'Vaillant';
+    if(key.startsWith('aux_')) return 'AUX';
+    if(key.startsWith('midea_')) return 'Midea';
+    if(key.startsWith('zuba') || key.startsWith('mitsubishi_') && model.type==='hp') return 'Mitsubishi tepelné čerpadlá';
+    if(key.startsWith('mitsubishi_')) return 'Mitsubishi klimatizácie';
+    if(key.startsWith('samsung_')) return 'Samsung klimatizácie';
+    if(key.startsWith('daikin_') && model.type==='ac') return 'Daikin klimatizácie';
+    if(key.startsWith('daikin_')) return 'Daikin tepelné čerpadlá';
+    return 'Ostatné';
+  }
+
+  function populateModels(){
+    const select=$('#modelSelect'); select.innerHTML='<option value="">— Bez zariadenia z katalógu —</option>';
+    const groups={};
+    Object.entries(PRICES.models).forEach(([key,model])=>{
+      const group=getGroup(key,model); (groups[group] ||= []).push([key,model]);
+    });
+    Object.entries(groups).sort(([a],[b])=>a.localeCompare(b,'sk')).forEach(([group,items])=>{
+      const og=document.createElement('optgroup'); og.label=group;
+      items.sort((a,b)=>a[1].name.localeCompare(b[1].name,'sk')).forEach(([key,m])=>{
+        const opt=document.createElement('option'); opt.value=key; opt.textContent=m.name; og.appendChild(opt);
+      }); select.appendChild(og);
+    });
+  }
+
+  function item(name,qty,unit,sellGross,costNet=0){
+    return {id:uid(),name,qty,unit,priceNet:+grossToNet(sellGross).toFixed(4),costNet:asNumber(costNet)};
+  }
+
+  function buildPackage(force=false){
+    if(state.items.length && !force && !confirm('Nahradiť aktuálne položky štandardnou zostavou?')) return;
+    const model=PRICES.models[state.modelKey];
+    const result=[];
+    if(model){
+      state.offerType=model.type;
+      result.push(item(model.name,1,'ks',model.price));
+      if(model.type==='hp'){
+        if(model.isAiO) result.push({id:uid(),name:'Integrovaný zásobník teplej vody – súčasť vnútornej jednotky',qty:1,unit:'súbor',priceNet:0,costNet:0});
+        else if(state.tankSize!=='none') result.push(item(`Zásobník TÚV ${state.tankSize} l – smaltovaný`,1,'ks',PRICES.tank[state.tankSize]||0));
+      }
+      const work=model.type==='ac'?PRICES.work_ac:PRICES.work_hp;
+      work.filter(x=>x.price>0).forEach(w=>result.push(item(w.name,1,'súbor',w.price)));
+      if(model.type==='ac') state.projectTitle='Dodávka a montáž klimatizácie';
+      else state.projectTitle='Dodávka a montáž tepelného čerpadla';
+    } else {
+      result.push({id:uid(),name:'Dodávka zariadenia a materiálu',qty:1,unit:'súbor',priceNet:0,costNet:0});
+      result.push({id:uid(),name:'Montážne práce a uvedenie do prevádzky',qty:1,unit:'súbor',priceNet:0,costNet:0});
     }
+    state.items=result; syncForm(); renderAll();
+  }
 
-    function render() {
-        checkModelType();
+  function calc(){
+    const netBefore=state.items.reduce((s,x)=>s+asNumber(x.qty)*asNumber(x.priceNet),0);
+    const costs=state.items.reduce((s,x)=>s+asNumber(x.qty)*asNumber(x.costNet),0);
+    const rate=asNumber(state.vatRate)/100;
+    const grossBefore=netBefore*(1+rate);
+    const discountGross=Math.min(Math.max(0,asNumber(state.discountGross)),grossBefore);
+    const discountNet=rate>-1?discountGross/(1+rate):discountGross;
+    const net=Math.max(0,netBefore-discountNet);
+    const vat=net*rate;
+    const gross=net+vat;
+    const profit=net-costs;
+    const margin=net>0?profit/net*100:0;
+    const customerPayment=Math.max(0,gross-asNumber(state.subsidyGross));
+    return {netBefore,grossBefore,discountGross,discountNet,net,vat,gross,costs,profit,margin,customerPayment};
+  }
 
-        ui.outNo.textContent = ui.no.value || '—';
-        const d = new Date(ui.date.value);
-        ui.outDate.textContent = !isNaN(d) ? d.toLocaleDateString('sk-SK') : '—';
-        ui.outName.textContent = ui.name.value || 'Nezadaný zákazník';
-        ui.outAddr.textContent = ui.addr.value || '—';
-        ui.outContact.textContent = `${ui.phone.value || ''} • ${ui.email.value || ''}`;
-        ui.outNote.textContent = ui.note.value ? `Poznámka: ${ui.note.value}` : '';
+  function renderItemsEditor(){
+    const root=$('#itemsEditor'); $('#itemCount').textContent=state.items.length;
+    if(!state.items.length){root.innerHTML='<div class="empty">Ponuka zatiaľ nemá položky.</div>';}
+    else root.innerHTML=state.items.map((x,i)=>`
+      <div class="item-card" data-id="${x.id}">
+        <div class="item-head"><div class="item-no">${i+1}</div><input class="item-name" data-item-field="name" value="${esc(x.name)}"><button class="icon-btn" data-action="up" title="Hore">↑</button><button class="icon-btn" data-action="down" title="Dole">↓</button><button class="icon-btn remove" data-action="remove" title="Odstrániť">×</button></div>
+        <div class="item-grid">
+          <div class="field"><label>Množstvo</label><input type="number" step="0.01" data-item-field="qty" value="${x.qty}"></div>
+          <div class="field"><label>MJ</label><input data-item-field="unit" value="${esc(x.unit)}"></div>
+          <div class="field price"><label>Predaj bez DPH / MJ</label><input type="number" step="0.01" data-item-field="priceNet" value="${x.priceNet}"></div>
+          <div class="field price"><label>Interný náklad / MJ</label><input type="number" step="0.01" data-item-field="costNet" value="${x.costNet}"></div>
+        </div>
+      </div>`).join('');
+    const c=calc();
+    $('#internalSummary').innerHTML=`<div class="line"><span>Predaj bez DPH po zľave</span><strong>${money(c.net)}</strong></div><div class="line"><span>Zadané interné náklady</span><strong>${c.costs?money(c.costs):'—'}</strong></div><div class="line big"><span>Hrubý zisk / marža</span><strong class="${c.costs?'positive':'warning'}">${c.costs?`${money(c.profit)} / ${c.margin.toFixed(1)} %`:'zadajte náklady'}</strong></div>`;
+  }
 
-        const selectedModelKey = ui.model.value;
-        const selectedTankKey = ui.tank.value;
-        const vatRate = parseFloat(ui.vat.value) / 100;
-
-        const modelData = PRICES.models[selectedModelKey];
-        ui.outHpName.textContent = modelData.name;
-
-        let items = [];
-        
-        // 1. Zariadenie
-        items.push({ name: modelData.name, gross: modelData.price });
-        
-        // 2. Zásobník (Iba pre HP)
-        if (modelData.type === 'hp') {
-            if (modelData.isAiO) {
-                items.push({ name: `Integrovaný nerezový zásobník TÚV`, gross: 0 });
-            } else {
-                items.push({ name: `Zásobník TÚV ${selectedTankKey} litrov - smalt`, gross: PRICES.tank[selectedTankKey] });
-            }
-        }
-
-        // 3. Práce (Rozdielne pre AC a HP)
-        const workItems = (modelData.type === 'ac') ? PRICES.work_ac : PRICES.work_hp;
-        
-        workItems.forEach(w => {
-            if (w.price > 0) { // Zobrazuj len položky s cenou > 0
-                items.push({ name: w.name, gross: w.price });
-            }
-        });
-
-        ui.tbody.innerHTML = '';
-        let sumNet = 0;
-        let sumGross = 0;
-        let sumVat = 0;
-
-        items.forEach(item => {
-            const net = vatRate > 0 ? item.gross / (1 + vatRate) : item.gross;
-            const vatAmt = item.gross - net;
-
-            sumNet += net;
-            sumGross += item.gross;
-            sumVat += vatAmt;
-
-            ui.tbody.innerHTML += `
-                <tr>
-                    <td>${item.name}</td>
-                    <td class="num">${item.gross > 0 ? eur.format(net) : '—'}</td>
-                    <td class="num">${item.gross > 0 ? eur.format(vatAmt) : '—'}</td>
-                    <td class="num"><strong>${item.gross > 0 ? eur.format(item.gross) : 'Súčasťou'}</strong></td>
-                </tr>
-            `;
-        });
-
-        const voucher = parseFloat(ui.voucher.value) || 0;
-        const discount = parseFloat(ui.discount.value) || 0;
-        const grandToPay = Math.max(0, sumGross - discount);
-        const afterSubsidy = Math.max(0, grandToPay - voucher);
-
-        ui.tNet.textContent = eur.format(sumNet);
-        ui.tVat.textContent = eur.format(sumVat);
-        ui.tDisc.textContent = `- ${eur.format(discount)}`;
-        document.getElementById('row-discount').style.display = discount > 0 ? 'flex' : 'none';
-        ui.tGrand.textContent = eur.format(grandToPay);
-
-        // Dotácie zobrazuj len ak je vybraté HP a je zvolená dotácia
-        if (voucher > 0 && modelData.type === 'hp') {
-            ui.subSection.style.display = 'block';
-            ui.subVal.textContent = `- ${eur.format(voucher)}`;
-            ui.subTotal.textContent = eur.format(afterSubsidy);
-        } else {
-            ui.subSection.style.display = 'none';
-        }
+  function technicalText(){
+    const model=PRICES.models[state.modelKey];
+    if(state.offerType==='hp'){
+      const facts=[];
+      if(model) facts.push(`<strong>Navrhované zariadenie:</strong> ${esc(model.name)}`);
+      if(state.heatedArea) facts.push(`<strong>Vykurovaná plocha:</strong> ${esc(state.heatedArea)} m²`);
+      if(state.heatLoss) facts.push(`<strong>Uvažovaná tepelná strata:</strong> ${esc(state.heatLoss)} kW`);
+      if(state.heatingSystem) facts.push(`<strong>Vykurovacia sústava:</strong> ${esc(state.heatingSystem)}`);
+      if(state.waterTemp) facts.push(`<strong>Uvažovaná teplota vykurovacej vody:</strong> do ${esc(state.waterTemp)} °C`);
+      if(state.persons) facts.push(`<strong>Príprava TÚV:</strong> pre ${esc(state.persons)} osoby`);
+      facts.push('Konečný výkon a hydraulické riešenie budú potvrdené po obhliadke a kontrole skutočného stavu vykurovacej sústavy.');
+      return facts.join(' • ');
     }
+    if(state.offerType==='ac') return 'Ponuka zahŕňa dodávku klimatizačného zariadenia, štandardný montážny materiál v uvedenom rozsahu, odbornú montáž, skúšku tesnosti, vákuovanie, spustenie a zaškolenie obsluhy.';
+    if(state.offerType==='service') return 'Rozsah servisných úkonov a použitého materiálu je uvedený v položkovom rozpočte. Skryté poruchy a náhradné diely zistené až počas zásahu budú riešené po odsúhlasení objednávateľom.';
+    return 'Technické riešenie, materiál a rozsah prác sú špecifikované v položkovom rozpočte a podmienkach tejto ponuky.';
+  }
 
-    function init() {
-        const today = new Date().toISOString().split('T')[0];
-        ui.date.value = today;
+  function renderPreview(){
+    const c=calc(); const rate=asNumber(state.vatRate);
+    $('#outNo').textContent=state.no||'—'; $('#outFooterNo').textContent=state.no||'';
+    $('#outDate').textContent=formatDate(state.date); $('#outValidUntil').textContent=formatDate(addDays(state.date,state.validityDays));
+    $('#outSupplierContact').textContent=[state.supplierPhone,state.supplierEmail].filter(Boolean).join(' • ');
+    $('#outCustomerName').textContent=state.customerName||'Nezadaný zákazník'; $('#outCustomerAddress').textContent=state.customerAddress||'—';
+    $('#outCustomerIds').textContent=[state.customerIco&&`IČO: ${state.customerIco}`,state.customerVatId&&`IČ DPH: ${state.customerVatId}`].filter(Boolean).join(' • ');
+    $('#outCustomerContact').textContent=[state.customerPhone,state.customerEmail].filter(Boolean).join(' • ');
+    $('#outProjectTitle').textContent=state.projectTitle||'Cenová ponuka';
+    $('#outIntro').innerHTML=`Vážený zákazník, na základe Vašich požiadaviek Vám predkladáme cenovú ponuku na <strong>${esc((state.projectTitle||'dodávku a realizáciu').toLowerCase())}</strong>.`;
+    $('#outTech').innerHTML=technicalText();
+    $('#outItems').innerHTML=state.items.length?state.items.map(x=>{
+      const q=asNumber(x.qty), unitNet=asNumber(x.priceNet), rowNet=q*unitNet, rowGross=rowNet*(1+rate/100);
+      return `<tr><td class="item-desc">${esc(x.name)}</td><td class="center">${qtyFmt.format(q)}</td><td class="center">${esc(x.unit)}</td><td class="num">${money(unitNet)}</td><td class="num">${money(rowNet)}</td><td class="num"><strong>${money(rowGross)}</strong></td></tr>`;
+    }).join(''):'<tr><td colspan="6" class="center">Bez položiek</td></tr>';
+    $('#sumNet').textContent=money(c.net); $('#sumVat').textContent=money(c.vat); $('#sumGross').textContent=money(c.gross); $('#vatLabel').textContent=`${rate} %`;
+    $('#sumDiscount').textContent=`− ${money(c.discountGross)}`; $('#discountRow').classList.toggle('hide',!c.discountGross);
+    const showSub=asNumber(state.subsidyGross)>0; $('#subsidyBox').classList.toggle('hide',!showSub); $('#subsidyValue').textContent=`− ${money(state.subsidyGross)}`; $('#customerPayment').textContent=money(c.customerPayment);
+    $('#outIncluded').innerHTML=lines(state.includedScope).map(x=>`<li>${esc(x)}</li>`).join('');
+    $('#outExcluded').innerHTML=lines(state.excludedScope).map(x=>`<li>${esc(x)}</li>`).join('');
+    const cond=[`Platnosť cenovej ponuky: ${state.validityDays} dní, do ${formatDate(addDays(state.date,state.validityDays))}.`, `Predpokladaný termín dodania: ${state.deliveryTerm||'podľa dohody'}.`, `Predpokladaná dĺžka realizácie: ${state.workDuration||'podľa dohody'}.`, `Platobné podmienky: záloha ${asNumber(state.advancePercent)} %, doplatok ${state.paymentDue||'po odovzdaní diela'}.`, `Záruka na zariadenie: ${state.equipmentWarranty||'podľa podmienok výrobcu'}.`, `Záruka na montážne práce: ${asNumber(state.workWarrantyMonths)} mesiacov.`];
+    $('#outConditions').innerHTML=cond.map(x=>`<li>${esc(x)}</li>`).join('');
+    $('#outNote').textContent=[state.customerNote,state.additionalTerms].filter(Boolean).join('\n'); $('#outNote').classList.toggle('hide',!state.customerNote&&!state.additionalTerms);
+    $('#outPreparedBy').textContent=state.preparedBy||'Spektra Install s. r. o.';
+    $('#customerSignature').classList.toggle('hide',!state.showAcceptance); $('#acceptanceText').classList.toggle('hide',!state.showAcceptance);
+  }
 
-        // Load
-        const saved = JSON.parse(localStorage.getItem('spektra_data_v3'));
-        if (saved) {
-            Object.keys(saved).forEach(key => {
-                const el = document.getElementById(key);
-                if (el) el.value = saved[key];
-            });
-        }
-        
-        document.querySelectorAll('input, select, textarea').forEach(el => {
-            el.addEventListener('input', render);
-        });
-        
-        render();
-    }
+  function updateVisibility(){
+    $('#hpDetails').classList.toggle('hide',state.offerType!=='hp'); $('#tankField').classList.toggle('hide',state.offerType!=='hp');
+    $('#uiStatus').textContent=state.status||'Rozpracovaná';
+  }
 
-    function saveLocal() {
-        const data = {};
-        document.querySelectorAll('input, select, textarea').forEach(el => {
-            data[el.id] = el.value;
-        });
-        localStorage.setItem('spektra_data_v3', JSON.stringify(data));
-        alert('Údaje uložené!');
-    }
+  function renderAll(){
+    state.updatedAt=new Date().toISOString(); updateVisibility(); renderItemsEditor(); renderPreview();
+    localStorage.setItem(CURRENT_KEY,JSON.stringify(state));
+  }
 
-    function resetForm() {
-        if(confirm("Vymazať všetky údaje?")) {
-            localStorage.removeItem('spektra_data_v3');
-            location.reload();
-        }
-    }
+  function syncForm(){
+    $$('[data-field]').forEach(el=>{
+      const key=el.dataset.field; if(!(key in state)) return;
+      if(el.type==='checkbox') el.checked=!!state[key]; else el.value=state[key] ?? '';
+    }); updateVisibility();
+  }
 
-    init();
+  function readField(el){
+    const key=el.dataset.field; if(!key) return;
+    state[key]=el.type==='checkbox'?el.checked:el.value;
+    if(key==='modelKey' && state.modelKey){ const model=PRICES.models[state.modelKey]; if(model) state.offerType=model.type; }
+    renderAll(); syncForm();
+  }
 
+  function bind(){
+    $$('.tab').forEach(btn=>btn.addEventListener('click',()=>{ $$('.tab').forEach(x=>x.classList.remove('active')); $$('.tab-panel').forEach(x=>x.classList.remove('active')); btn.classList.add('active'); $(`#tab-${btn.dataset.tab}`).classList.add('active'); }));
+    $$('[data-field]').forEach(el=>el.addEventListener(el.tagName==='SELECT'||el.type==='checkbox'?'change':'input',()=>readField(el)));
+    $('#loadPackage').addEventListener('click',()=>buildPackage(false));
+    $('#addItem').addEventListener('click',()=>{state.items.push({id:uid(),name:'Nová položka',qty:1,unit:'ks',priceNet:0,costNet:0});renderAll();});
+    $('#clearItems').addEventListener('click',()=>{if(confirm('Vymazať všetky položky?')){state.items=[];renderAll();}});
+    $('#itemsEditor').addEventListener('input',e=>{
+      const card=e.target.closest('.item-card'); if(!card||!e.target.dataset.itemField)return;
+      const x=state.items.find(i=>i.id===card.dataset.id); if(!x)return; const key=e.target.dataset.itemField; x[key]=['qty','priceNet','costNet'].includes(key)?e.target.value:e.target.value; renderPreview(); const c=calc(); $('#internalSummary').innerHTML=`<div class="line"><span>Predaj bez DPH po zľave</span><strong>${money(c.net)}</strong></div><div class="line"><span>Zadané interné náklady</span><strong>${c.costs?money(c.costs):'—'}</strong></div><div class="line big"><span>Hrubý zisk / marža</span><strong class="${c.costs?'positive':'warning'}">${c.costs?`${money(c.profit)} / ${c.margin.toFixed(1)} %`:'zadajte náklady'}</strong></div>`; localStorage.setItem(CURRENT_KEY,JSON.stringify(state));
+    });
+    $('#itemsEditor').addEventListener('click',e=>{
+      const btn=e.target.closest('[data-action]'); if(!btn)return; const card=btn.closest('.item-card'); const i=state.items.findIndex(x=>x.id===card.dataset.id); if(i<0)return;
+      if(btn.dataset.action==='remove')state.items.splice(i,1); if(btn.dataset.action==='up'&&i>0)[state.items[i-1],state.items[i]]=[state.items[i],state.items[i-1]]; if(btn.dataset.action==='down'&&i<state.items.length-1)[state.items[i+1],state.items[i]]=[state.items[i],state.items[i+1]]; renderAll();
+    });
+    $('#printBtn').addEventListener('click',()=>window.print()); $('#saveBtn').addEventListener('click',saveOffer); $('#newBtn').addEventListener('click',newOffer);
+    $('#archiveBtn').addEventListener('click',openArchive); $('#closeArchive').addEventListener('click',closeArchive); $('#archiveModal').addEventListener('click',e=>{if(e.target.id==='archiveModal')closeArchive();});
+    $('#exportBtn').addEventListener('click',exportOffer); $('#importBtn').addEventListener('click',()=>$('#importFile').click()); $('#importFile').addEventListener('change',importOffer);
+    $('#archiveList').addEventListener('click',archiveAction);
+  }
+
+  function getArchive(){try{return JSON.parse(localStorage.getItem(ARCHIVE_KEY))||[]}catch{return[]}}
+  function setArchive(a){localStorage.setItem(ARCHIVE_KEY,JSON.stringify(a))}
+  function saveOffer(){
+    const a=getArchive(); const i=a.findIndex(x=>x.id===state.id); const copy=clone(state); copy.updatedAt=new Date().toISOString(); if(i>=0)a[i]=copy;else a.unshift(copy); setArchive(a); localStorage.setItem(CURRENT_KEY,JSON.stringify(copy)); alert(`Ponuka ${state.no} bola uložená.`);
+  }
+  function newOffer(){
+    if(state && state.items.length && !confirm('Vytvoriť novú ponuku? Aktuálnu ponuku najskôr uložte, ak ju chcete zachovať.'))return;
+    state=baseState(); buildPackage(true); syncForm(); renderAll();
+  }
+  function openArchive(){renderArchive();$('#archiveModal').classList.add('open')}
+  function closeArchive(){$('#archiveModal').classList.remove('open')}
+  function renderArchive(){
+    const a=getArchive(); $('#archiveList').innerHTML=a.length?a.map(x=>`<div class="archive-row" data-id="${x.id}"><div><strong>${esc(x.no)}</strong><small>${formatDate(x.date)} • ${esc(x.status)}</small></div><div><strong>${esc(x.customerName||'Nezadaný zákazník')}</strong><small>${esc(x.projectTitle||'')}</small></div><div><strong>${money(calcFor(x).gross)}</strong><small>s DPH</small></div><div class="button-row"><button class="btn btn-small btn-primary" data-archive-action="load">Otvoriť</button><button class="btn btn-small btn-light" data-archive-action="duplicate">Duplikovať</button><button class="btn btn-small btn-danger" data-archive-action="delete">Zmazať</button></div></div>`).join(''):'<div class="empty">Archív je zatiaľ prázdny.</div>';
+  }
+  function calcFor(s){const old=state;state=s;const c=calc();state=old;return c}
+  function archiveAction(e){
+    const btn=e.target.closest('[data-archive-action]');if(!btn)return;const row=btn.closest('.archive-row');const a=getArchive();const x=a.find(o=>o.id===row.dataset.id);if(!x)return;
+    if(btn.dataset.archiveAction==='load'){state=clone(x);syncForm();renderAll();closeArchive();}
+    if(btn.dataset.archiveAction==='duplicate'){state=clone(x);state.id=uid();state.no=nextOfferNo();state.status='Rozpracovaná';state.date=todayISO();state.createdAt=new Date().toISOString();syncForm();renderAll();closeArchive();}
+    if(btn.dataset.archiveAction==='delete'&&confirm(`Zmazať ponuku ${x.no}?`)){setArchive(a.filter(o=>o.id!==x.id));renderArchive();}
+  }
+  function exportOffer(){
+    const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`${state.no||'cenova-ponuka'}.json`;a.click();URL.revokeObjectURL(a.href);
+  }
+  function importOffer(e){
+    const file=e.target.files[0];if(!file)return;const r=new FileReader();r.onload=()=>{try{const x=JSON.parse(r.result);if(!x.items||!Array.isArray(x.items))throw new Error();state={...baseState(false),...x,id:uid(),no:x.no||nextOfferNo()};syncForm();renderAll();alert('Ponuka bola importovaná.')}catch{alert('Súbor nie je platný export ponuky.')}e.target.value='';};r.readAsText(file);
+  }
+
+  function init(){
+    populateModels();
+    try{state=JSON.parse(localStorage.getItem(CURRENT_KEY))}catch{state=null}
+    if(!state){state=baseState();buildPackage(true);} else {state={...baseState(false),...state,items:Array.isArray(state.items)?state.items:[]}; if(!state.no) state.no=nextOfferNo();}
+    syncForm();bind();renderAll();
+  }
+  init();
 </script>
 </body>
 </html>
