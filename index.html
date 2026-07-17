@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light">
-  <title>Spektra Install – Generátor cenových ponúk V4.1</title>
+  <title>Spektra Install – Generátor cenových ponúk V4.2</title>
   <link rel="icon" href="data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='13' fill='%23d10a0a'/%3E%3Ctext x='32' y='46' fill='white' font-family='Arial' font-weight='900' font-size='42' text-anchor='middle'%3ES%3C/text%3E%3C/svg%3E">
   <style>
     :root {
@@ -157,17 +157,18 @@
         <section class="section">
           <h3 class="section-title"><span>Náklady montáže a réžia</span></h3>
           <div class="grid2">
-            <div class="field"><label>Počet montážnikov</label><input type="number" min="1" data-field="installersCount" readonly></div>
-            <div class="field"><label>Cena montážnika €/hod.</label><input type="number" min="0" step="0.5" data-field="installerHourlyRate"></div>
-            <div class="field full"><label>Počet hodín na jedného montážnika</label><input type="number" min="0" step="0.5" data-field="workHoursPerInstaller"></div>
-            <div class="field"><label>Dodávka / zákazka €</label><input type="number" min="0" step="1" data-field="vehicleCost"></div>
+            <div class="field"><label>Rabat z cenníka bez DPH</label><input type="number" data-field="catalogDiscountPercent" readonly></div>
             <div class="field"><label>Počet zákaziek za mesiac</label><input type="number" min="1" step="1" data-field="monthlyJobs"></div>
-            <div class="field"><label>Sklad / nájom mesačne €</label><input type="number" min="0" step="10" data-field="warehouseMonthly"></div>
-            <div class="field"><label>Úver mesačne €</label><input type="number" min="0" step="10" data-field="loanMonthly"></div>
+            <div class="field"><label>Počet montážnikov</label><input type="number" data-field="installersCount" readonly></div>
+            <div class="field"><label>Cena montážnika €/hod.</label><input type="number" data-field="installerHourlyRate" readonly></div>
+            <div class="field full"><label>Počet hodín na jedného montážnika</label><input type="number" min="0" step="0.5" data-field="workHoursPerInstaller"></div>
+            <div class="field"><label>Dodávka / zákazka €</label><input type="number" data-field="vehicleCost" readonly></div>
+            <div class="field"><label>Sklad / nájom mesačne €</label><input type="number" data-field="warehouseMonthly" readonly></div>
+            <div class="field"><label>Úver mesačne €</label><input type="number" data-field="loanMonthly" readonly></div>
             <div class="field"><label>Iná mesačná réžia €</label><input type="number" min="0" step="10" data-field="otherMonthlyOverhead"></div>
-            <div class="field"><label>Požadovaný zisk firmy €</label><input type="number" min="0" step="50" data-field="targetProfit"></div>
+            <div class="field"><label>Cieľ zisku firmy mesačne €</label><input type="number" min="0" step="100" data-field="monthlyTargetProfit"></div>
           </div>
-          <div class="hint">Cena práce = 2 montážnici × hodiny na jedného × 15 €/hod. Réžia na zákazku = mesačný sklad, úver a ostatná réžia delená počtom zákaziek za mesiac.</div>
+          <div class="hint">Pevné nastavenie Spektra: nákupná cena katalógovej položky = 75 % cenníkovej ceny bez DPH. Do zákazníckej ponuky sa automaticky vloží cena montáže, dodávky a prípadný doplatok potrebný na pokrytie skladu, úveru a cieľového zisku.</div>
         </section>
         <section class="section">
           <h3 class="section-title"><span>Výsledok internej kalkulácie</span></h3>
@@ -381,8 +382,8 @@ const PRICES = {
   };
 
   const BASE_CATALOG_VAT = 0.23;
-  const CURRENT_KEY = 'spektra_offer_current_v4';
-  const ARCHIVE_KEY = 'spektra_offer_archive_v4';
+  const CURRENT_KEY = 'spektra_offer_current_v42';
+  const ARCHIVE_KEY = 'spektra_offer_archive_v42';
   const moneyFmt = new Intl.NumberFormat('sk-SK',{style:'currency',currency:'EUR',minimumFractionDigits:2});
   const qtyFmt = new Intl.NumberFormat('sk-SK',{maximumFractionDigits:2});
   const $ = (s,root=document)=>root.querySelector(s);
@@ -418,8 +419,8 @@ const PRICES = {
       projectTitle:'Dodávka a montáž tepelného čerpadla',
       customerName:'', customerPhone:'', customerEmail:'', customerAddress:'', customerIco:'', customerVatId:'',
       offerType:'hp', vatRate:23, modelKey:'midea_nature_12', tankSize:'300', subsidyGross:0, discountGross:0, advancePercent:50,
-      installersCount:2, installerHourlyRate:15, workHoursPerInstaller:0, vehicleCost:30,
-      warehouseMonthly:1500, loanMonthly:600, otherMonthlyOverhead:0, monthlyJobs:8, targetProfit:0,
+      catalogDiscountPercent:25, installersCount:2, installerHourlyRate:15, workHoursPerInstaller:0, vehicleCost:30,
+      warehouseMonthly:1500, loanMonthly:600, otherMonthlyOverhead:0, monthlyJobs:8, monthlyTargetProfit:3000,
       heatedArea:'', heatLoss:'', waterTemp:50, heatingSystem:'Radiátory', persons:4, powerSupply:'Podľa zariadenia',
       customerNote:'', deliveryTerm:'podľa dostupnosti zariadenia, predpoklad 14 až 30 dní', workDuration:'2 až 3 pracovné dni', paymentDue:'po odovzdaní diela',
       workWarrantyMonths:24, equipmentWarranty:'podľa podmienok výrobcu',
@@ -461,8 +462,18 @@ const PRICES = {
     });
   }
 
-  function item(name,qty,unit,sellGross,costNet=0){
-    return {id:uid(),name,qty,unit,priceNet:+grossToNet(sellGross).toFixed(4),costNet:asNumber(costNet)};
+  function catalogItem(name,qty,unit,sellGross){
+    const listNet=+grossToNet(sellGross).toFixed(4);
+    const discount=Math.min(100,Math.max(0,asNumber(state.catalogDiscountPercent)||25))/100;
+    return {id:uid(),name,qty,unit,priceNet:listNet,catalogListNet:listNet,autoCatalogCost:true,costNet:+(listNet*(1-discount)).toFixed(4)};
+  }
+
+  function standardItem(name,qty,unit,priceNet=0,costNet=0){
+    return {id:uid(),name,qty,unit,priceNet:asNumber(priceNet),costNet:asNumber(costNet),autoCatalogCost:false};
+  }
+
+  function automaticFixedItem(){
+    return {id:uid(),name:'Odborná montáž, doprava, koordinácia a uvedenie do prevádzky',qty:1,unit:'súbor',priceNet:0,costNet:0,autoFixedCost:true};
   }
 
   function buildPackage(force=false){
@@ -471,35 +482,71 @@ const PRICES = {
     const result=[];
     if(model){
       state.offerType=model.type;
-      result.push(item(model.name,1,'ks',model.price));
+      result.push(catalogItem(model.name,1,'ks',model.price));
       if(model.type==='hp'){
         if(model.isAiO) result.push({id:uid(),name:'Integrovaný zásobník teplej vody – súčasť vnútornej jednotky',qty:1,unit:'súbor',priceNet:0,costNet:0});
-        else if(state.tankSize!=='none') result.push(item(`Zásobník TÚV ${state.tankSize} l – smaltovaný`,1,'ks',PRICES.tank[state.tankSize]||0));
+        else if(state.tankSize!=='none') result.push(catalogItem(`Zásobník TÚV ${state.tankSize} l – smaltovaný`,1,'ks',PRICES.tank[state.tankSize]||0));
       }
       const work=model.type==='ac'?PRICES.work_ac:PRICES.work_hp;
-      work.filter(x=>x.price>0).forEach(w=>result.push(item(w.name,1,'súbor',w.price)));
+      work.filter(x=>x.price>0 && !/odborná montáž|doprava|vákuovanie/i.test(x.name)).forEach(w=>result.push(catalogItem(w.name,1,'súbor',w.price)));
+      result.push(automaticFixedItem());
       if(model.type==='ac') state.projectTitle='Dodávka a montáž klimatizácie';
       else state.projectTitle='Dodávka a montáž tepelného čerpadla';
     } else {
-      result.push({id:uid(),name:'Dodávka zariadenia a materiálu',qty:1,unit:'súbor',priceNet:0,costNet:0});
-      result.push({id:uid(),name:'Montážne práce a uvedenie do prevádzky',qty:1,unit:'súbor',priceNet:0,costNet:0});
+      result.push(standardItem('Dodávka zariadenia a materiálu',1,'súbor',0,0));
+      result.push(automaticFixedItem());
     }
     state.items=result; syncForm(); renderAll();
   }
 
+  function syncAutomaticPricing(){
+    if(!state || !Array.isArray(state.items)) return;
+    const discount=Math.min(100,Math.max(0,asNumber(state.catalogDiscountPercent)||25))/100;
+    state.items.forEach(x=>{
+      if(x.autoCatalogCost){
+        const listNet=Math.max(0,asNumber(x.catalogListNet)||asNumber(x.priceNet));
+        x.catalogListNet=listNet;
+        x.costNet=+(listNet*(1-discount)).toFixed(4);
+      }
+    });
+    let fixed=state.items.find(x=>x.autoFixedCost);
+    if(!fixed){ fixed=automaticFixedItem(); state.items.push(fixed); }
+    fixed.qty=1; fixed.unit='súbor'; fixed.costNet=0;
+
+    const catalogSales=state.items.filter(x=>x.autoCatalogCost).reduce((sum,x)=>sum+asNumber(x.qty)*asNumber(x.priceNet),0);
+    const catalogCosts=state.items.filter(x=>x.autoCatalogCost).reduce((sum,x)=>sum+asNumber(x.qty)*asNumber(x.costNet),0);
+    const catalogMargin=Math.max(0,catalogSales-catalogCosts);
+    const installers=2;
+    const laborCost=installers*15*Math.max(0,asNumber(state.workHoursPerInstaller));
+    const vehicleCost=30;
+    const monthlyJobs=Math.max(1,asNumber(state.monthlyJobs)||8);
+    const monthlyOverhead=1500+600+Math.max(0,asNumber(state.otherMonthlyOverhead));
+    const overheadCost=monthlyOverhead/monthlyJobs;
+    const targetProfit=Math.max(0,asNumber(state.monthlyTargetProfit))/monthlyJobs;
+    const overheadAndProfitTopUp=Math.max(0,overheadCost+targetProfit-catalogMargin);
+    fixed.priceNet=+(laborCost+vehicleCost+overheadAndProfitTopUp).toFixed(4);
+  }
+
   function calc(){
+    syncAutomaticPricing();
     const netBefore=state.items.reduce((s,x)=>s+asNumber(x.qty)*asNumber(x.priceNet),0);
     const itemCosts=state.items.reduce((s,x)=>s+asNumber(x.qty)*asNumber(x.costNet),0);
-    const installers=Math.max(1,asNumber(state.installersCount)||2);
-    const hourlyRate=Math.max(0,asNumber(state.installerHourlyRate));
+    const catalogSales=state.items.filter(x=>x.autoCatalogCost).reduce((s,x)=>s+asNumber(x.qty)*asNumber(x.priceNet),0);
+    const catalogCosts=state.items.filter(x=>x.autoCatalogCost).reduce((s,x)=>s+asNumber(x.qty)*asNumber(x.costNet),0);
+    const catalogMargin=catalogSales-catalogCosts;
+    const installers=2;
+    const hourlyRate=15;
     const hoursPerInstaller=Math.max(0,asNumber(state.workHoursPerInstaller));
     const laborCost=installers*hourlyRate*hoursPerInstaller;
-    const vehicleCost=Math.max(0,asNumber(state.vehicleCost));
-    const monthlyJobs=Math.max(1,asNumber(state.monthlyJobs)||1);
-    const monthlyOverhead=Math.max(0,asNumber(state.warehouseMonthly))+Math.max(0,asNumber(state.loanMonthly))+Math.max(0,asNumber(state.otherMonthlyOverhead));
+    const vehicleCost=30;
+    const monthlyJobs=Math.max(1,asNumber(state.monthlyJobs)||8);
+    const monthlyOverhead=1500+600+Math.max(0,asNumber(state.otherMonthlyOverhead));
     const overheadCost=monthlyOverhead/monthlyJobs;
+    const targetProfit=Math.max(0,asNumber(state.monthlyTargetProfit))/monthlyJobs;
+    const fixedOfferItem=state.items.find(x=>x.autoFixedCost);
+    const fixedOfferPrice=fixedOfferItem?asNumber(fixedOfferItem.priceNet):0;
+    const overheadAndProfitTopUp=Math.max(0,fixedOfferPrice-laborCost-vehicleCost);
     const costs=itemCosts+laborCost+vehicleCost+overheadCost;
-    const targetProfit=Math.max(0,asNumber(state.targetProfit));
     const recommendedNet=costs+targetProfit;
     const rate=asNumber(state.vatRate)/100;
     const grossBefore=netBefore*(1+rate);
@@ -513,37 +560,42 @@ const PRICES = {
     const recommendedGross=recommendedNet*(1+rate);
     const priceGap=net-recommendedNet;
     const customerPayment=Math.max(0,gross-asNumber(state.subsidyGross));
-    return {netBefore,grossBefore,discountGross,discountNet,net,vat,gross,itemCosts,laborCost,vehicleCost,monthlyOverhead,overheadCost,costs,targetProfit,recommendedNet,recommendedGross,priceGap,profit,margin,customerPayment};
+    return {netBefore,grossBefore,discountGross,discountNet,net,vat,gross,itemCosts,catalogSales,catalogCosts,catalogMargin,laborCost,vehicleCost,monthlyOverhead,overheadCost,costs,targetProfit,recommendedNet,recommendedGross,priceGap,profit,margin,customerPayment,fixedOfferPrice,overheadAndProfitTopUp,monthlyJobs};
   }
 
   function internalSummaryHtml(c){
     const gapClass=c.priceGap>=0?'positive':'warning';
     const gapLabel=c.priceGap>=0?'Rezerva nad minimálnou cenou':'Chýba do minimálnej ceny';
     return `
-      <div class="line"><span>Nákup zariadenia a materiálu</span><strong>${money(c.itemCosts)}</strong></div>
-      <div class="line"><span>Montážnici (${asNumber(state.installersCount)||2} × ${asNumber(state.workHoursPerInstaller)} h × ${money(asNumber(state.installerHourlyRate))})</span><strong>${money(c.laborCost)}</strong></div>
+      <div class="line"><span>Cenníkový predaj bez DPH</span><strong>${money(c.catalogSales)}</strong></div>
+      <div class="line"><span>Nákup po ${asNumber(state.catalogDiscountPercent)||25} % rabate</span><strong>${money(c.catalogCosts)}</strong></div>
+      <div class="line"><span>Marža z rabatu</span><strong class="positive">${money(c.catalogMargin)}</strong></div>
+      <div class="line"><span>Montážnici (2 × ${asNumber(state.workHoursPerInstaller)} h × ${money(15)})</span><strong>${money(c.laborCost)}</strong></div>
       <div class="line"><span>Dodávka / auto</span><strong>${money(c.vehicleCost)}</strong></div>
-      <div class="line"><span>Podiel skladu, úveru a réžie</span><strong>${money(c.overheadCost)}</strong></div>
+      <div class="line"><span>Podiel skladu a úveru (${c.monthlyJobs} zákaziek/mes.)</span><strong>${money(c.overheadCost)}</strong></div>
+      <div class="line"><span>Cieľ zisku na zákazku</span><strong>${money(c.targetProfit)}</strong></div>
+      <div class="line"><span>Automatická položka montáže v ponuke</span><strong>${money(c.fixedOfferPrice)}</strong></div>
+      <div class="line"><span>Z toho doplatok na réžiu a zisk</span><strong>${money(c.overheadAndProfitTopUp)}</strong></div>
       <div class="line"><span>Celkové reálne náklady</span><strong>${money(c.costs)}</strong></div>
-      <div class="line"><span>Požadovaný zisk</span><strong>${money(c.targetProfit)}</strong></div>
       <div class="line"><span>Minimálna cena bez DPH</span><strong>${money(c.recommendedNet)}</strong></div>
-      <div class="line"><span>Minimálna cena s DPH</span><strong>${money(c.recommendedGross)}</strong></div>
       <div class="line"><span>Aktuálny predaj bez DPH po zľave</span><strong>${money(c.net)}</strong></div>
       <div class="line"><span>${gapLabel}</span><strong class="${gapClass}">${money(Math.abs(c.priceGap))}</strong></div>
       <div class="line big"><span>Skutočný zisk / marža</span><strong class="${c.profit>=0?'positive':'warning'}">${money(c.profit)} / ${c.margin.toFixed(1)} %</strong></div>`;
   }
 
   function renderItemsEditor(){
+    syncAutomaticPricing();
     const root=$('#itemsEditor'); $('#itemCount').textContent=state.items.length;
     if(!state.items.length){root.innerHTML='<div class="empty">Ponuka zatiaľ nemá položky.</div>';}
     else root.innerHTML=state.items.map((x,i)=>`
       <div class="item-card" data-id="${x.id}">
-        <div class="item-head"><div class="item-no">${i+1}</div><input class="item-name" data-item-field="name" value="${esc(x.name)}"><button class="icon-btn" data-action="up" title="Hore">↑</button><button class="icon-btn" data-action="down" title="Dole">↓</button><button class="icon-btn remove" data-action="remove" title="Odstrániť">×</button></div>
+        <div class="item-head"><div class="item-no">${i+1}</div><input class="item-name" data-item-field="name" value="${esc(x.name)}" ${x.autoFixedCost?'readonly':''}><button class="icon-btn" data-action="up" title="Hore">↑</button><button class="icon-btn" data-action="down" title="Dole">↓</button>${x.autoFixedCost?'':'<button class="icon-btn remove" data-action="remove" title="Odstrániť">×</button>'}</div>
         <div class="item-grid">
-          <div class="field"><label>Množstvo</label><input type="number" step="0.01" data-item-field="qty" value="${x.qty}"></div>
-          <div class="field"><label>MJ</label><input data-item-field="unit" value="${esc(x.unit)}"></div>
-          <div class="field price"><label>Predaj bez DPH / MJ</label><input type="number" step="0.01" data-item-field="priceNet" value="${x.priceNet}"></div>
-          <div class="field price"><label>Interný náklad / MJ</label><input type="number" step="0.01" data-item-field="costNet" value="${x.costNet}"></div>
+          <div class="field"><label>Množstvo</label><input type="number" step="0.01" data-item-field="qty" value="${x.qty}" ${x.autoFixedCost?'readonly':''}></div>
+          <div class="field"><label>MJ</label><input data-item-field="unit" value="${esc(x.unit)}" ${x.autoFixedCost?'readonly':''}></div>
+          <div class="field price"><label>${x.autoFixedCost?'Automatická cena bez DPH':'Predaj bez DPH / MJ'}</label><input type="number" step="0.01" data-item-field="priceNet" value="${x.priceNet}" ${x.autoFixedCost?'readonly':''}></div>
+          <div class="field price"><label>${x.autoCatalogCost?'Nákup po 25 % rabate':'Interný náklad / MJ'}</label><input type="number" step="0.01" data-item-field="costNet" value="${x.costNet}" ${(x.autoCatalogCost||x.autoFixedCost)?'readonly':''}></div>
+          ${x.autoFixedCost?'':`<div class="field full"><label style="text-transform:none"><input type="checkbox" data-item-field="autoCatalogCost" style="width:auto;margin-right:6px" ${x.autoCatalogCost?'checked':''}> Katalógová položka – nákup automaticky so zľavou 25 % bez DPH</label></div>`}
         </div>
       </div>`).join('');
     const c=calc();
@@ -606,6 +658,7 @@ const PRICES = {
   }
 
   function syncForm(){
+    state.catalogDiscountPercent=25; state.installersCount=2; state.installerHourlyRate=15; state.vehicleCost=30; state.warehouseMonthly=1500; state.loanMonthly=600;
     $$('[data-field]').forEach(el=>{
       const key=el.dataset.field; if(!(key in state)) return;
       if(el.type==='checkbox') el.checked=!!state[key]; else el.value=state[key] ?? '';
@@ -615,6 +668,7 @@ const PRICES = {
   function readField(el){
     const key=el.dataset.field; if(!key) return;
     state[key]=el.type==='checkbox'?el.checked:el.value;
+    state.catalogDiscountPercent=25; state.installersCount=2; state.installerHourlyRate=15; state.vehicleCost=30; state.warehouseMonthly=1500; state.loanMonthly=600;
     if(key==='modelKey' && state.modelKey){ const model=PRICES.models[state.modelKey]; if(model) state.offerType=model.type; }
     renderAll(); syncForm();
   }
@@ -623,11 +677,15 @@ const PRICES = {
     $$('.tab').forEach(btn=>btn.addEventListener('click',()=>{ $$('.tab').forEach(x=>x.classList.remove('active')); $$('.tab-panel').forEach(x=>x.classList.remove('active')); btn.classList.add('active'); $(`#tab-${btn.dataset.tab}`).classList.add('active'); }));
     $$('[data-field]').forEach(el=>el.addEventListener(el.tagName==='SELECT'||el.type==='checkbox'?'change':'input',()=>readField(el)));
     $('#loadPackage').addEventListener('click',()=>buildPackage(false));
-    $('#addItem').addEventListener('click',()=>{state.items.push({id:uid(),name:'Nová položka',qty:1,unit:'ks',priceNet:0,costNet:0});renderAll();});
+    $('#addItem').addEventListener('click',()=>{state.items.push(standardItem('Nová položka',1,'ks',0,0));renderAll();});
     $('#clearItems').addEventListener('click',()=>{if(confirm('Vymazať všetky položky?')){state.items=[];renderAll();}});
     $('#itemsEditor').addEventListener('input',e=>{
       const card=e.target.closest('.item-card'); if(!card||!e.target.dataset.itemField)return;
-      const x=state.items.find(i=>i.id===card.dataset.id); if(!x)return; const key=e.target.dataset.itemField; x[key]=e.target.value; renderPreview(); const c=calc(); $('#internalSummary').innerHTML=internalSummaryHtml(c); localStorage.setItem(CURRENT_KEY,JSON.stringify(state));
+      const x=state.items.find(i=>i.id===card.dataset.id); if(!x)return; const key=e.target.dataset.itemField;
+      x[key]=e.target.type==='checkbox'?e.target.checked:e.target.value;
+      if(key==='priceNet'&&x.autoCatalogCost)x.catalogListNet=asNumber(e.target.value);
+      if(key==='autoCatalogCost'&&x.autoCatalogCost)x.catalogListNet=asNumber(x.priceNet);
+      syncAutomaticPricing(); renderPreview(); const c=calc(); $('#internalSummary').innerHTML=internalSummaryHtml(c); localStorage.setItem(CURRENT_KEY,JSON.stringify(state));
     });
     $('#itemsEditor').addEventListener('click',e=>{
       const btn=e.target.closest('[data-action]'); if(!btn)return; const card=btn.closest('.item-card'); const i=state.items.findIndex(x=>x.id===card.dataset.id); if(i<0)return;
@@ -670,8 +728,13 @@ const PRICES = {
   function init(){
     populateModels();
     try{state=JSON.parse(localStorage.getItem(CURRENT_KEY))}catch{state=null}
-    if(!state){state=baseState();buildPackage(true);} else {state={...baseState(false),...state,items:Array.isArray(state.items)?state.items:[]}; if(!state.no) state.no=nextOfferNo();}
-    syncForm();bind();renderAll();
+    if(!state){state=baseState();buildPackage(true);} else {
+      state={...baseState(false),...state,items:Array.isArray(state.items)?state.items:[]};
+      if(!state.no) state.no=nextOfferNo();
+      if(!state.monthlyTargetProfit && state.targetProfit) state.monthlyTargetProfit=asNumber(state.targetProfit)*Math.max(1,asNumber(state.monthlyJobs)||8);
+    }
+    state.catalogDiscountPercent=25; state.installersCount=2; state.installerHourlyRate=15; state.vehicleCost=30; state.warehouseMonthly=1500; state.loanMonthly=600;
+    syncAutomaticPricing(); syncForm();bind();renderAll();
   }
   init();
 </script>
