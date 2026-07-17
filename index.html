@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light">
-  <title>Spektra Install – Generátor cenových ponúk V4</title>
+  <title>Spektra Install – Generátor cenových ponúk V4.1</title>
   <link rel="icon" href="data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='13' fill='%23d10a0a'/%3E%3Ctext x='32' y='46' fill='white' font-family='Arial' font-weight='900' font-size='42' text-anchor='middle'%3ES%3C/text%3E%3C/svg%3E">
   <style>
     :root {
@@ -83,7 +83,7 @@
   <aside class="sidebar">
     <div class="app-head">
       <div class="brand-row">
-        <div class="brand"><div class="brand-mark">S</div><div>Spektra Ponuky V4<small>kalkulácia • ponuka • archív</small></div></div>
+        <div class="brand"><div class="brand-mark">S</div><div>Spektra Ponuky V4.1<small>kalkulácia • ponuka • archív</small></div></div>
         <div class="status-pill" id="uiStatus">Rozpracovaná</div>
       </div>
     </div>
@@ -152,8 +152,27 @@
           <h3 class="section-title"><span>Položkový rozpočet</span><strong id="itemCount">0</strong></h3>
           <div class="items-toolbar"><button class="btn btn-primary grow" id="addItem">+ Pridať položku</button><button class="btn btn-light" id="clearItems">Vymazať</button></div>
           <div id="itemsEditor"></div>
-          <div class="hint">Interný náklad sa netlačí zákazníkovi. Slúži len na kontrolu zisku a marže.</div>
+          <div class="hint">Interný náklad položky je nákupná cena zariadenia alebo materiálu bez DPH. Náklady montážnikov, auta a réžie sa počítajú samostatne nižšie.</div>
+        </section>
+        <section class="section">
+          <h3 class="section-title"><span>Náklady montáže a réžia</span></h3>
+          <div class="grid2">
+            <div class="field"><label>Počet montážnikov</label><input type="number" min="1" data-field="installersCount" readonly></div>
+            <div class="field"><label>Cena montážnika €/hod.</label><input type="number" min="0" step="0.5" data-field="installerHourlyRate"></div>
+            <div class="field full"><label>Počet hodín na jedného montážnika</label><input type="number" min="0" step="0.5" data-field="workHoursPerInstaller"></div>
+            <div class="field"><label>Dodávka / zákazka €</label><input type="number" min="0" step="1" data-field="vehicleCost"></div>
+            <div class="field"><label>Počet zákaziek za mesiac</label><input type="number" min="1" step="1" data-field="monthlyJobs"></div>
+            <div class="field"><label>Sklad / nájom mesačne €</label><input type="number" min="0" step="10" data-field="warehouseMonthly"></div>
+            <div class="field"><label>Úver mesačne €</label><input type="number" min="0" step="10" data-field="loanMonthly"></div>
+            <div class="field"><label>Iná mesačná réžia €</label><input type="number" min="0" step="10" data-field="otherMonthlyOverhead"></div>
+            <div class="field"><label>Požadovaný zisk firmy €</label><input type="number" min="0" step="50" data-field="targetProfit"></div>
+          </div>
+          <div class="hint">Cena práce = 2 montážnici × hodiny na jedného × 15 €/hod. Réžia na zákazku = mesačný sklad, úver a ostatná réžia delená počtom zákaziek za mesiac.</div>
+        </section>
+        <section class="section">
+          <h3 class="section-title"><span>Výsledok internej kalkulácie</span></h3>
           <div class="internal-summary" id="internalSummary"></div>
+          <div class="hint">Odporúčaná minimálna cena zahŕňa všetky zadané náklady a požadovaný zisk. Interná kalkulácia sa zákazníkovi netlačí.</div>
         </section>
       </div>
 
@@ -399,6 +418,8 @@ const PRICES = {
       projectTitle:'Dodávka a montáž tepelného čerpadla',
       customerName:'', customerPhone:'', customerEmail:'', customerAddress:'', customerIco:'', customerVatId:'',
       offerType:'hp', vatRate:23, modelKey:'midea_nature_12', tankSize:'300', subsidyGross:0, discountGross:0, advancePercent:50,
+      installersCount:2, installerHourlyRate:15, workHoursPerInstaller:0, vehicleCost:30,
+      warehouseMonthly:1500, loanMonthly:600, otherMonthlyOverhead:0, monthlyJobs:8, targetProfit:0,
       heatedArea:'', heatLoss:'', waterTemp:50, heatingSystem:'Radiátory', persons:4, powerSupply:'Podľa zariadenia',
       customerNote:'', deliveryTerm:'podľa dostupnosti zariadenia, predpoklad 14 až 30 dní', workDuration:'2 až 3 pracovné dni', paymentDue:'po odovzdaní diela',
       workWarrantyMonths:24, equipmentWarranty:'podľa podmienok výrobcu',
@@ -468,7 +489,18 @@ const PRICES = {
 
   function calc(){
     const netBefore=state.items.reduce((s,x)=>s+asNumber(x.qty)*asNumber(x.priceNet),0);
-    const costs=state.items.reduce((s,x)=>s+asNumber(x.qty)*asNumber(x.costNet),0);
+    const itemCosts=state.items.reduce((s,x)=>s+asNumber(x.qty)*asNumber(x.costNet),0);
+    const installers=Math.max(1,asNumber(state.installersCount)||2);
+    const hourlyRate=Math.max(0,asNumber(state.installerHourlyRate));
+    const hoursPerInstaller=Math.max(0,asNumber(state.workHoursPerInstaller));
+    const laborCost=installers*hourlyRate*hoursPerInstaller;
+    const vehicleCost=Math.max(0,asNumber(state.vehicleCost));
+    const monthlyJobs=Math.max(1,asNumber(state.monthlyJobs)||1);
+    const monthlyOverhead=Math.max(0,asNumber(state.warehouseMonthly))+Math.max(0,asNumber(state.loanMonthly))+Math.max(0,asNumber(state.otherMonthlyOverhead));
+    const overheadCost=monthlyOverhead/monthlyJobs;
+    const costs=itemCosts+laborCost+vehicleCost+overheadCost;
+    const targetProfit=Math.max(0,asNumber(state.targetProfit));
+    const recommendedNet=costs+targetProfit;
     const rate=asNumber(state.vatRate)/100;
     const grossBefore=netBefore*(1+rate);
     const discountGross=Math.min(Math.max(0,asNumber(state.discountGross)),grossBefore);
@@ -478,8 +510,27 @@ const PRICES = {
     const gross=net+vat;
     const profit=net-costs;
     const margin=net>0?profit/net*100:0;
+    const recommendedGross=recommendedNet*(1+rate);
+    const priceGap=net-recommendedNet;
     const customerPayment=Math.max(0,gross-asNumber(state.subsidyGross));
-    return {netBefore,grossBefore,discountGross,discountNet,net,vat,gross,costs,profit,margin,customerPayment};
+    return {netBefore,grossBefore,discountGross,discountNet,net,vat,gross,itemCosts,laborCost,vehicleCost,monthlyOverhead,overheadCost,costs,targetProfit,recommendedNet,recommendedGross,priceGap,profit,margin,customerPayment};
+  }
+
+  function internalSummaryHtml(c){
+    const gapClass=c.priceGap>=0?'positive':'warning';
+    const gapLabel=c.priceGap>=0?'Rezerva nad minimálnou cenou':'Chýba do minimálnej ceny';
+    return `
+      <div class="line"><span>Nákup zariadenia a materiálu</span><strong>${money(c.itemCosts)}</strong></div>
+      <div class="line"><span>Montážnici (${asNumber(state.installersCount)||2} × ${asNumber(state.workHoursPerInstaller)} h × ${money(asNumber(state.installerHourlyRate))})</span><strong>${money(c.laborCost)}</strong></div>
+      <div class="line"><span>Dodávka / auto</span><strong>${money(c.vehicleCost)}</strong></div>
+      <div class="line"><span>Podiel skladu, úveru a réžie</span><strong>${money(c.overheadCost)}</strong></div>
+      <div class="line"><span>Celkové reálne náklady</span><strong>${money(c.costs)}</strong></div>
+      <div class="line"><span>Požadovaný zisk</span><strong>${money(c.targetProfit)}</strong></div>
+      <div class="line"><span>Minimálna cena bez DPH</span><strong>${money(c.recommendedNet)}</strong></div>
+      <div class="line"><span>Minimálna cena s DPH</span><strong>${money(c.recommendedGross)}</strong></div>
+      <div class="line"><span>Aktuálny predaj bez DPH po zľave</span><strong>${money(c.net)}</strong></div>
+      <div class="line"><span>${gapLabel}</span><strong class="${gapClass}">${money(Math.abs(c.priceGap))}</strong></div>
+      <div class="line big"><span>Skutočný zisk / marža</span><strong class="${c.profit>=0?'positive':'warning'}">${money(c.profit)} / ${c.margin.toFixed(1)} %</strong></div>`;
   }
 
   function renderItemsEditor(){
@@ -496,7 +547,7 @@ const PRICES = {
         </div>
       </div>`).join('');
     const c=calc();
-    $('#internalSummary').innerHTML=`<div class="line"><span>Predaj bez DPH po zľave</span><strong>${money(c.net)}</strong></div><div class="line"><span>Zadané interné náklady</span><strong>${c.costs?money(c.costs):'—'}</strong></div><div class="line big"><span>Hrubý zisk / marža</span><strong class="${c.costs?'positive':'warning'}">${c.costs?`${money(c.profit)} / ${c.margin.toFixed(1)} %`:'zadajte náklady'}</strong></div>`;
+    $('#internalSummary').innerHTML=internalSummaryHtml(c);
   }
 
   function technicalText(){
@@ -576,7 +627,7 @@ const PRICES = {
     $('#clearItems').addEventListener('click',()=>{if(confirm('Vymazať všetky položky?')){state.items=[];renderAll();}});
     $('#itemsEditor').addEventListener('input',e=>{
       const card=e.target.closest('.item-card'); if(!card||!e.target.dataset.itemField)return;
-      const x=state.items.find(i=>i.id===card.dataset.id); if(!x)return; const key=e.target.dataset.itemField; x[key]=['qty','priceNet','costNet'].includes(key)?e.target.value:e.target.value; renderPreview(); const c=calc(); $('#internalSummary').innerHTML=`<div class="line"><span>Predaj bez DPH po zľave</span><strong>${money(c.net)}</strong></div><div class="line"><span>Zadané interné náklady</span><strong>${c.costs?money(c.costs):'—'}</strong></div><div class="line big"><span>Hrubý zisk / marža</span><strong class="${c.costs?'positive':'warning'}">${c.costs?`${money(c.profit)} / ${c.margin.toFixed(1)} %`:'zadajte náklady'}</strong></div>`; localStorage.setItem(CURRENT_KEY,JSON.stringify(state));
+      const x=state.items.find(i=>i.id===card.dataset.id); if(!x)return; const key=e.target.dataset.itemField; x[key]=e.target.value; renderPreview(); const c=calc(); $('#internalSummary').innerHTML=internalSummaryHtml(c); localStorage.setItem(CURRENT_KEY,JSON.stringify(state));
     });
     $('#itemsEditor').addEventListener('click',e=>{
       const btn=e.target.closest('[data-action]'); if(!btn)return; const card=btn.closest('.item-card'); const i=state.items.findIndex(x=>x.id===card.dataset.id); if(i<0)return;
